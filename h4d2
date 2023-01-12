@@ -12,7 +12,7 @@ class MainWindow(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle('Hack-In-The-Box')
+        self.setWindowTitle('H4D2')
         self.setFixedHeight(650)
         self.setFixedWidth(1000)
         self.setStyleSheet('background: #161219;')
