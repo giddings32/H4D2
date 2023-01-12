@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
 sys.path.insert(1, './')
-from Functions_hitb import frame1, grid
+from Functions_h4d2 import frame1, grid
 
 class MainWindow(QWidget):
 
