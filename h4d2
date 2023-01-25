@@ -117,7 +117,9 @@ class MainWindow(QMainWindow):
         self.rhost_label = QLabel("Rhost:")
         self.rhost_label.setStyleSheet("color: 'white'; font-size: 16px;")
         self.rhost_combo = QComboBox()
-        self.rhost_combo.setFixedWidth(100) #set width of the dropdown
+        self.rhost_combo.setFixedSize(100, 25)
+        self.rhost_label.setFixedSize(50, 25)
+#        self.rhost_combo.setFixedWidth(100) #set width of the dropdown
         self.rhost_combo.activated[str].connect(self.onActivated2)
         
         # Add the rhosts to the dropdown
@@ -125,12 +127,13 @@ class MainWindow(QMainWindow):
         for rhost in rhosts:
             self.rhost_combo.addItem(rhost)
 
-
         self.rhost_input = QLineEdit()
+        self.rhost_input.setFixedWidth(200) 
         self.rhost_input.setPlaceholderText("Add Rhost")
         self.rhost_layout.addWidget(self.rhost_input)
 
         self.rhost_add_button = QPushButton("Add")
+        self.rhost_add_button.setFixedWidth(50) 
         self.rhost_add_button.clicked.connect(lambda: self.add_rhost(rhosts_file))
         self.rhost_layout.addWidget(self.rhost_add_button)
 
