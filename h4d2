@@ -287,17 +287,32 @@ class MainWindow(QMainWindow):
         self.rhost_label.setText("Rhost: ")
         self.tabChanged(text)
    
-    def handleItemPressed(self, index):
+     def handleItemPressed(self, index):
         item = self.rport_combo.model().itemFromIndex(index)
-        if item.checkState() == Qt.Checked:
-            item.setCheckState(Qt.Unchecked)
-            self.rport = ','.join([x for x in self.rport.split(',') if x != item.text()])
-        else:
-            item.setCheckState(Qt.Checked)
-            if self.rport == "":
-                self.rport += item.text()
+        if index.row() == 0:
+            if item.checkState() == Qt.Checked:
+                item.setCheckState(Qt.Unchecked)
+                self.rport = ','.join([x for x in self.rport.split(',') if x != item.text()])
             else:
-                self.rport += "," + item.text()
+                for i in range(1, self.rport_combo.count()):
+                    self.rport_combo.model().item(i).setCheckState(Qt.Unchecked)
+                item.setCheckState(Qt.Checked)
+                self.rport = item.text()
+        else:
+            if item.checkState() == Qt.Checked:
+                item.setCheckState(Qt.Unchecked)
+                self.rport = ','.join([x for x in self.rport.split(',') if x != item.text()])
+            else:
+                self.rport_combo.model().item(0).setCheckState(Qt.Unchecked)
+                item.setCheckState(Qt.Checked)
+                if self.rport == "":
+                    self.rport += item.text()
+                else:
+                    if self.rport == "-":
+                        self.rport = ""
+                        self.rport += item.text()
+                    else:
+                        self.rport += "," + item.text()
 
     def onActivated3(self, text):
         self.rport_label.setText("rport: ")
