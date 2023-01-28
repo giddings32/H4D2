@@ -7,4 +7,3 @@ fi
 chmod +x h4d2
 sudo mv ../H4D2 /opt/H4D2
 sudo cp -s /opt/H4D2/h4d2 /usr/bin/h4d2
-
