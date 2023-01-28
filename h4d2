@@ -7,6 +7,11 @@ from PyQt5.QtGui import *
 import subprocess
 import re
 
+class CheckableComboBox(QComboBox):
+    def __init__(self):
+        super(CheckableComboBox, self).__init__()
+        self.setModel(QStandardItemModel(self))
+
 class MainWindow(QMainWindow):
 
     def __init__(self):
@@ -14,9 +19,9 @@ class MainWindow(QMainWindow):
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
         self.widgets = {}
-        self.lhost = "<LHOST>"
-        self.rhost = "<RHOST>"
-        self.rport = "<RPORT>"
+        self.lhost = ""
+        self.rhost = ""
+        self.rport = ""
 
         # Create home page
         self.home_page = QWidget()
@@ -147,20 +152,24 @@ class MainWindow(QMainWindow):
         self.rhost_layout.addWidget(self.rhost_add_button)
 
 ### rport Setup
-        rports = []
+        i = 0
         H4D2_directory = os.path.join('/opt', "H4D2")
         rports_file_path = os.path.join(H4D2_directory, "rports.txt")
         if os.path.exists(H4D2_directory) and os.access(H4D2_directory, os.R_OK):
             if os.path.isfile(rports_file_path):
                 try:
                     with open("/opt/H4D2/rports.txt", "r") as rports_file:
-                        rports = rports_file.read().split("\n")
-                    rports = ["-"] + sorted(filter(None, rports), key=lambda x: (len(x), x))
-                    rports_file.close()
+                        rports = [line.strip() for line in rports_file]
+                        rports = ["-"] + sorted(filter(None, rports), key=lambda x: (len(x), x))
+                        for rport in rports:
+                            self.rport_combo.addItem(rport)
+                            item = self.rport_combo.model().item(i, 0)
+                            item.setCheckState(Qt.Unchecked)
+                            i += 1               
                 except IOError:
                     print("rports.txt not found.")
                 except:
-                    print("An error occurred while reading rports.txt.")
+                    pass
             else:
                 try:
                     with open("/opt/H4D2/rports.txt", "w") as rports_file:
@@ -174,10 +183,11 @@ class MainWindow(QMainWindow):
         self.rport_layout = QHBoxLayout()
         self.rport_label = QLabel("Rport:")
         self.rport_label.setStyleSheet("color: 'white'; font-size: 16px;")
-        self.rport_combo = QComboBox()
+        self.rport_combo = CheckableComboBox()
         self.rport_combo.setFixedSize(100, 25)
         self.rport_label.setFixedSize(50, 25)
-        self.rport_combo.activated[str].connect(self.onActivated3)
+        self.rport_combo.view().pressed.connect(self.handleItemPressed)
+        self.rport_combo.view().pressed.connect(self.onActivated3)
         
         # Add the rports to the dropdown
         for rport in rports:
@@ -277,8 +287,19 @@ class MainWindow(QMainWindow):
         self.rhost_label.setText("Rhost: ")
         self.tabChanged(text)
    
+    def handleItemPressed(self, index):
+        item = self.rport_combo.model().itemFromIndex(index)
+        if item.checkState() == Qt.Checked:
+            item.setCheckState(Qt.Unchecked)
+            self.rport = ','.join([x for x in self.rport.split(',') if x != item.text()])
+        else:
+            item.setCheckState(Qt.Checked)
+            if self.rport == "":
+                self.rport += item.text()
+            else:
+                self.rport += "," + item.text()
+
     def onActivated3(self, text):
-        self.rport = text
         self.rport_label.setText("rport: ")
         self.tabChanged(text)
   
