@@ -22,7 +22,8 @@ class MainWindow(QMainWindow):
         self.lhost = ""
         self.rhost = ""
         self.rport = ""
-
+        self.lport = ""
+            
         # Create home page
         self.home_page = QWidget()
         
@@ -210,6 +211,59 @@ class MainWindow(QMainWindow):
         self.rport_layout.addWidget(self.rport_add_button)
 
 #####
+### lport Setup
+        lports = []
+        H4D2_directory = os.path.join('/opt', "H4D2")
+        lports_file_path = os.path.join(H4D2_directory, "lports.txt")
+        if os.path.exists(H4D2_directory) and os.access(H4D2_directory, os.R_OK):
+            if os.path.isfile(lports_file_path):
+                try:
+                    with open("/opt/H4D2/lports.txt", "r") as lports_file:
+                        lports = lports_file.read().split("\n")
+                    lports = sorted(filter(None, lports), key=lambda x: (len(x), x))
+                    lports_file.close()
+                except IOError:
+                    print("lports.txt not found.")
+                except:
+                    print("An error occurred while reading lports.txt.")
+            else:
+                try:
+                    with open("/opt/H4D2/lports.txt", "w") as lports_file:
+                        lports_file.write("")
+                except:
+                    print("An error occurred while creating lports.txt.")
+        else:
+            print("H4D2 directory not found or permission denied.")
+        # Create a horizontal layout for the lport label and dropdown
+        self.lport_layout = QHBoxLayout()
+        self.lport_label = QLabel("Lport:")
+        self.lport_label.setStyleSheet("color: 'white'; font-size: 16px;")
+        self.lport_combo = CheckableComboBox()
+        self.lport_combo.setFixedSize(100, 25)
+        self.lport_label.setFixedSize(50, 25)
+        self.lport_combo.activated[str].connect(self.onActivated4)
+
+        # Add the lports to the dropdown
+        for lport in lports:
+            self.lport_combo.addItem(lport)
+
+        self.lport_input = QLineEdit()
+        self.lport_input.setFixedWidth(100) 
+        self.lport_input.setPlaceholderText("LPORT")
+        self.lport_input.setAlignment(Qt.AlignCenter) 
+        self.lport_layout.addWidget(self.lport_input)
+
+        # lport number validation
+        lport_validator = QRegExpValidator(QRegExp('^([0-9]|[1-9][0-9]|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$'))
+        self.lport_input.setValidator(lport_validator)
+        
+        # lport add button
+        self.lport_add_button = QPushButton("Add")
+        self.lport_add_button.setFixedWidth(50) 
+        self.lport_add_button.clicked.connect(lambda: self.add_lport(lports_file))
+        self.lport_layout.addWidget(self.lport_add_button)
+
+#####
         # Add dropdown and labels to layout
         self.lhost_layout.addWidget(self.lhost_label)
         self.lhost_layout.addWidget(self.lhost_combo)
@@ -220,15 +274,14 @@ class MainWindow(QMainWindow):
         self.rhost = self.rhost_combo.currentText()
         self.rport_layout.addWidget(self.rport_label)
         self.rport_layout.addWidget(self.rport_combo)
-        self.rhost_combo.setCurrentIndex(0)
-        #self.rhost = self.rhost_combo.currentText()
-
-        #self.rport = self.rport_combo.currentText()
+        self.lport_layout.addWidget(self.lport_label)
+        self.lport_layout.addWidget(self.lport_combo)
         layout = QVBoxLayout()
         hbox = QHBoxLayout()
         hbox.addLayout(self.rhost_layout)
         hbox.addLayout(self.rport_layout)
         hbox.addLayout(self.lhost_layout)
+        hbox.addLayout(self.lport_layout)
         hbox.addStretch()
         main_layout = QVBoxLayout()
         main_layout.addLayout(hbox)
@@ -261,6 +314,14 @@ class MainWindow(QMainWindow):
             self.rport_input.clear()
             with open("/opt/H4D2/rports.txt", "a") as f:
                 f.write(new_rport + "\n")
+
+    def add_lport(self, lports_file_path):
+        new_lport = self.lport_input.text()
+        if new_lport:
+            self.lport_combo.addItem(new_lport)
+            self.lport_input.clear()
+            with open("/opt/H4D2/lports.txt", "a") as f:
+                f.write(new_lport + "\n")
 
     def refresh_interfaces(self):
         # Clear the current list of interfaces in the lhost_combo widget
@@ -317,7 +378,12 @@ class MainWindow(QMainWindow):
     def onActivated3(self, text):
         self.rport_label.setText("rport: ")
         self.tabChanged(text)
-  
+ 
+    def onActivated4(self, text):
+        self.lport = text
+        self.lport_label.setText("lport: ")
+        self.tabChanged(text)
+
     def show_main_page(self):
         self.stacked_widget.setCurrentWidget(self.main_page)
 
@@ -538,7 +604,6 @@ class MainWindow(QMainWindow):
 
 ### HTTPHelper
     def httphelper(self):
-        self.lport = "80"
         if not hasattr(self, 'tab2_container'):
             self.tab2_container = QWidget()
             self.tab2_container_layout = QVBoxLayout(self.tab2_container)
@@ -2580,7 +2645,6 @@ class MainWindow(QMainWindow):
 
 ##### LPE
     def lpe(self):
-        self.lport = "80"
         if not hasattr(self, 'tab3_container'):
             self.tab3_container = QWidget()
             self.tab3_container_layout = QVBoxLayout(self.tab3_container)
@@ -2597,7 +2661,6 @@ class MainWindow(QMainWindow):
             self.tab3.layout().addWidget(self.scroll)
 
     def wpe(self):
-        self.lport = "80"
         if not hasattr(self, 'tab4_container'):
             self.tab4_container = QWidget()
             self.tab4_container_layout = QVBoxLayout(self.tab4_container)
@@ -2614,7 +2677,6 @@ class MainWindow(QMainWindow):
             self.tab4.layout().addWidget(self.scroll)
 
     def tty(self):
-        self.lport = "80"
         if not hasattr(self, 'tab5_container'):
             self.tab5_container = QWidget()
             self.tab5_container_layout = QVBoxLayout(self.tab5_container)
@@ -2631,7 +2693,6 @@ class MainWindow(QMainWindow):
             self.tab5.layout().addWidget(self.scroll)
 
     def revShells(self):
-        self.lport = "80"
         if not hasattr(self, 'tab6_container'):
             self.tab6_container = QWidget()
             self.tab6_container_layout = QVBoxLayout(self.tab6_container)
