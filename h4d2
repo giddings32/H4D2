@@ -412,7 +412,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'nmap_Scan2'):
             self.tab1_container_layout.removeWidget(self.nmap_Scan2)
             self.nmap_Scan2.deleteLater()
-        self.nmap_Scan2 = QLabel(f"nmap -p- -sC -sV {self.rhost} --open") 
+        self.nmap_Scan2 = QLabel(f"nmap -p{self.rport} -sC -sV {self.rhost} --open") 
         self.nmap_Scan2.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
@@ -456,7 +456,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'nmap_Scan3'):
             self.tab1_container_layout.removeWidget(self.nmap_Scan3)
             self.nmap_Scan3.deleteLater()
-        self.nmap_Scan3 = QLabel(f"nmap -p- --script=vuln {self.rhost}")
+        self.nmap_Scan3 = QLabel(f"nmap -p{self.rport} --script=vuln {self.rhost}")
         self.nmap_Scan3.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
@@ -539,7 +539,6 @@ class MainWindow(QMainWindow):
 ### HTTPHelper
     def httphelper(self):
         self.lport = "80"
-        self.rport = "4444"
         if not hasattr(self, 'tab2_container'):
             self.tab2_container = QWidget()
             self.tab2_container_layout = QVBoxLayout(self.tab2_container)
@@ -655,7 +654,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'nmapMethods_Scan3'):
             self.tab2_container_layout.removeWidget(self.nmapMethods_Scan3)
             self.nmapMethods_Scan3.deleteLater()
-        self.nmapMethods_Scan3 = QLabel("nmap -p80,443 --script=http-methods --script-args http-methods.url-path='/website'")
+        self.nmapMethods_Scan3 = QLabel(f"nmap -p{self.rport} --script=http-methods --script-args http-methods.url-path='/website'")
         self.nmapMethods_Scan3.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
@@ -2582,7 +2581,6 @@ class MainWindow(QMainWindow):
 ##### LPE
     def lpe(self):
         self.lport = "80"
-        self.rport = "4444"
         if not hasattr(self, 'tab3_container'):
             self.tab3_container = QWidget()
             self.tab3_container_layout = QVBoxLayout(self.tab3_container)
@@ -2600,7 +2598,6 @@ class MainWindow(QMainWindow):
 
     def wpe(self):
         self.lport = "80"
-        self.rport = "4444"
         if not hasattr(self, 'tab4_container'):
             self.tab4_container = QWidget()
             self.tab4_container_layout = QVBoxLayout(self.tab4_container)
@@ -2618,7 +2615,6 @@ class MainWindow(QMainWindow):
 
     def tty(self):
         self.lport = "80"
-        self.rport = "4444"
         if not hasattr(self, 'tab5_container'):
             self.tab5_container = QWidget()
             self.tab5_container_layout = QVBoxLayout(self.tab5_container)
@@ -2636,7 +2632,6 @@ class MainWindow(QMainWindow):
 
     def revShells(self):
         self.lport = "80"
-        self.rport = "4444"
         if not hasattr(self, 'tab6_container'):
             self.tab6_container = QWidget()
             self.tab6_container_layout = QVBoxLayout(self.tab6_container)
