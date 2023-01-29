@@ -22,8 +22,7 @@ class MainWindow(QMainWindow):
         self.lhost = ""
         self.rhost = ""
         self.rport = ""
-        self.lport = ""
-            
+
         # Create home page
         self.home_page = QWidget()
         
@@ -211,59 +210,6 @@ class MainWindow(QMainWindow):
         self.rport_layout.addWidget(self.rport_add_button)
 
 #####
-### lport Setup
-        lports = []
-        H4D2_directory = os.path.join('/opt', "H4D2")
-        lports_file_path = os.path.join(H4D2_directory, "lports.txt")
-        if os.path.exists(H4D2_directory) and os.access(H4D2_directory, os.R_OK):
-            if os.path.isfile(lports_file_path):
-                try:
-                    with open("/opt/H4D2/lports.txt", "r") as lports_file:
-                        lports = lports_file.read().split("\n")
-                    lports = sorted(filter(None, lports), key=lambda x: (len(x), x))
-                    lports_file.close()
-                except IOError:
-                    print("lports.txt not found.")
-                except:
-                    print("An error occurred while reading lports.txt.")
-            else:
-                try:
-                    with open("/opt/H4D2/lports.txt", "w") as lports_file:
-                        lports_file.write("")
-                except:
-                    print("An error occurred while creating lports.txt.")
-        else:
-            print("H4D2 directory not found or permission denied.")
-        # Create a horizontal layout for the lport label and dropdown
-        self.lport_layout = QHBoxLayout()
-        self.lport_label = QLabel("Lport:")
-        self.lport_label.setStyleSheet("color: 'white'; font-size: 16px;")
-        self.lport_combo = CheckableComboBox()
-        self.lport_combo.setFixedSize(100, 25)
-        self.lport_label.setFixedSize(50, 25)
-        self.lport_combo.activated[str].connect(self.onActivated4)
-
-        # Add the lports to the dropdown
-        for lport in lports:
-            self.lport_combo.addItem(lport)
-
-        self.lport_input = QLineEdit()
-        self.lport_input.setFixedWidth(100) 
-        self.lport_input.setPlaceholderText("LPORT")
-        self.lport_input.setAlignment(Qt.AlignCenter) 
-        self.lport_layout.addWidget(self.lport_input)
-
-        # lport number validation
-        lport_validator = QRegExpValidator(QRegExp('^([0-9]|[1-9][0-9]|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$'))
-        self.lport_input.setValidator(lport_validator)
-        
-        # lport add button
-        self.lport_add_button = QPushButton("Add")
-        self.lport_add_button.setFixedWidth(50) 
-        self.lport_add_button.clicked.connect(lambda: self.add_lport(lports_file))
-        self.lport_layout.addWidget(self.lport_add_button)
-
-#####
         # Add dropdown and labels to layout
         self.lhost_layout.addWidget(self.lhost_label)
         self.lhost_layout.addWidget(self.lhost_combo)
@@ -274,14 +220,15 @@ class MainWindow(QMainWindow):
         self.rhost = self.rhost_combo.currentText()
         self.rport_layout.addWidget(self.rport_label)
         self.rport_layout.addWidget(self.rport_combo)
-        self.lport_layout.addWidget(self.lport_label)
-        self.lport_layout.addWidget(self.lport_combo)
+        self.rhost_combo.setCurrentIndex(0)
+        #self.rhost = self.rhost_combo.currentText()
+
+        #self.rport = self.rport_combo.currentText()
         layout = QVBoxLayout()
         hbox = QHBoxLayout()
         hbox.addLayout(self.rhost_layout)
         hbox.addLayout(self.rport_layout)
         hbox.addLayout(self.lhost_layout)
-        hbox.addLayout(self.lport_layout)
         hbox.addStretch()
         main_layout = QVBoxLayout()
         main_layout.addLayout(hbox)
@@ -314,14 +261,6 @@ class MainWindow(QMainWindow):
             self.rport_input.clear()
             with open("/opt/H4D2/rports.txt", "a") as f:
                 f.write(new_rport + "\n")
-
-    def add_lport(self, lports_file_path):
-        new_lport = self.lport_input.text()
-        if new_lport:
-            self.lport_combo.addItem(new_lport)
-            self.lport_input.clear()
-            with open("/opt/H4D2/lports.txt", "a") as f:
-                f.write(new_lport + "\n")
 
     def refresh_interfaces(self):
         # Clear the current list of interfaces in the lhost_combo widget
@@ -378,12 +317,7 @@ class MainWindow(QMainWindow):
     def onActivated3(self, text):
         self.rport_label.setText("rport: ")
         self.tabChanged(text)
- 
-    def onActivated4(self, text):
-        self.lport = text
-        self.lport_label.setText("lport: ")
-        self.tabChanged(text)
-
+  
     def show_main_page(self):
         self.stacked_widget.setCurrentWidget(self.main_page)
 
@@ -604,6 +538,7 @@ class MainWindow(QMainWindow):
 
 ### HTTPHelper
     def httphelper(self):
+        self.lport = "80"
         if not hasattr(self, 'tab2_container'):
             self.tab2_container = QWidget()
             self.tab2_container_layout = QVBoxLayout(self.tab2_container)
@@ -2645,6 +2580,7 @@ class MainWindow(QMainWindow):
 
 ##### LPE
     def lpe(self):
+        self.lport = "80"
         if not hasattr(self, 'tab3_container'):
             self.tab3_container = QWidget()
             self.tab3_container_layout = QVBoxLayout(self.tab3_container)
@@ -2660,7 +2596,11 @@ class MainWindow(QMainWindow):
             self.tab3.setLayout(QVBoxLayout())
             self.tab3.layout().addWidget(self.scroll)
 
+<<<<<<< HEAD
              # lpe_top_divider 1
+=======
+                    # lpe_top_divider 1
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         if hasattr(self, 'lpe_top_divider1'):
             self.tab3_container_layout.removeWidget(self.lpe_top_divider1)
             self.lpe_top_divider1.deleteLater()
@@ -3459,7 +3399,11 @@ class MainWindow(QMainWindow):
             self.lpe_www1_spacer1.deleteLater()
         self.lpe_www1_spacer1 = QLabel()
         self.lpe_www1_spacer1.setFixedWidth(40)
+<<<<<<< HEAD
         self.lpe_www1_spacer1.setFixedHeight(20)
+=======
+        self.lpe_www1_spacer1.setFixedHeight(50)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_www1_spacer & divider layout
         self.tab3_container_layout.insertWidget(41, self.lpe_www1_spacer1)
@@ -3668,12 +3612,20 @@ class MainWindow(QMainWindow):
             self.lpe_suid1_spacer1.deleteLater()
         self.lpe_suid1_spacer1 = QLabel()
         self.lpe_suid1_spacer1.setFixedWidth(40)
+<<<<<<< HEAD
         self.lpe_suid1_spacer1.setFixedHeight(20)
+=======
+        self.lpe_suid1_spacer1.setFixedHeight(50)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_suid1_spacer & divider layout
         self.tab3_container_layout.insertWidget(51, self.lpe_suid1_spacer1)
         self.tab3_container_layout.addStretch()
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 # guid
         if hasattr(self, 'guid'):
             self.tab3_container_layout.removeWidget(self.guid)
@@ -3771,17 +3723,1259 @@ class MainWindow(QMainWindow):
         self.tab3_container_layout.insertWidget(57, self.lpe_suid_spacer2)
         self.tab3_container_layout.addStretch()
 
+<<<<<<< HEAD
+=======
+# qli
+        if hasattr(self, 'qli'):
+            self.tab3_container_layout.removeWidget(self.qli)
+            self.qli.deleteLater()
+        self.qli = QLabel("[+ Quick Look in]")
+        self.qli.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab3_container_layout.insertWidget(58,self.qli)
+
+        # qli_Scan1
+        if hasattr(self, 'qli_Scan1'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan1)
+            self.qli_Scan1.deleteLater()
+        self.qli_Scan1 = QLabel("ls -lsaht /var/lib")
+        self.qli_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # qli_Scan1 copy button
+        if hasattr(self, 'qli_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan1_Copy)
+            self.qli_Scan1_Copy.deleteLater()
+        self.qli_Scan1_Copy = QPushButton()
+        self.qli_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.qli_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.qli_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.qli_Scan1.text()))
+        self.qli_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan1 run button
+        if hasattr(self, 'qli_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan1_Run)
+            self.qli_Scan1_Run.deleteLater()
+        self.qli_Scan1_Run = QPushButton()
+        self.qli_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.qli_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.qli_Scan1.text() + "; bash"
+        self.qli_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.qli_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.qli_Scan1_Copy)
+        label_layout.addWidget(self.qli_Scan1_Run)
+        label_layout.addWidget(self.qli_Scan1)
+        self.tab3_container_layout.insertLayout(59, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # qli_Scan2
+        if hasattr(self, 'qli_Scan2'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan2)
+            self.qli_Scan2.deleteLater()
+        self.qli_Scan2 = QLabel("ls -lsaht /var/db")
+        self.qli_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # qli_Scan2 copy button
+        if hasattr(self, 'qli_Scan2_Copy'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan2_Copy)
+            self.qli_Scan2_Copy.deleteLater()
+        self.qli_Scan2_Copy = QPushButton()
+        self.qli_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.qli_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.qli_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.qli_Scan2.text()))
+        self.qli_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan2 run button
+        if hasattr(self, 'qli_Scan2_Run'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan2_Run)
+            self.qli_Scan2_Run.deleteLater()
+        self.qli_Scan2_Run = QPushButton()
+        self.qli_Scan2_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.qli_Scan2_Run.setFixedSize(QSize(20,20))
+        command10 = self.qli_Scan2.text() + "; bash"
+        self.qli_Scan2_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.qli_Scan2_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.qli_Scan2_Copy)
+        label_layout.addWidget(self.qli_Scan2_Run)
+        label_layout.addWidget(self.qli_Scan2)
+        self.tab3_container_layout.insertLayout(60, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # qli_Scan3
+        if hasattr(self, 'qli_Scan3'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan3)
+            self.qli_Scan3.deleteLater()
+        self.qli_Scan3 = QLabel("ls -lsaht /opt/")
+        self.qli_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # qli_Scan3 copy button
+        if hasattr(self, 'qli_Scan3_Copy'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan3_Copy)
+            self.qli_Scan3_Copy.deleteLater()
+        self.qli_Scan3_Copy = QPushButton()
+        self.qli_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.qli_Scan3_Copy.setFixedSize(QSize(20,20))
+        self.qli_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.qli_Scan3.text()))
+        self.qli_Scan3_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan3 run button
+        if hasattr(self, 'qli_Scan3_Run'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan3_Run)
+            self.qli_Scan3_Run.deleteLater()
+        self.qli_Scan3_Run = QPushButton()
+        self.qli_Scan3_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.qli_Scan3_Run.setFixedSize(QSize(20,20))
+        command10 = self.qli_Scan3.text() + "; bash"
+        self.qli_Scan3_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.qli_Scan3_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan3 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.qli_Scan3_Copy)
+        label_layout.addWidget(self.qli_Scan3_Run)
+        label_layout.addWidget(self.qli_Scan3)
+        self.tab3_container_layout.insertLayout(61, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # qli_Scan4
+        if hasattr(self, 'qli_Scan4'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan4)
+            self.qli_Scan4.deleteLater()
+        self.qli_Scan4 = QLabel("ls -lsaht /tmp/")
+        self.qli_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # qli_Scan4 copy button
+        if hasattr(self, 'qli_Scan4_Copy'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan4_Copy)
+            self.qli_Scan4_Copy.deleteLater()
+        self.qli_Scan4_Copy = QPushButton()
+        self.qli_Scan4_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.qli_Scan4_Copy.setFixedSize(QSize(20,20))
+        self.qli_Scan4_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.qli_Scan4.text()))
+        self.qli_Scan4_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan4 run button
+        if hasattr(self, 'qli_Scan4_Run'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan4_Run)
+            self.qli_Scan4_Run.deleteLater()
+        self.qli_Scan4_Run = QPushButton()
+        self.qli_Scan4_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.qli_Scan4_Run.setFixedSize(QSize(20,20))
+        command10 = self.qli_Scan4.text() + "; bash"
+        self.qli_Scan4_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.qli_Scan4_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan4 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.qli_Scan4_Copy)
+        label_layout.addWidget(self.qli_Scan4_Run)
+        label_layout.addWidget(self.qli_Scan4)
+        self.tab3_container_layout.insertLayout(62, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # qli_Scan5
+        if hasattr(self, 'qli_Scan5'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan5)
+            self.qli_Scan5.deleteLater()
+        self.qli_Scan5 = QLabel("ls -lsaht /var/tmp/")
+        self.qli_Scan5.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # qli_Scan5 copy button
+        if hasattr(self, 'qli_Scan5_Copy'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan5_Copy)
+            self.qli_Scan5_Copy.deleteLater()
+        self.qli_Scan5_Copy = QPushButton()
+        self.qli_Scan5_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.qli_Scan5_Copy.setFixedSize(QSize(20,20))
+        self.qli_Scan5_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.qli_Scan5.text()))
+        self.qli_Scan5_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan5 run button
+        if hasattr(self, 'qli_Scan5_Run'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan5_Run)
+            self.qli_Scan5_Run.deleteLater()
+        self.qli_Scan5_Run = QPushButton()
+        self.qli_Scan5_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.qli_Scan5_Run.setFixedSize(QSize(20,20))
+        command10 = self.qli_Scan5.text() + "; bash"
+        self.qli_Scan5_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.qli_Scan5_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan5 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.qli_Scan5_Copy)
+        label_layout.addWidget(self.qli_Scan5_Run)
+        label_layout.addWidget(self.qli_Scan5)
+        self.tab3_container_layout.insertLayout(63, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # qli_Scan6
+        if hasattr(self, 'qli_Scan6'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan6)
+            self.qli_Scan6.deleteLater()
+        self.qli_Scan6 = QLabel("ls -lsaht /var/shm/")
+        self.qli_Scan6.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # qli_Scan6 copy button
+        if hasattr(self, 'qli_Scan6_Copy'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan6_Copy)
+            self.qli_Scan6_Copy.deleteLater()
+        self.qli_Scan6_Copy = QPushButton()
+        self.qli_Scan6_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.qli_Scan6_Copy.setFixedSize(QSize(20,20))
+        self.qli_Scan6_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.qli_Scan6.text()))
+        self.qli_Scan6_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan6 run button
+        if hasattr(self, 'qli_Scan6_Run'):
+            self.tab3_container_layout.removeWidget(self.qli_Scan6_Run)
+            self.qli_Scan6_Run.deleteLater()
+        self.qli_Scan6_Run = QPushButton()
+        self.qli_Scan6_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.qli_Scan6_Run.setFixedSize(QSize(20,20))
+        command10 = self.qli_Scan6.text() + "; bash"
+        self.qli_Scan6_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.qli_Scan6_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # qli_Scan6 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.qli_Scan6_Copy)
+        label_layout.addWidget(self.qli_Scan6_Run)
+        label_layout.addWidget(self.qli_Scan6)
+        self.tab3_container_layout.insertLayout(64, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # lpe_qli_divider 1
+        if hasattr(self, 'lpe_qli_divider1'):
+            self.tab3_container_layout.removeWidget(self.lpe_qli_divider1)
+            self.lpe_qli_divider1.deleteLater()
+        self.lpe_qli_divider1 = QFrame()
+        self.lpe_qli_divider1.setFrameShape(QFrame.HLine)
+        self.lpe_qli_divider1.setLineWidth(3)
+        self.lpe_qli_divider1.setStyleSheet("color: #20C20E;")
+        
+        # lpe_qli_divider2
+        if hasattr(self, 'lpe_qli_divider2'):
+            self.tab3_container_layout.removeWidget(self.lpe_qli_divider2)
+            self.lpe_qli_divider2.deleteLater()
+        self.lpe_qli_divider2 = QFrame()
+        self.lpe_qli_divider2.setFrameShape(QFrame.HLine)
+        self.lpe_qli_divider2.setLineWidth(3)
+        self.lpe_qli_divider2.setStyleSheet("color: #20C20E;")
+        
+        # lpe_qli_spacer1
+        if hasattr(self, 'lpe_qli_spacer1'):
+            self.tab3_container_layout.removeWidget(self.lpe_qli_spacer1)
+            self.lpe_qli_spacer1.deleteLater()
+        self.lpe_qli_spacer1 = QLabel()
+        self.lpe_qli_spacer1.setFixedWidth(40)
+        self.lpe_qli_spacer1.setFixedHeight(50)
+        
+        # lpe_qli_spacer2
+        if hasattr(self, 'lpe_qli_spacer2'):
+            self.tab3_container_layout.removeWidget(self.lpe_qli_spacer2)
+            self.lpe_qli_spacer2.deleteLater()
+        self.lpe_qli_spacer2 = QLabel()
+        self.lpe_qli_spacer2.setFixedWidth(40)
+        self.lpe_qli_spacer2.setFixedHeight(50)
+
+        # lpe_qli_spacer & divider layout
+        self.tab3_container_layout.insertWidget(65, self.lpe_qli_spacer1)
+        self.tab3_container_layout.insertWidget(66, self.lpe_qli_divider1)
+        self.tab3_container_layout.insertWidget(67, self.lpe_qli_divider2)
+        self.tab3_container_layout.insertWidget(68, self.lpe_qli_spacer2)
+        self.tab3_container_layout.addStretch()
+
+# mounts
+        if hasattr(self, 'mounts'):
+            self.tab3_container_layout.removeWidget(self.mounts)
+            self.mounts.deleteLater()
+        self.mounts = QLabel("[+ any exotic file system mounts/extended attributes? (looking for it to say user extened attributes)]")
+        self.mounts.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab3_container_layout.insertWidget(69,self.mounts)
+
+        # mounts_Scan1
+        if hasattr(self, 'mounts_Scan1'):
+            self.tab3_container_layout.removeWidget(self.mounts_Scan1)
+            self.mounts_Scan1.deleteLater()
+        self.mounts_Scan1 = QLabel("cat /etc/fstab")
+        self.mounts_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # mounts_Scan1 copy button
+        if hasattr(self, 'mounts_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.mounts_Scan1_Copy)
+            self.mounts_Scan1_Copy.deleteLater()
+        self.mounts_Scan1_Copy = QPushButton()
+        self.mounts_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.mounts_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.mounts_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.mounts_Scan1.text()))
+        self.mounts_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # mounts_Scan1 run button
+        if hasattr(self, 'mounts_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.mounts_Scan1_Run)
+            self.mounts_Scan1_Run.deleteLater()
+        self.mounts_Scan1_Run = QPushButton()
+        self.mounts_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.mounts_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.mounts_Scan1.text() + "; bash"
+        self.mounts_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.mounts_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # mounts_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.mounts_Scan1_Copy)
+        label_layout.addWidget(self.mounts_Scan1_Run)
+        label_layout.addWidget(self.mounts_Scan1)
+        self.tab3_container_layout.insertLayout(70, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # mounts_Scan2
+        if hasattr(self, 'mounts_Scan2'):
+            self.tab3_container_layout.removeWidget(self.mounts_Scan2)
+            self.mounts_Scan2.deleteLater()
+        self.mounts_Scan2 = QLabel("mount")
+        self.mounts_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # mounts_Scan2 copy button
+        if hasattr(self, 'mounts_Scan2_Copy'):
+            self.tab3_container_layout.removeWidget(self.mounts_Scan2_Copy)
+            self.mounts_Scan2_Copy.deleteLater()
+        self.mounts_Scan2_Copy = QPushButton()
+        self.mounts_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.mounts_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.mounts_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.mounts_Scan2.text()))
+        self.mounts_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # mounts_Scan2 run button
+        if hasattr(self, 'mounts_Scan2_Run'):
+            self.tab3_container_layout.removeWidget(self.mounts_Scan2_Run)
+            self.mounts_Scan2_Run.deleteLater()
+        self.mounts_Scan2_Run = QPushButton()
+        self.mounts_Scan2_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.mounts_Scan2_Run.setFixedSize(QSize(20,20))
+        command10 = self.mounts_Scan2.text() + "; bash"
+        self.mounts_Scan2_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.mounts_Scan2_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # mounts_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.mounts_Scan2_Copy)
+        label_layout.addWidget(self.mounts_Scan2_Run)
+        label_layout.addWidget(self.mounts_Scan2)
+        self.tab3_container_layout.insertLayout(71, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # lpe_mounts_divider 1
+        if hasattr(self, 'lpe_mounts_divider1'):
+            self.tab3_container_layout.removeWidget(self.lpe_mounts_divider1)
+            self.lpe_mounts_divider1.deleteLater()
+        self.lpe_mounts_divider1 = QFrame()
+        self.lpe_mounts_divider1.setFrameShape(QFrame.HLine)
+        self.lpe_mounts_divider1.setLineWidth(3)
+        self.lpe_mounts_divider1.setStyleSheet("color: #20C20E;")
+        
+        # lpe_mounts_divider2
+        if hasattr(self, 'lpe_mounts_divider2'):
+            self.tab3_container_layout.removeWidget(self.lpe_mounts_divider2)
+            self.lpe_mounts_divider2.deleteLater()
+        self.lpe_mounts_divider2 = QFrame()
+        self.lpe_mounts_divider2.setFrameShape(QFrame.HLine)
+        self.lpe_mounts_divider2.setLineWidth(3)
+        self.lpe_mounts_divider2.setStyleSheet("color: #20C20E;")
+        
+        # lpe_mounts_spacer1
+        if hasattr(self, 'lpe_mounts_spacer1'):
+            self.tab3_container_layout.removeWidget(self.lpe_mounts_spacer1)
+            self.lpe_mounts_spacer1.deleteLater()
+        self.lpe_mounts_spacer1 = QLabel()
+        self.lpe_mounts_spacer1.setFixedWidth(40)
+        self.lpe_mounts_spacer1.setFixedHeight(50)
+        
+        # lpe_mounts_spacer2
+        if hasattr(self, 'lpe_mounts_spacer2'):
+            self.tab3_container_layout.removeWidget(self.lpe_mounts_spacer2)
+            self.lpe_mounts_spacer2.deleteLater()
+        self.lpe_mounts_spacer2 = QLabel()
+        self.lpe_mounts_spacer2.setFixedWidth(40)
+        self.lpe_mounts_spacer2.setFixedHeight(50)
+
+        # lpe_mounts_spacer & divider layout
+        self.tab3_container_layout.insertWidget(72, self.lpe_mounts_spacer1)
+        self.tab3_container_layout.insertWidget(73, self.lpe_mounts_divider1)
+        self.tab3_container_layout.insertWidget(74, self.lpe_mounts_divider2)
+        self.tab3_container_layout.insertWidget(75, self.lpe_mounts_spacer2)
+        self.tab3_container_layout.addStretch()
+
+# ulf
+        if hasattr(self, 'ulf'):
+            self.tab3_container_layout.removeWidget(self.ulf)
+            self.ulf.deleteLater()
+        self.ulf = QLabel("[+ Check etc for anything special made by any user-level people]")
+        self.ulf.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab3_container_layout.insertWidget(76,self.ulf)
+
+        # ulf_Scan1
+        if hasattr(self, 'ulf_Scan1'):
+            self.tab3_container_layout.removeWidget(self.ulf_Scan1)
+            self.ulf_Scan1.deleteLater()
+        self.ulf_Scan1 = QLabel("ls -lsaht /etc/")
+        self.ulf_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # ulf_Scan1 copy button
+        if hasattr(self, 'ulf_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.ulf_Scan1_Copy)
+            self.ulf_Scan1_Copy.deleteLater()
+        self.ulf_Scan1_Copy = QPushButton()
+        self.ulf_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.ulf_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.ulf_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.ulf_Scan1.text()))
+        self.ulf_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # ulf_Scan1 run button
+        if hasattr(self, 'ulf_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.ulf_Scan1_Run)
+            self.ulf_Scan1_Run.deleteLater()
+        self.ulf_Scan1_Run = QPushButton()
+        self.ulf_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.ulf_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.ulf_Scan1.text() + "; bash"
+        self.ulf_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.ulf_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # ulf_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.ulf_Scan1_Copy)
+        label_layout.addWidget(self.ulf_Scan1_Run)
+        label_layout.addWidget(self.ulf_Scan1)
+        self.tab3_container_layout.insertLayout(77, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # lpe_ulf_divider 1
+        if hasattr(self, 'lpe_ulf_divider1'):
+            self.tab3_container_layout.removeWidget(self.lpe_ulf_divider1)
+            self.lpe_ulf_divider1.deleteLater()
+        self.lpe_ulf_divider1 = QFrame()
+        self.lpe_ulf_divider1.setFrameShape(QFrame.HLine)
+        self.lpe_ulf_divider1.setLineWidth(3)
+        self.lpe_ulf_divider1.setStyleSheet("color: #20C20E;")
+        
+        # lpe_ulf_divider2
+        if hasattr(self, 'lpe_ulf_divider2'):
+            self.tab3_container_layout.removeWidget(self.lpe_ulf_divider2)
+            self.lpe_ulf_divider2.deleteLater()
+        self.lpe_ulf_divider2 = QFrame()
+        self.lpe_ulf_divider2.setFrameShape(QFrame.HLine)
+        self.lpe_ulf_divider2.setLineWidth(3)
+        self.lpe_ulf_divider2.setStyleSheet("color: #20C20E;")
+        
+        # lpe_ulf_spacer1
+        if hasattr(self, 'lpe_ulf_spacer1'):
+            self.tab3_container_layout.removeWidget(self.lpe_ulf_spacer1)
+            self.lpe_ulf_spacer1.deleteLater()
+        self.lpe_ulf_spacer1 = QLabel()
+        self.lpe_ulf_spacer1.setFixedWidth(40)
+        self.lpe_ulf_spacer1.setFixedHeight(50)
+        
+        # lpe_ulf_spacer2
+        if hasattr(self, 'lpe_ulf_spacer2'):
+            self.tab3_container_layout.removeWidget(self.lpe_ulf_spacer2)
+            self.lpe_ulf_spacer2.deleteLater()
+        self.lpe_ulf_spacer2 = QLabel()
+        self.lpe_ulf_spacer2.setFixedWidth(40)
+        self.lpe_ulf_spacer2.setFixedHeight(50)
+
+        # lpe_ulf_spacer & divider layout
+        self.tab3_container_layout.insertWidget(78, self.lpe_ulf_spacer1)
+        self.tab3_container_layout.insertWidget(79, self.lpe_ulf_divider1)
+        self.tab3_container_layout.insertWidget(80, self.lpe_ulf_divider2)
+        self.tab3_container_layout.insertWidget(81, self.lpe_ulf_spacer2)
+        self.tab3_container_layout.addStretch()
+
+# config
+        if hasattr(self, 'config'):
+            self.tab3_container_layout.removeWidget(self.config)
+            self.config.deleteLater()
+        self.config = QLabel("[+ Any .config files in /etc ?]")
+        self.config.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab3_container_layout.insertWidget(82,self.config)
+
+        # config_Scan1
+        if hasattr(self, 'config_Scan1'):
+            self.tab3_container_layout.removeWidget(self.config_Scan1)
+            self.config_Scan1.deleteLater()
+        self.config_Scan1 = QLabel("ls -lsaht /etc/ |grep -i '.conf' --color=auto")
+        self.config_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # config_Scan1 copy button
+        if hasattr(self, 'config_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.config_Scan1_Copy)
+            self.config_Scan1_Copy.deleteLater()
+        self.config_Scan1_Copy = QPushButton()
+        self.config_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.config_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.config_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.config_Scan1.text()))
+        self.config_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # config_Scan1 run button
+        if hasattr(self, 'config_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.config_Scan1_Run)
+            self.config_Scan1_Run.deleteLater()
+        self.config_Scan1_Run = QPushButton()
+        self.config_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.config_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.config_Scan1.text() + "; bash"
+        self.config_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.config_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # config_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.config_Scan1_Copy)
+        label_layout.addWidget(self.config_Scan1_Run)
+        label_layout.addWidget(self.config_Scan1)
+        self.tab3_container_layout.insertLayout(83, label_layout)
+        self.tab3_container_layout.addStretch()
+
+	# lpe_config1_spacer1
+        if hasattr(self, 'lpe_config1_spacer1'):
+            self.tab3_container_layout.removeWidget(self.lpe_config1_spacer1)
+            self.lpe_config1_spacer1.deleteLater()
+        self.lpe_config1_spacer1 = QLabel()
+        self.lpe_config1_spacer1.setFixedWidth(40)
+        self.lpe_config1_spacer1.setFixedHeight(50)
+
+        # lpe_config1_spacer & divider layout
+        self.tab3_container_layout.insertWidget(84, self.lpe_config1_spacer1)
+        self.tab3_container_layout.addStretch()
+
+# secret
+        if hasattr(self, 'secret'):
+            self.tab3_container_layout.removeWidget(self.secret)
+            self.secret.deleteLater()
+        self.secret = QLabel("[+ Any .secret files in /etc ?]")
+        self.secret.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab3_container_layout.insertWidget(85,self.secret)
+
+        # secret_Scan1
+        if hasattr(self, 'secret_Scan1'):
+            self.tab3_container_layout.removeWidget(self.secret_Scan1)
+            self.secret_Scan1.deleteLater()
+        self.secret_Scan1 = QLabel("ls -lsaht /etc/ |grep -i '.secret' --color=auto")
+        self.secret_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # secret_Scan1 copy button
+        if hasattr(self, 'secret_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.secret_Scan1_Copy)
+            self.secret_Scan1_Copy.deleteLater()
+        self.secret_Scan1_Copy = QPushButton()
+        self.secret_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.secret_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.secret_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.secret_Scan1.text()))
+        self.secret_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # secret_Scan1 run button
+        if hasattr(self, 'secret_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.secret_Scan1_Run)
+            self.secret_Scan1_Run.deleteLater()
+        self.secret_Scan1_Run = QPushButton()
+        self.secret_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.secret_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.secret_Scan1.text() + "; bash"
+        self.secret_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.secret_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # secret_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.secret_Scan1_Copy)
+        label_layout.addWidget(self.secret_Scan1_Run)
+        label_layout.addWidget(self.secret_Scan1)
+        self.tab3_container_layout.insertLayout(86, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # lpe_config_divider 1
+        if hasattr(self, 'lpe_config_divider1'):
+            self.tab3_container_layout.removeWidget(self.lpe_config_divider1)
+            self.lpe_config_divider1.deleteLater()
+        self.lpe_config_divider1 = QFrame()
+        self.lpe_config_divider1.setFrameShape(QFrame.HLine)
+        self.lpe_config_divider1.setLineWidth(3)
+        self.lpe_config_divider1.setStyleSheet("color: #20C20E;")
+        
+        # lpe_config_divider2
+        if hasattr(self, 'lpe_config_divider2'):
+            self.tab3_container_layout.removeWidget(self.lpe_config_divider2)
+            self.lpe_config_divider2.deleteLater()
+        self.lpe_config_divider2 = QFrame()
+        self.lpe_config_divider2.setFrameShape(QFrame.HLine)
+        self.lpe_config_divider2.setLineWidth(3)
+        self.lpe_config_divider2.setStyleSheet("color: #20C20E;")
+        
+        # lpe_config_spacer1
+        if hasattr(self, 'lpe_config_spacer1'):
+            self.tab3_container_layout.removeWidget(self.lpe_config_spacer1)
+            self.lpe_config_spacer1.deleteLater()
+        self.lpe_config_spacer1 = QLabel()
+        self.lpe_config_spacer1.setFixedWidth(40)
+        self.lpe_config_spacer1.setFixedHeight(50)
+        
+        # lpe_config_spacer2
+        if hasattr(self, 'lpe_config_spacer2'):
+            self.tab3_container_layout.removeWidget(self.lpe_config_spacer2)
+            self.lpe_config_spacer2.deleteLater()
+        self.lpe_config_spacer2 = QLabel()
+        self.lpe_config_spacer2.setFixedWidth(40)
+        self.lpe_config_spacer2.setFixedHeight(50)
+
+        # lpe_config_spacer & divider layout
+        self.tab3_container_layout.insertWidget(87, self.lpe_config_spacer1)
+        self.tab3_container_layout.insertWidget(88, self.lpe_config_divider1)
+        self.tab3_container_layout.insertWidget(89, self.lpe_config_divider2)
+        self.tab3_container_layout.insertWidget(90, self.lpe_config_spacer2)
+        self.tab3_container_layout.addStretch()
+
+# passwd
+        if hasattr(self, 'passwd'):
+            self.tab3_container_layout.removeWidget(self.passwd)
+            self.passwd.deleteLater()
+        self.passwd = QLabel("[+ Is passwd writable?]")
+        self.passwd.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab3_container_layout.insertWidget(91,self.passwd)
+
+        # passwd_Scan1
+        if hasattr(self, 'passwd_Scan1'):
+            self.tab3_container_layout.removeWidget(self.passwd_Scan1)
+            self.passwd_Scan1.deleteLater()
+        self.passwd_Scan1 = QLabel("ls -lsa /etc/passwd")
+        self.passwd_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # passwd_Scan1 copy button
+        if hasattr(self, 'passwd_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.passwd_Scan1_Copy)
+            self.passwd_Scan1_Copy.deleteLater()
+        self.passwd_Scan1_Copy = QPushButton()
+        self.passwd_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.passwd_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.passwd_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.passwd_Scan1.text()))
+        self.passwd_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # passwd_Scan1 run button
+        if hasattr(self, 'passwd_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.passwd_Scan1_Run)
+            self.passwd_Scan1_Run.deleteLater()
+        self.passwd_Scan1_Run = QPushButton()
+        self.passwd_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.passwd_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.passwd_Scan1.text() + "; bash"
+        self.passwd_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.passwd_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # passwd_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.passwd_Scan1_Copy)
+        label_layout.addWidget(self.passwd_Scan1_Run)
+        label_layout.addWidget(self.passwd_Scan1)
+        self.tab3_container_layout.insertLayout(92, label_layout)
+        self.tab3_container_layout.addStretch()
+
+# exploit_passwd
+        if hasattr(self, 'exploit_passwd'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd)
+            self.exploit_passwd.deleteLater()
+        self.exploit_passwd = QLabel("[+ Exploit writable passwd file]")
+        self.exploit_passwd.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab3_container_layout.insertWidget(93,self.exploit_passwd)
+
+        # exploit_passwd_Scan1
+        if hasattr(self, 'exploit_passwd_Scan1'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan1)
+            self.exploit_passwd_Scan1.deleteLater()
+        self.exploit_passwd_Scan1 = QLabel("openssl passwd -1")
+        self.exploit_passwd_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # exploit_passwd_Scan1 copy button
+        if hasattr(self, 'exploit_passwd_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan1_Copy)
+            self.exploit_passwd_Scan1_Copy.deleteLater()
+        self.exploit_passwd_Scan1_Copy = QPushButton()
+        self.exploit_passwd_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.exploit_passwd_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.exploit_passwd_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.exploit_passwd_Scan1.text()))
+        self.exploit_passwd_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # exploit_passwd_Scan1 run button
+        if hasattr(self, 'exploit_passwd_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan1_Run)
+            self.exploit_passwd_Scan1_Run.deleteLater()
+        self.exploit_passwd_Scan1_Run = QPushButton()
+        self.exploit_passwd_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.exploit_passwd_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.exploit_passwd_Scan1.text() + "; bash"
+        self.exploit_passwd_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.exploit_passwd_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # exploit_passwd_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.exploit_passwd_Scan1_Copy)
+        label_layout.addWidget(self.exploit_passwd_Scan1_Run)
+        label_layout.addWidget(self.exploit_passwd_Scan1)
+        self.tab3_container_layout.insertLayout(94, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # exploit_passwd_Scan2
+        if hasattr(self, 'exploit_passwd_Scan2'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan2)
+            self.exploit_passwd_Scan2.deleteLater()
+        self.exploit_passwd_Scan2 = QLabel("<Enter A Password>")
+        self.exploit_passwd_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # exploit_passwd_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.exploit_passwd_Scan2)
+        self.tab3_container_layout.insertLayout(95, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # exploit_passwd_Scan3
+        if hasattr(self, 'exploit_passwd_Scan3'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan3)
+            self.exploit_passwd_Scan3.deleteLater()
+        self.exploit_passwd_Scan3 = QLabel("echo 'offsec:<PASTE_HASH>:0:0:offsec:/home/offsec:/bin/bash' >> /etc/passwd")
+        self.exploit_passwd_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # exploit_passwd_Scan3 copy button
+        if hasattr(self, 'exploit_passwd_Scan3_Copy'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan3_Copy)
+            self.exploit_passwd_Scan3_Copy.deleteLater()
+        self.exploit_passwd_Scan3_Copy = QPushButton()
+        self.exploit_passwd_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.exploit_passwd_Scan3_Copy.setFixedSize(QSize(20,20))
+        self.exploit_passwd_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.exploit_passwd_Scan3.text()))
+        self.exploit_passwd_Scan3_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # exploit_passwd_Scan3 run button
+        if hasattr(self, 'exploit_passwd_Scan3_Run'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan3_Run)
+            self.exploit_passwd_Scan3_Run.deleteLater()
+        self.exploit_passwd_Scan3_Run = QPushButton()
+        self.exploit_passwd_Scan3_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.exploit_passwd_Scan3_Run.setFixedSize(QSize(20,20))
+        command10 = self.exploit_passwd_Scan3.text() + "; bash"
+        self.exploit_passwd_Scan3_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.exploit_passwd_Scan3_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # exploit_passwd_Scan3 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.exploit_passwd_Scan3_Copy)
+        label_layout.addWidget(self.exploit_passwd_Scan3_Run)
+        label_layout.addWidget(self.exploit_passwd_Scan3)
+        self.tab3_container_layout.insertLayout(96, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # exploit_passwd_Scan4
+        if hasattr(self, 'exploit_passwd_Scan4'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan4)
+            self.exploit_passwd_Scan4.deleteLater()
+        self.exploit_passwd_Scan4 = QLabel("su offsec")
+        self.exploit_passwd_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # exploit_passwd_Scan4 copy button
+        if hasattr(self, 'exploit_passwd_Scan4_Copy'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan4_Copy)
+            self.exploit_passwd_Scan4_Copy.deleteLater()
+        self.exploit_passwd_Scan4_Copy = QPushButton()
+        self.exploit_passwd_Scan4_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.exploit_passwd_Scan4_Copy.setFixedSize(QSize(20,20))
+        self.exploit_passwd_Scan4_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.exploit_passwd_Scan4.text()))
+        self.exploit_passwd_Scan4_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # exploit_passwd_Scan4 run button
+        if hasattr(self, 'exploit_passwd_Scan4_Run'):
+            self.tab3_container_layout.removeWidget(self.exploit_passwd_Scan4_Run)
+            self.exploit_passwd_Scan4_Run.deleteLater()
+        self.exploit_passwd_Scan4_Run = QPushButton()
+        self.exploit_passwd_Scan4_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.exploit_passwd_Scan4_Run.setFixedSize(QSize(20,20))
+        command10 = self.exploit_passwd_Scan4.text() + "; bash"
+        self.exploit_passwd_Scan4_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.exploit_passwd_Scan4_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # exploit_passwd_Scan4 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.exploit_passwd_Scan4_Copy)
+        label_layout.addWidget(self.exploit_passwd_Scan4_Run)
+        label_layout.addWidget(self.exploit_passwd_Scan4)
+        self.tab3_container_layout.insertLayout(97, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # lpe_passwd_divider 1
+        if hasattr(self, 'lpe_passwd_divider1'):
+            self.tab3_container_layout.removeWidget(self.lpe_passwd_divider1)
+            self.lpe_passwd_divider1.deleteLater()
+        self.lpe_passwd_divider1 = QFrame()
+        self.lpe_passwd_divider1.setFrameShape(QFrame.HLine)
+        self.lpe_passwd_divider1.setLineWidth(3)
+        self.lpe_passwd_divider1.setStyleSheet("color: #20C20E;")
+        
+        # lpe_passwd_divider2
+        if hasattr(self, 'lpe_passwd_divider2'):
+            self.tab3_container_layout.removeWidget(self.lpe_passwd_divider2)
+            self.lpe_passwd_divider2.deleteLater()
+        self.lpe_passwd_divider2 = QFrame()
+        self.lpe_passwd_divider2.setFrameShape(QFrame.HLine)
+        self.lpe_passwd_divider2.setLineWidth(3)
+        self.lpe_passwd_divider2.setStyleSheet("color: #20C20E;")
+        
+        # lpe_passwd_spacer1
+        if hasattr(self, 'lpe_passwd_spacer1'):
+            self.tab3_container_layout.removeWidget(self.lpe_passwd_spacer1)
+            self.lpe_passwd_spacer1.deleteLater()
+        self.lpe_passwd_spacer1 = QLabel()
+        self.lpe_passwd_spacer1.setFixedWidth(40)
+        self.lpe_passwd_spacer1.setFixedHeight(50)
+        
+        # lpe_passwd_spacer2
+        if hasattr(self, 'lpe_passwd_spacer2'):
+            self.tab3_container_layout.removeWidget(self.lpe_passwd_spacer2)
+            self.lpe_passwd_spacer2.deleteLater()
+        self.lpe_passwd_spacer2 = QLabel()
+        self.lpe_passwd_spacer2.setFixedWidth(40)
+        self.lpe_passwd_spacer2.setFixedHeight(50)
+
+        # lpe_passwd_spacer & divider layout
+        self.tab3_container_layout.insertWidget(98, self.lpe_passwd_spacer1)
+        self.tab3_container_layout.insertWidget(99, self.lpe_passwd_divider1)
+        self.tab3_container_layout.insertWidget(100, self.lpe_passwd_divider2)
+        self.tab3_container_layout.insertWidget(101, self.lpe_passwd_spacer2)
+        self.tab3_container_layout.addStretch()
+
+# cron
+        if hasattr(self, 'cron'):
+            self.tab3_container_layout.removeWidget(self.cron)
+            self.cron.deleteLater()
+        self.cron = QLabel("[+ Cron]")
+        self.cron.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab3_container_layout.insertWidget(102,self.cron)
+
+        # cron_Scan1
+        if hasattr(self, 'cron_Scan1'):
+            self.tab3_container_layout.removeWidget(self.cron_Scan1)
+            self.cron_Scan1.deleteLater()
+        self.cron_Scan1 = QLabel("crontab –u root –l")
+        self.cron_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # cron_Scan1 copy button
+        if hasattr(self, 'cron_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.cron_Scan1_Copy)
+            self.cron_Scan1_Copy.deleteLater()
+        self.cron_Scan1_Copy = QPushButton()
+        self.cron_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.cron_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.cron_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.cron_Scan1.text()))
+        self.cron_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # cron_Scan1 run button
+        if hasattr(self, 'cron_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.cron_Scan1_Run)
+            self.cron_Scan1_Run.deleteLater()
+        self.cron_Scan1_Run = QPushButton()
+        self.cron_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.cron_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.cron_Scan1.text() + "; bash"
+        self.cron_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.cron_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # cron_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.cron_Scan1_Copy)
+        label_layout.addWidget(self.cron_Scan1_Run)
+        label_layout.addWidget(self.cron_Scan1)
+        self.tab3_container_layout.insertLayout(103, label_layout)
+        self.tab3_container_layout.addStretch()
+
+	# lpe_cron1_spacer1
+        if hasattr(self, 'lpe_cron1_spacer1'):
+            self.tab3_container_layout.removeWidget(self.lpe_cron1_spacer1)
+            self.lpe_cron1_spacer1.deleteLater()
+        self.lpe_cron1_spacer1 = QLabel()
+        self.lpe_cron1_spacer1.setFixedWidth(40)
+        self.lpe_cron1_spacer1.setFixedHeight(50)
+
+        # lpe_cron1_spacer & divider layout
+        self.tab3_container_layout.insertWidget(104, self.lpe_cron1_spacer1)
+        self.tab3_container_layout.addStretch()
+
+# cronjobs
+        if hasattr(self, 'cronjobs'):
+            self.tab3_container_layout.removeWidget(self.cronjobs)
+            self.cronjobs.deleteLater()
+        self.cronjobs = QLabel("[+ Unusual System-Wide Cron Jobs]")
+        self.cronjobs.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab3_container_layout.insertWidget(105,self.cronjobs)
+
+        # cronjobs_Scan1
+        if hasattr(self, 'cronjobs_Scan1'):
+            self.tab3_container_layout.removeWidget(self.cronjobs_Scan1)
+            self.cronjobs_Scan1.deleteLater()
+        self.cronjobs_Scan1 = QLabel("ls -lsa /etc/cron*")
+        self.cronjobs_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # cronjobs_Scan1 copy button
+        if hasattr(self, 'cronjobs_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.cronjobs_Scan1_Copy)
+            self.cronjobs_Scan1_Copy.deleteLater()
+        self.cronjobs_Scan1_Copy = QPushButton()
+        self.cronjobs_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.cronjobs_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.cronjobs_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.cronjobs_Scan1.text()))
+        self.cronjobs_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # cronjobs_Scan1 run button
+        if hasattr(self, 'cronjobs_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.cronjobs_Scan1_Run)
+            self.cronjobs_Scan1_Run.deleteLater()
+        self.cronjobs_Scan1_Run = QPushButton()
+        self.cronjobs_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.cronjobs_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.cronjobs_Scan1.text() + "; bash"
+        self.cronjobs_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.cronjobs_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # cronjobs_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.cronjobs_Scan1_Copy)
+        label_layout.addWidget(self.cronjobs_Scan1_Run)
+        label_layout.addWidget(self.cronjobs_Scan1)
+        self.tab3_container_layout.insertLayout(106, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # cronjobs_Scan2
+        if hasattr(self, 'cronjobs_Scan2'):
+            self.tab3_container_layout.removeWidget(self.cronjobs_Scan2)
+            self.cronjobs_Scan2.deleteLater()
+        self.cronjobs_Scan2 = QLabel("cat /etc/crontab")
+        self.cronjobs_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # cronjobs_Scan2 copy button
+        if hasattr(self, 'cronjobs_Scan2_Copy'):
+            self.tab3_container_layout.removeWidget(self.cronjobs_Scan2_Copy)
+            self.cronjobs_Scan2_Copy.deleteLater()
+        self.cronjobs_Scan2_Copy = QPushButton()
+        self.cronjobs_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.cronjobs_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.cronjobs_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.cronjobs_Scan2.text()))
+        self.cronjobs_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # cronjobs_Scan2 run button
+        if hasattr(self, 'cronjobs_Scan2_Run'):
+            self.tab3_container_layout.removeWidget(self.cronjobs_Scan2_Run)
+            self.cronjobs_Scan2_Run.deleteLater()
+        self.cronjobs_Scan2_Run = QPushButton()
+        self.cronjobs_Scan2_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.cronjobs_Scan2_Run.setFixedSize(QSize(20,20))
+        command10 = self.cronjobs_Scan2.text() + "; bash"
+        self.cronjobs_Scan2_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.cronjobs_Scan2_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # cronjobs_Scan2 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.cronjobs_Scan2_Copy)
+        label_layout.addWidget(self.cronjobs_Scan2_Run)
+        label_layout.addWidget(self.cronjobs_Scan2)
+        self.tab3_container_layout.insertLayout(107, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # cronjobs_Scan3
+        if hasattr(self, 'cronjobs_Scan3'):
+            self.tab3_container_layout.removeWidget(self.cronjobs_Scan3)
+            self.cronjobs_Scan3.deleteLater()
+        self.cronjobs_Scan3 = QLabel("crontab -l")
+        self.cronjobs_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # cronjobs_Scan3 copy button
+        if hasattr(self, 'cronjobs_Scan3_Copy'):
+            self.tab3_container_layout.removeWidget(self.cronjobs_Scan3_Copy)
+            self.cronjobs_Scan3_Copy.deleteLater()
+        self.cronjobs_Scan3_Copy = QPushButton()
+        self.cronjobs_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.cronjobs_Scan3_Copy.setFixedSize(QSize(20,20))
+        self.cronjobs_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.cronjobs_Scan3.text()))
+        self.cronjobs_Scan3_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # cronjobs_Scan3 run button
+        if hasattr(self, 'cronjobs_Scan3_Run'):
+            self.tab3_container_layout.removeWidget(self.cronjobs_Scan3_Run)
+            self.cronjobs_Scan3_Run.deleteLater()
+        self.cronjobs_Scan3_Run = QPushButton()
+        self.cronjobs_Scan3_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.cronjobs_Scan3_Run.setFixedSize(QSize(20,20))
+        command10 = self.cronjobs_Scan3.text() + "; bash"
+        self.cronjobs_Scan3_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.cronjobs_Scan3_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # cronjobs_Scan3 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.cronjobs_Scan3_Copy)
+        label_layout.addWidget(self.cronjobs_Scan3_Run)
+        label_layout.addWidget(self.cronjobs_Scan3)
+        self.tab3_container_layout.insertLayout(108, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # lpe_cron_divider 1
+        if hasattr(self, 'lpe_cron_divider1'):
+            self.tab3_container_layout.removeWidget(self.lpe_cron_divider1)
+            self.lpe_cron_divider1.deleteLater()
+        self.lpe_cron_divider1 = QFrame()
+        self.lpe_cron_divider1.setFrameShape(QFrame.HLine)
+        self.lpe_cron_divider1.setLineWidth(3)
+        self.lpe_cron_divider1.setStyleSheet("color: #20C20E;")
+        
+        # lpe_cron_divider2
+        if hasattr(self, 'lpe_cron_divider2'):
+            self.tab3_container_layout.removeWidget(self.lpe_cron_divider2)
+            self.lpe_cron_divider2.deleteLater()
+        self.lpe_cron_divider2 = QFrame()
+        self.lpe_cron_divider2.setFrameShape(QFrame.HLine)
+        self.lpe_cron_divider2.setLineWidth(3)
+        self.lpe_cron_divider2.setStyleSheet("color: #20C20E;")
+        
+        # lpe_cron_spacer1
+        if hasattr(self, 'lpe_cron_spacer1'):
+            self.tab3_container_layout.removeWidget(self.lpe_cron_spacer1)
+            self.lpe_cron_spacer1.deleteLater()
+        self.lpe_cron_spacer1 = QLabel()
+        self.lpe_cron_spacer1.setFixedWidth(40)
+        self.lpe_cron_spacer1.setFixedHeight(50)
+        
+        # lpe_cron_spacer2
+        if hasattr(self, 'lpe_cron_spacer2'):
+            self.tab3_container_layout.removeWidget(self.lpe_cron_spacer2)
+            self.lpe_cron_spacer2.deleteLater()
+        self.lpe_cron_spacer2 = QLabel()
+        self.lpe_cron_spacer2.setFixedWidth(40)
+        self.lpe_cron_spacer2.setFixedHeight(50)
+
+        # lpe_cron_spacer & divider layout
+        self.tab3_container_layout.insertWidget(109, self.lpe_cron_spacer1)
+        self.tab3_container_layout.insertWidget(110, self.lpe_cron_divider1)
+        self.tab3_container_layout.insertWidget(111, self.lpe_cron_divider2)
+        self.tab3_container_layout.insertWidget(112, self.lpe_cron_spacer2)
+        self.tab3_container_layout.addStretch()
+
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 # pspy
         if hasattr(self, 'pspy'):
             self.tab3_container_layout.removeWidget(self.pspy)
             self.pspy.deleteLater()
+<<<<<<< HEAD
         self.pspy = QLabel("[+ Using pspy on system]")
+=======
+        self.pspy = QLabel("[+ sing pspy on system]")
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.pspy.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(58,self.pspy)
+=======
+        self.tab3_container_layout.insertWidget(113,self.pspy)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # pspy_Scan1
         if hasattr(self, 'pspy_Scan1'):
@@ -3824,7 +5018,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.pspy_Scan1_Copy)
         label_layout.addWidget(self.pspy_Scan1_Run)
         label_layout.addWidget(self.pspy_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(59, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(114, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # pspy_Scan2
@@ -3841,7 +5039,11 @@ class MainWindow(QMainWindow):
         # pspy_Scan2 adding widgets
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.pspy_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(60, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(115, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # pspy_Scan2
@@ -3885,7 +5087,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.pspy_Scan2_Copy)
         label_layout.addWidget(self.pspy_Scan2_Run)
         label_layout.addWidget(self.pspy_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(61, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(116, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # pspy_Scan3
@@ -3929,7 +5135,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.pspy_Scan3_Copy)
         label_layout.addWidget(self.pspy_Scan3_Run)
         label_layout.addWidget(self.pspy_Scan3)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(62, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(117, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # pspy_Scan4
@@ -3973,7 +5183,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.pspy_Scan4_Copy)
         label_layout.addWidget(self.pspy_Scan4_Run)
         label_layout.addWidget(self.pspy_Scan4)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(63, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(118, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_pspy_divider 1
@@ -4011,10 +5225,17 @@ class MainWindow(QMainWindow):
         self.lpe_pspy_spacer2.setFixedHeight(50)
 
         # lpe_pspy_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(64, self.lpe_pspy_spacer1)
         self.tab3_container_layout.insertWidget(65, self.lpe_pspy_divider1)
         self.tab3_container_layout.insertWidget(66, self.lpe_pspy_divider2)
         self.tab3_container_layout.insertWidget(67, self.lpe_pspy_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(119, self.lpe_pspy_spacer1)
+        self.tab3_container_layout.insertWidget(120, self.lpe_pspy_divider1)
+        self.tab3_container_layout.insertWidget(121, self.lpe_pspy_divider2)
+        self.tab3_container_layout.insertWidget(122, self.lpe_pspy_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # netstat
@@ -4027,7 +5248,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(68,self.netstat)
+=======
+        self.tab3_container_layout.insertWidget(123,self.netstat)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # netstat_Scan1
         if hasattr(self, 'netstat_Scan1'):
@@ -4070,7 +5295,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.netstat_Scan1_Copy)
         label_layout.addWidget(self.netstat_Scan1_Run)
         label_layout.addWidget(self.netstat_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(69, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(124, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # netstat_Scan2
@@ -4114,7 +5343,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.netstat_Scan2_Copy)
         label_layout.addWidget(self.netstat_Scan2_Run)
         label_layout.addWidget(self.netstat_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(70, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(125, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_netstat_divider 1
@@ -4152,10 +5385,17 @@ class MainWindow(QMainWindow):
         self.lpe_netstat_spacer2.setFixedHeight(50)
 
         # lpe_netstat_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(71, self.lpe_netstat_spacer1)
         self.tab3_container_layout.insertWidget(72, self.lpe_netstat_divider1)
         self.tab3_container_layout.insertWidget(73, self.lpe_netstat_divider2)
         self.tab3_container_layout.insertWidget(74, self.lpe_netstat_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(126, self.lpe_netstat_spacer1)
+        self.tab3_container_layout.insertWidget(127, self.lpe_netstat_divider1)
+        self.tab3_container_layout.insertWidget(128, self.lpe_netstat_divider2)
+        self.tab3_container_layout.insertWidget(129, self.lpe_netstat_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_ps
@@ -4168,7 +5408,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(75,self.lpe_ps)
+=======
+        self.tab3_container_layout.insertWidget(130,self.lpe_ps)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_ps_Scan1
         if hasattr(self, 'lpe_ps_Scan1'):
@@ -4211,7 +5455,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_ps_Scan1_Copy)
         label_layout.addWidget(self.lpe_ps_Scan1_Run)
         label_layout.addWidget(self.lpe_ps_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(76, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(131, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_ps_divider 1
@@ -4249,10 +5497,17 @@ class MainWindow(QMainWindow):
         self.lpe_ps_spacer2.setFixedHeight(50)
 
         # lpe_ps_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(77, self.lpe_ps_spacer1)
         self.tab3_container_layout.insertWidget(78, self.lpe_ps_divider1)
         self.tab3_container_layout.insertWidget(79, self.lpe_ps_divider2)
         self.tab3_container_layout.insertWidget(80, self.lpe_ps_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(132, self.lpe_ps_spacer1)
+        self.tab3_container_layout.insertWidget(133, self.lpe_ps_divider1)
+        self.tab3_container_layout.insertWidget(134, self.lpe_ps_divider2)
+        self.tab3_container_layout.insertWidget(135, self.lpe_ps_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_mysql
@@ -4265,7 +5520,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(81,self.lpe_mysql)
+=======
+        self.tab3_container_layout.insertWidget(136,self.lpe_mysql)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_mysql_Scan1
         if hasattr(self, 'lpe_mysql_Scan1'):
@@ -4308,7 +5567,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_mysql_Scan1_Copy)
         label_layout.addWidget(self.lpe_mysql_Scan1_Run)
         label_layout.addWidget(self.lpe_mysql_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(82, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(137, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_mysql_Scan2
@@ -4325,7 +5588,11 @@ class MainWindow(QMainWindow):
         # lpe_mysql_Scan2 adding widgets
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.lpe_mysql_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(83, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(138, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_mysql_Scan3
@@ -4342,7 +5609,11 @@ class MainWindow(QMainWindow):
         # lpe_mysql_Scan3 adding widgets
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.lpe_mysql_Scan3)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(84, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(139, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_mysql_Scan4
@@ -4359,7 +5630,11 @@ class MainWindow(QMainWindow):
         # lpe_mysql_Scan4 adding widgets
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.lpe_mysql_Scan4)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(85, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(140, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_mysql_divider 1
@@ -4397,10 +5672,17 @@ class MainWindow(QMainWindow):
         self.lpe_mysql_spacer2.setFixedHeight(50)
 
         # lpe_mysql_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(86, self.lpe_mysql_spacer1)
         self.tab3_container_layout.insertWidget(87, self.lpe_mysql_divider1)
         self.tab3_container_layout.insertWidget(88, self.lpe_mysql_divider2)
         self.tab3_container_layout.insertWidget(89, self.lpe_mysql_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(141, self.lpe_mysql_spacer1)
+        self.tab3_container_layout.insertWidget(142, self.lpe_mysql_divider1)
+        self.tab3_container_layout.insertWidget(143, self.lpe_mysql_divider2)
+        self.tab3_container_layout.insertWidget(144, self.lpe_mysql_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_etc_usercreated
@@ -4413,7 +5695,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(90,self.lpe_etc_usercreated)
+=======
+        self.tab3_container_layout.insertWidget(145,self.lpe_etc_usercreated)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_etc_usercreated_Scan1
         if hasattr(self, 'lpe_etc_usercreated_Scan1'):
@@ -4456,7 +5742,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_etc_usercreated_Scan1_Copy)
         label_layout.addWidget(self.lpe_etc_usercreated_Scan1_Run)
         label_layout.addWidget(self.lpe_etc_usercreated_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(91, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(146, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_etc_usercreated_Scan2
@@ -4500,7 +5790,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_etc_usercreated_Scan2_Copy)
         label_layout.addWidget(self.lpe_etc_usercreated_Scan2_Run)
         label_layout.addWidget(self.lpe_etc_usercreated_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(92, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(147, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_etc_usercreated_Scan3
@@ -4544,7 +5838,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_etc_usercreated_Scan3_Copy)
         label_layout.addWidget(self.lpe_etc_usercreated_Scan3_Run)
         label_layout.addWidget(self.lpe_etc_usercreated_Scan3)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(93, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(148, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_usercreated_divider 1
@@ -4582,10 +5880,17 @@ class MainWindow(QMainWindow):
         self.lpe_usercreated_spacer2.setFixedHeight(50)
 
         # lpe_usercreated_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(94, self.lpe_usercreated_spacer1)
         self.tab3_container_layout.insertWidget(95, self.lpe_usercreated_divider1)
         self.tab3_container_layout.insertWidget(96, self.lpe_usercreated_divider2)
         self.tab3_container_layout.insertWidget(97, self.lpe_usercreated_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(149, self.lpe_usercreated_spacer1)
+        self.tab3_container_layout.insertWidget(150, self.lpe_usercreated_divider1)
+        self.tab3_container_layout.insertWidget(151, self.lpe_usercreated_divider2)
+        self.tab3_container_layout.insertWidget(152, self.lpe_usercreated_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_misc_files
@@ -4598,7 +5903,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(98,self.lpe_misc_files)
+=======
+        self.tab3_container_layout.insertWidget(153,self.lpe_misc_files)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_misc_files_Scan1
         if hasattr(self, 'lpe_misc_files_Scan1'):
@@ -4641,7 +5950,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_misc_files_Scan1_Copy)
         label_layout.addWidget(self.lpe_misc_files_Scan1_Run)
         label_layout.addWidget(self.lpe_misc_files_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(99, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(154, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_misc_files_Scan2
@@ -4685,7 +5998,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_misc_files_Scan2_Copy)
         label_layout.addWidget(self.lpe_misc_files_Scan2_Run)
         label_layout.addWidget(self.lpe_misc_files_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(100, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(155, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_misc_files_Scan3
@@ -4729,7 +6046,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_misc_files_Scan3_Copy)
         label_layout.addWidget(self.lpe_misc_files_Scan3_Run)
         label_layout.addWidget(self.lpe_misc_files_Scan3)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(101, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(156, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_misc_files_Scan4
@@ -4773,7 +6094,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_misc_files_Scan4_Copy)
         label_layout.addWidget(self.lpe_misc_files_Scan4_Run)
         label_layout.addWidget(self.lpe_misc_files_Scan4)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(102, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(157, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_misc_files_Scan5
@@ -4817,7 +6142,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_misc_files_Scan5_Copy)
         label_layout.addWidget(self.lpe_misc_files_Scan5_Run)
         label_layout.addWidget(self.lpe_misc_files_Scan5)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(103, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(158, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_misc_files_Scan6
@@ -4861,7 +6190,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_misc_files_Scan6_Copy)
         label_layout.addWidget(self.lpe_misc_files_Scan6_Run)
         label_layout.addWidget(self.lpe_misc_files_Scan6)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(104, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(159, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_misc_files_divider 1
@@ -4899,10 +6232,17 @@ class MainWindow(QMainWindow):
         self.lpe_misc_files_spacer2.setFixedHeight(50)
 
         # lpe_misc_files_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(105, self.lpe_misc_files_spacer1)
         self.tab3_container_layout.insertWidget(106, self.lpe_misc_files_divider1)
         self.tab3_container_layout.insertWidget(107, self.lpe_misc_files_divider2)
         self.tab3_container_layout.insertWidget(108, self.lpe_misc_files_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(160, self.lpe_misc_files_spacer1)
+        self.tab3_container_layout.insertWidget(161, self.lpe_misc_files_divider1)
+        self.tab3_container_layout.insertWidget(162, self.lpe_misc_files_divider2)
+        self.tab3_container_layout.insertWidget(163, self.lpe_misc_files_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_fileTransfer
@@ -4915,7 +6255,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(109,self.lpe_fileTransfer)
+=======
+        self.tab3_container_layout.insertWidget(164,self.lpe_fileTransfer)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_fileTransfer_Scan1
         if hasattr(self, 'lpe_fileTransfer_Scan1'):
@@ -4958,7 +6302,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_fileTransfer_Scan1_Copy)
         label_layout.addWidget(self.lpe_fileTransfer_Scan1_Run)
         label_layout.addWidget(self.lpe_fileTransfer_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(110, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(165, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_fileTransfer_Scan2
@@ -5002,7 +6350,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_fileTransfer_Scan2_Copy)
         label_layout.addWidget(self.lpe_fileTransfer_Scan2_Run)
         label_layout.addWidget(self.lpe_fileTransfer_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(111, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(166, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_fileTransfer_Scan3
@@ -5046,7 +6398,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_fileTransfer_Scan3_Copy)
         label_layout.addWidget(self.lpe_fileTransfer_Scan3_Run)
         label_layout.addWidget(self.lpe_fileTransfer_Scan3)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(112, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(167, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_fileTransfer_Scan4
@@ -5090,7 +6446,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_fileTransfer_Scan4_Copy)
         label_layout.addWidget(self.lpe_fileTransfer_Scan4_Run)
         label_layout.addWidget(self.lpe_fileTransfer_Scan4)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(113, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(168, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_fileTransfer_Scan5
@@ -5134,7 +6494,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_fileTransfer_Scan5_Copy)
         label_layout.addWidget(self.lpe_fileTransfer_Scan5_Run)
         label_layout.addWidget(self.lpe_fileTransfer_Scan5)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(114, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(169, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_fileTransfer_divider 1
@@ -5172,10 +6536,17 @@ class MainWindow(QMainWindow):
         self.lpe_fileTransfer_spacer2.setFixedHeight(50)
 
         # lpe_fileTransfer_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(115, self.lpe_fileTransfer_spacer1)
         self.tab3_container_layout.insertWidget(116, self.lpe_fileTransfer_divider1)
         self.tab3_container_layout.insertWidget(117, self.lpe_fileTransfer_divider2)
         self.tab3_container_layout.insertWidget(118, self.lpe_fileTransfer_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(170, self.lpe_fileTransfer_spacer1)
+        self.tab3_container_layout.insertWidget(171, self.lpe_fileTransfer_divider1)
+        self.tab3_container_layout.insertWidget(172, self.lpe_fileTransfer_divider2)
+        self.tab3_container_layout.insertWidget(173, self.lpe_fileTransfer_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_NFS
@@ -5188,7 +6559,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(119,self.lpe_NFS)
+=======
+        self.tab3_container_layout.insertWidget(174,self.lpe_NFS)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_NFS_Scan1
         if hasattr(self, 'lpe_NFS_Scan1'):
@@ -5231,7 +6606,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_NFS_Scan1_Copy)
         label_layout.addWidget(self.lpe_NFS_Scan1_Run)
         label_layout.addWidget(self.lpe_NFS_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(120, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(175, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_NFS_Scan2
@@ -5248,7 +6627,11 @@ class MainWindow(QMainWindow):
         # lpe_NFS_Scan2 adding widgets
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.lpe_NFS_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(121, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(176, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 	# lpe_NFS1_spacer1
@@ -5257,10 +6640,17 @@ class MainWindow(QMainWindow):
             self.lpe_NFS1_spacer1.deleteLater()
         self.lpe_NFS1_spacer1 = QLabel()
         self.lpe_NFS1_spacer1.setFixedWidth(40)
+<<<<<<< HEAD
         self.lpe_NFS1_spacer1.setFixedHeight(20)
 
         # lpe_NFS1_spacer & divider layout
         self.tab3_container_layout.insertWidget(122, self.lpe_NFS1_spacer1)
+=======
+        self.lpe_NFS1_spacer1.setFixedHeight(50)
+
+        # lpe_NFS1_spacer & divider layout
+        self.tab3_container_layout.insertWidget(177, self.lpe_NFS1_spacer1)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 	# lpe_NFS_exploitHost
@@ -5273,7 +6663,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(123,self.lpe_NFS_exploitHost)
+=======
+        self.tab3_container_layout.insertWidget(178,self.lpe_NFS_exploitHost)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_NFS_exploitHost_Scan1
         if hasattr(self, 'lpe_NFS_exploitHost_Scan1'):
@@ -5316,7 +6710,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan1_Copy)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan1_Run)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(124, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(179, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_NFS_exploitHost_Scan2
@@ -5360,7 +6758,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan2_Copy)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan2_Run)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(125, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(180, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_NFS_exploitHost_Scan3
@@ -5404,7 +6806,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan3_Copy)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan3_Run)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan3)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(126, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(181, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_NFS_exploitHost_Scan4
@@ -5448,7 +6854,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan4_Copy)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan4_Run)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan4)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(127, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(182, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_NFS_exploitHost_Scan5
@@ -5492,7 +6902,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan5_Copy)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan5_Run)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan5)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(128, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(183, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_NFS_exploitHost_Scan6
@@ -5536,7 +6950,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan6_Copy)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan6_Run)
         label_layout.addWidget(self.lpe_NFS_exploitHost_Scan6)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(129, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(184, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 	# lpe_nfs_eh_spacer1
@@ -5545,12 +6963,23 @@ class MainWindow(QMainWindow):
             self.lpe_nfs_eh_spacer1.deleteLater()
         self.lpe_nfs_eh_spacer1 = QLabel()
         self.lpe_nfs_eh_spacer1.setFixedWidth(40)
+<<<<<<< HEAD
         self.lpe_nfs_eh_spacer1.setFixedHeight(20)
 
         # lpe_nfs_eh_spacer & divider layout
         self.tab3_container_layout.insertWidget(130, self.lpe_nfs_eh_spacer1)
         self.tab3_container_layout.addStretch()
 
+=======
+        self.lpe_nfs_eh_spacer1.setFixedHeight(50)
+
+        # lpe_nfs_eh_spacer & divider layout
+        self.tab3_container_layout.insertWidget(185, self.lpe_nfs_eh_spacer1)
+        self.tab3_container_layout.addStretch()
+
+
+
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 # lpe_NFS_exploitTarget
         if hasattr(self, 'lpe_NFS_exploitTarget'):
             self.tab3_container_layout.removeWidget(self.lpe_NFS_exploitTarget)
@@ -5561,7 +6990,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(131,self.lpe_NFS_exploitTarget)
+=======
+        self.tab3_container_layout.insertWidget(186,self.lpe_NFS_exploitTarget)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_NFS_exploitTarget_Scan1
         if hasattr(self, 'lpe_NFS_exploitTarget_Scan1'):
@@ -5604,7 +7037,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_NFS_exploitTarget_Scan1_Copy)
         label_layout.addWidget(self.lpe_NFS_exploitTarget_Scan1_Run)
         label_layout.addWidget(self.lpe_NFS_exploitTarget_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(132, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(187, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_NFS_divider 1
@@ -5642,10 +7079,17 @@ class MainWindow(QMainWindow):
         self.lpe_NFS_spacer2.setFixedHeight(50)
 
         # lpe_NFS_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(133, self.lpe_NFS_spacer1)
         self.tab3_container_layout.insertWidget(134, self.lpe_NFS_divider1)
         self.tab3_container_layout.insertWidget(135, self.lpe_NFS_divider2)
         self.tab3_container_layout.insertWidget(136, self.lpe_NFS_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(188, self.lpe_NFS_spacer1)
+        self.tab3_container_layout.insertWidget(189, self.lpe_NFS_divider1)
+        self.tab3_container_layout.insertWidget(190, self.lpe_NFS_divider2)
+        self.tab3_container_layout.insertWidget(191, self.lpe_NFS_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_Mounts
@@ -5658,7 +7102,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(137,self.lpe_Mounts)
+=======
+        self.tab3_container_layout.insertWidget(192,self.lpe_Mounts)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_Mounts_Scan1
         if hasattr(self, 'lpe_Mounts_Scan1'):
@@ -5701,7 +7149,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_Mounts_Scan1_Copy)
         label_layout.addWidget(self.lpe_Mounts_Scan1_Run)
         label_layout.addWidget(self.lpe_Mounts_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(138, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(193, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_Mounts_divider 1
@@ -5739,10 +7191,17 @@ class MainWindow(QMainWindow):
         self.lpe_Mounts_spacer2.setFixedHeight(50)
 
         # lpe_Mounts_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(139, self.lpe_Mounts_spacer1)
         self.tab3_container_layout.insertWidget(140, self.lpe_Mounts_divider1)
         self.tab3_container_layout.insertWidget(141, self.lpe_Mounts_divider2)
         self.tab3_container_layout.insertWidget(142, self.lpe_Mounts_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(194, self.lpe_Mounts_spacer1)
+        self.tab3_container_layout.insertWidget(195, self.lpe_Mounts_divider1)
+        self.tab3_container_layout.insertWidget(196, self.lpe_Mounts_divider2)
+        self.tab3_container_layout.insertWidget(197, self.lpe_Mounts_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_MeterpreterForwarding
@@ -5755,13 +7214,21 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(143,self.lpe_MeterpreterForwarding)
+=======
+        self.tab3_container_layout.insertWidget(198,self.lpe_MeterpreterForwarding)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_MeterpreterForwarding_Scan1
         if hasattr(self, 'lpe_MeterpreterForwarding_Scan1'):
             self.tab3_container_layout.removeWidget(self.lpe_MeterpreterForwarding_Scan1)
             self.lpe_MeterpreterForwarding_Scan1.deleteLater()
+<<<<<<< HEAD
         self.lpe_MeterpreterForwarding_Scan1 = QLabel("portfwd add –l " + self.lport + " –p " + self.rport + " –r " + self.rhost)
+=======
+        self.lpe_MeterpreterForwarding_Scan1 = QLabel("portfwd add –l 139 –p 139 –r " + self.rhost)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.lpe_MeterpreterForwarding_Scan1.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
@@ -5798,7 +7265,55 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan1_Copy)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan1_Run)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(144, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(199, label_layout)
+        self.tab3_container_layout.addStretch()
+
+        # lpe_MeterpreterForwarding_Scan1
+        if hasattr(self, 'lpe_MeterpreterForwarding_Scan1'):
+            self.tab3_container_layout.removeWidget(self.lpe_MeterpreterForwarding_Scan1)
+            self.lpe_MeterpreterForwarding_Scan1.deleteLater()
+        self.lpe_MeterpreterForwarding_Scan1 = QLabel("background")
+        self.lpe_MeterpreterForwarding_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';" 
+            )
+
+        # lpe_MeterpreterForwarding_Scan1 copy button
+        if hasattr(self, 'lpe_MeterpreterForwarding_Scan1_Copy'):
+            self.tab3_container_layout.removeWidget(self.lpe_MeterpreterForwarding_Scan1_Copy)
+            self.lpe_MeterpreterForwarding_Scan1_Copy.deleteLater()
+        self.lpe_MeterpreterForwarding_Scan1_Copy = QPushButton()
+        self.lpe_MeterpreterForwarding_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.lpe_MeterpreterForwarding_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.lpe_MeterpreterForwarding_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.lpe_MeterpreterForwarding_Scan1.text()))
+        self.lpe_MeterpreterForwarding_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # lpe_MeterpreterForwarding_Scan1 run button
+        if hasattr(self, 'lpe_MeterpreterForwarding_Scan1_Run'):
+            self.tab3_container_layout.removeWidget(self.lpe_MeterpreterForwarding_Scan1_Run)
+            self.lpe_MeterpreterForwarding_Scan1_Run.deleteLater()
+        self.lpe_MeterpreterForwarding_Scan1_Run = QPushButton()
+        self.lpe_MeterpreterForwarding_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.lpe_MeterpreterForwarding_Scan1_Run.setFixedSize(QSize(20,20))
+        command10 = self.lpe_MeterpreterForwarding_Scan1.text() + "; bash"
+        self.lpe_MeterpreterForwarding_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command10]))
+        self.lpe_MeterpreterForwarding_Scan1_Run.setStyleSheet(
+            "*:hover{background: '#20C20e';}"
+        )
+
+        # lpe_MeterpreterForwarding_Scan1 adding widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan1_Copy)
+        label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan1_Run)
+        label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan1)
+        self.tab3_container_layout.insertLayout(200, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_MeterpreterForwarding_Scan2
@@ -5842,7 +7357,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan2_Copy)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan2_Run)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(145, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(201, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_MeterpreterForwarding_Scan3
@@ -5886,7 +7405,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan3_Copy)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan3_Run)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan3)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(146, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(202, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_MeterpreterForwarding_Scan4
@@ -5930,7 +7453,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan4_Copy)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan4_Run)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan4)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(147, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(203, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_MeterpreterForwarding_Scan5
@@ -5974,7 +7501,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan5_Copy)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan5_Run)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan5)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(148, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(204, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_MeterpreterForwarding_Scan6
@@ -6018,7 +7549,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan6_Copy)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan6_Run)
         label_layout.addWidget(self.lpe_MeterpreterForwarding_Scan6)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(149, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(205, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_meterpreterForward_divider 1
@@ -6056,10 +7591,17 @@ class MainWindow(QMainWindow):
         self.lpe_meterpreterForward_spacer2.setFixedHeight(50)
 
         # lpe_meterpreterForward_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(150, self.lpe_meterpreterForward_spacer1)
         self.tab3_container_layout.insertWidget(151, self.lpe_meterpreterForward_divider1)
         self.tab3_container_layout.insertWidget(152, self.lpe_meterpreterForward_divider2)
         self.tab3_container_layout.insertWidget(153, self.lpe_meterpreterForward_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(206, self.lpe_meterpreterForward_spacer1)
+        self.tab3_container_layout.insertWidget(207, self.lpe_meterpreterForward_divider1)
+        self.tab3_container_layout.insertWidget(208, self.lpe_meterpreterForward_divider2)
+        self.tab3_container_layout.insertWidget(209, self.lpe_meterpreterForward_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_passwd
@@ -6072,7 +7614,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(154,self.lpe_passwd)
+=======
+        self.tab3_container_layout.insertWidget(210,self.lpe_passwd)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_passwd_Scan1
         if hasattr(self, 'lpe_passwd_Scan1'):
@@ -6115,7 +7661,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_passwd_Scan1_Copy)
         label_layout.addWidget(self.lpe_passwd_Scan1_Run)
         label_layout.addWidget(self.lpe_passwd_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(155, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(211, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_passwd_Scan2
@@ -6159,7 +7709,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_passwd_Scan2_Copy)
         label_layout.addWidget(self.lpe_passwd_Scan2_Run)
         label_layout.addWidget(self.lpe_passwd_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(156, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(212, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_passwd_Scan3
@@ -6203,7 +7757,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_passwd_Scan3_Copy)
         label_layout.addWidget(self.lpe_passwd_Scan3_Run)
         label_layout.addWidget(self.lpe_passwd_Scan3)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(157, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(213, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_passwd_Scan4
@@ -6247,7 +7805,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_passwd_Scan4_Copy)
         label_layout.addWidget(self.lpe_passwd_Scan4_Run)
         label_layout.addWidget(self.lpe_passwd_Scan4)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(158, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(214, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_passwd_divider 1
@@ -6285,10 +7847,17 @@ class MainWindow(QMainWindow):
         self.lpe_passwd_spacer2.setFixedHeight(50)
 
         # lpe_passwd_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(159, self.lpe_passwd_spacer1)
         self.tab3_container_layout.insertWidget(160, self.lpe_passwd_divider1)
         self.tab3_container_layout.insertWidget(161, self.lpe_passwd_divider2)
         self.tab3_container_layout.insertWidget(162, self.lpe_passwd_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(215, self.lpe_passwd_spacer1)
+        self.tab3_container_layout.insertWidget(216, self.lpe_passwd_divider1)
+        self.tab3_container_layout.insertWidget(217, self.lpe_passwd_divider2)
+        self.tab3_container_layout.insertWidget(218, self.lpe_passwd_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_cron
@@ -6301,7 +7870,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(163,self.lpe_cron)
+=======
+        self.tab3_container_layout.insertWidget(219,self.lpe_cron)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_cron_Scan1
         if hasattr(self, 'lpe_cron_Scan1'):
@@ -6344,7 +7917,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_cron_Scan1_Copy)
         label_layout.addWidget(self.lpe_cron_Scan1_Run)
         label_layout.addWidget(self.lpe_cron_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(164, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(220, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_cron_Scan2
@@ -6388,7 +7965,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_cron_Scan2_Copy)
         label_layout.addWidget(self.lpe_cron_Scan2_Run)
         label_layout.addWidget(self.lpe_cron_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(165, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(221, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_cron_Scan3
@@ -6432,7 +8013,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_cron_Scan3_Copy)
         label_layout.addWidget(self.lpe_cron_Scan3_Run)
         label_layout.addWidget(self.lpe_cron_Scan3)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(166, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(222, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_cron_divider 1
@@ -6470,10 +8055,17 @@ class MainWindow(QMainWindow):
         self.lpe_cron_spacer2.setFixedHeight(50)
 
         # lpe_cron_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(167, self.lpe_cron_spacer1)
         self.tab3_container_layout.insertWidget(168, self.lpe_cron_divider1)
         self.tab3_container_layout.insertWidget(169, self.lpe_cron_divider2)
         self.tab3_container_layout.insertWidget(170, self.lpe_cron_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(223, self.lpe_cron_spacer1)
+        self.tab3_container_layout.insertWidget(224, self.lpe_cron_divider1)
+        self.tab3_container_layout.insertWidget(225, self.lpe_cron_divider2)
+        self.tab3_container_layout.insertWidget(226, self.lpe_cron_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_userfiles
@@ -6486,7 +8078,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(171,self.lpe_userfiles)
+=======
+        self.tab3_container_layout.insertWidget(227,self.lpe_userfiles)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_userfiles_Scan1
         if hasattr(self, 'lpe_userfiles_Scan1'):
@@ -6529,7 +8125,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_userfiles_Scan1_Copy)
         label_layout.addWidget(self.lpe_userfiles_Scan1_Run)
         label_layout.addWidget(self.lpe_userfiles_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(172, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(228, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_userFiles_divider 1
@@ -6567,10 +8167,17 @@ class MainWindow(QMainWindow):
         self.lpe_userFiles_spacer2.setFixedHeight(50)
 
         # lpe_userFiles_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(173, self.lpe_userFiles_spacer1)
         self.tab3_container_layout.insertWidget(174, self.lpe_userFiles_divider1)
         self.tab3_container_layout.insertWidget(175, self.lpe_userFiles_divider2)
         self.tab3_container_layout.insertWidget(176, self.lpe_userFiles_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(229, self.lpe_userFiles_spacer1)
+        self.tab3_container_layout.insertWidget(230, self.lpe_userFiles_divider1)
+        self.tab3_container_layout.insertWidget(231, self.lpe_userFiles_divider2)
+        self.tab3_container_layout.insertWidget(232, self.lpe_userFiles_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_mail
@@ -6583,7 +8190,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(177,self.lpe_mail)
+=======
+        self.tab3_container_layout.insertWidget(233,self.lpe_mail)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_mail_Scan1
         if hasattr(self, 'lpe_mail_Scan1'):
@@ -6626,7 +8237,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_mail_Scan1_Copy)
         label_layout.addWidget(self.lpe_mail_Scan1_Run)
         label_layout.addWidget(self.lpe_mail_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(178, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(234, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_mail_divider 1
@@ -6664,10 +8279,17 @@ class MainWindow(QMainWindow):
         self.lpe_mail_spacer2.setFixedHeight(50)
 
         # lpe_mail_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(179, self.lpe_mail_spacer1)
         self.tab3_container_layout.insertWidget(180, self.lpe_mail_divider1)
         self.tab3_container_layout.insertWidget(181, self.lpe_mail_divider2)
         self.tab3_container_layout.insertWidget(182, self.lpe_mail_spacer2)
+=======
+        self.tab3_container_layout.insertWidget(235, self.lpe_mail_spacer1)
+        self.tab3_container_layout.insertWidget(236, self.lpe_mail_divider1)
+        self.tab3_container_layout.insertWidget(237, self.lpe_mail_divider2)
+        self.tab3_container_layout.insertWidget(238, self.lpe_mail_spacer2)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
 # lpe_linpeas
@@ -6680,7 +8302,11 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(183,self.lpe_linpeas)
+=======
+        self.tab3_container_layout.insertWidget(239,self.lpe_linpeas)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
 
         # lpe_linpeas_Scan1
         if hasattr(self, 'lpe_linpeas_Scan1'):
@@ -6723,7 +8349,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_linpeas_Scan1_Copy)
         label_layout.addWidget(self.lpe_linpeas_Scan1_Run)
         label_layout.addWidget(self.lpe_linpeas_Scan1)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(184, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(240, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_linpeas_Scan2
@@ -6767,7 +8397,11 @@ class MainWindow(QMainWindow):
         label_layout.addWidget(self.lpe_linpeas_Scan2_Copy)
         label_layout.addWidget(self.lpe_linpeas_Scan2_Run)
         label_layout.addWidget(self.lpe_linpeas_Scan2)
+<<<<<<< HEAD
         self.tab3_container_layout.insertLayout(185, label_layout)
+=======
+        self.tab3_container_layout.insertLayout(241, label_layout)
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
         self.tab3_container_layout.addStretch()
 
         # lpe_linpeas_divider 1
@@ -6805,13 +8439,27 @@ class MainWindow(QMainWindow):
         self.lpe_linpeas_spacer2.setFixedHeight(50)
 
         # lpe_linpeas_spacer & divider layout
+<<<<<<< HEAD
         self.tab3_container_layout.insertWidget(186, self.lpe_linpeas_spacer1)
         self.tab3_container_layout.insertWidget(187, self.lpe_linpeas_divider1)
         self.tab3_container_layout.insertWidget(188, self.lpe_linpeas_divider2)
         self.tab3_container_layout.insertWidget(189, self.lpe_linpeas_spacer2)
         self.tab3_container_layout.addStretch()
 
+=======
+        self.tab3_container_layout.insertWidget(242, self.lpe_linpeas_spacer1)
+        self.tab3_container_layout.insertWidget(243, self.lpe_linpeas_divider1)
+        self.tab3_container_layout.insertWidget(244, self.lpe_linpeas_divider2)
+        self.tab3_container_layout.insertWidget(245, self.lpe_linpeas_spacer2)
+        self.tab3_container_layout.addStretch()
+
+
+
+
+
+>>>>>>> bfda38b64f4a254db25b802f86271129c734675d
     def wpe(self):
+        self.lport = "80"
         if not hasattr(self, 'tab4_container'):
             self.tab4_container = QWidget()
             self.tab4_container_layout = QVBoxLayout(self.tab4_container)
@@ -6828,6 +8476,7 @@ class MainWindow(QMainWindow):
             self.tab4.layout().addWidget(self.scroll)
 
     def tty(self):
+        self.lport = "80"
         if not hasattr(self, 'tab5_container'):
             self.tab5_container = QWidget()
             self.tab5_container_layout = QVBoxLayout(self.tab5_container)
@@ -6844,6 +8493,7 @@ class MainWindow(QMainWindow):
             self.tab5.layout().addWidget(self.scroll)
 
     def revShells(self):
+        self.lport = "80"
         if not hasattr(self, 'tab6_container'):
             self.tab6_container = QWidget()
             self.tab6_container_layout = QVBoxLayout(self.tab6_container)
