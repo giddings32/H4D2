@@ -92,7 +92,8 @@ class MainWindow(QMainWindow):
 
     def show_settings(self):
         self.settings_popup = QDialog(self)
-
+        self.settings_popup.setStyleSheet("background-color: #161219;")        
+        
         # Create the scroll area
         self.scroll_area = QScrollArea()
         self.scroll_area.setWindowIcon(QIcon('/opt/H4D2/Icons/settings_icon.png'))
