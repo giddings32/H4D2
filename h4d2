@@ -2106,7 +2106,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzF'):
             self.tab2_container_layout.removeWidget(self.wfuzzF)
             self.wfuzzF.deleteLater()
-        self.wfuzzF = QLabel("[+ Nikto with SSL and Evasion:]")
+        self.wfuzzF = QLabel("[+ WFuzz Fuzz Files:]")
         self.wfuzzF.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
