@@ -2114,7 +2114,11 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzF'):
             self.tab2_container_layout.removeWidget(self.wfuzzF)
             self.wfuzzF.deleteLater()
+<<<<<<< HEAD
         self.wfuzzF = QLabel("[+ Wfuzz Fuzz Files]")
+=======
+        self.wfuzzF = QLabel("[+ WFuzz Fuzz Files:]")
+>>>>>>> 54550212bd9a3e7b0b2fcd45cb4e44ef397c02fe
         self.wfuzzF.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
