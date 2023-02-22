@@ -575,8 +575,7 @@ class MainWindow(QMainWindow):
             self.tab1_container_layout.removeWidget(self.nmap_Scan1_Run)
             self.nmap_Scan1_Run.deleteLater()
         self.nmap_Scan1_Run = QPushButton()
-        self.nmap_Scan1_Run.setIcon(QIcon.fromTheme("/opt/H4D2/Icons/tooltip.png"))
-        #self.nmap_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
+        self.nmap_Scan1_Run.setIcon(QIcon.fromTheme("media-playback-start"))
         self.nmap_Scan1_Run.setFixedSize(QSize(20,20))
         command1 = self.nmap_Scan1.text() + "; bash"
         self.nmap_Scan1_Run.clicked.connect(lambda: subprocess.Popen(["/usr/bin/terminator", "--new-tab", "-e", command1]))
