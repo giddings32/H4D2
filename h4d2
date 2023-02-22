@@ -19941,7 +19941,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'smbhelper_SMBClient_Scan1'):
             self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_Scan1)
             self.smbhelper_SMBClient_Scan1.deleteLater()
-        self.smbhelper_SMBClient_Scan1 = QLabel("smbclient -L  -N  " + self.rhost + "")
+        self.smbhelper_SMBClient_Scan1 = QLabel("smbclient -L  -N  //" + self.rhost + "")
         self.smbhelper_SMBClient_Scan1.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
@@ -20013,7 +20013,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'smbhelper_SMBClient_Scan2'):
             self.tab8_container_layout.removeWidget(self.smbhelper_SMBClient_Scan2)
             self.smbhelper_SMBClient_Scan2.deleteLater()
-        self.smbhelper_SMBClient_Scan2 = QLabel("smbclient -L " + self.rhost + "/share -N")
+        self.smbhelper_SMBClient_Scan2 = QLabel("smbclient //" + self.rhost + "/share -N")
         self.smbhelper_SMBClient_Scan2.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
