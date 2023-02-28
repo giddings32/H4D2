@@ -619,7 +619,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'nmap'):
             self.tab1_container_layout.removeWidget(self.nmap)
             self.nmap.deleteLater()
-        self.nmap = QLabel("[+ Nmap]")
+        self.nmap = QLabel("[ + Nmap ]")
         self.nmap.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -789,7 +789,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'nmap_methods'):
             self.tab2_container_layout.removeWidget(self.nmap_methods)
             self.nmap_methods.deleteLater()
-        self.nmap_methods = QLabel("[+ Nmap HTTP Methods]")
+        self.nmap_methods = QLabel("[ + Nmap HTTP Methods ]")
         self.nmap_methods.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -927,7 +927,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wpscanSSL'):
             self.tab2_container_layout.removeWidget(self.wpscanSSL)
             self.wpscanSSL.deleteLater()
-        self.wpscanSSL = QLabel("[+ WPScan & SSL]")
+        self.wpscanSSL = QLabel("[ + WPScan & SSL ]")
         self.wpscanSSL.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -980,7 +980,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wpscanBF'):
             self.tab2_container_layout.removeWidget(self.wpscanBF)
             self.wpscanBF.deleteLater()
-        self.wpscanBF = QLabel("[+ WPScan Brute Forcing:]")
+        self.wpscanBF = QLabel("[ + WPScan Brute Forcing: ]")
         self.wpscanBF.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1033,7 +1033,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wpscanAPD'):
             self.tab2_container_layout.removeWidget(self.wpscanAPD)
             self.wpscanAPD.deleteLater()
-        self.wpscanAPD = QLabel("[+ Aggressive Plugin Detection:]")
+        self.wpscanAPD = QLabel("[ + Aggressive Plugin Detection: ]")
         self.wpscanAPD.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1125,7 +1125,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'niktoSE'):
             self.tab2_container_layout.removeWidget(self.niktoSE)
             self.niktoSE.deleteLater()
-        self.niktoSE = QLabel("[+ Nikto with SSL and Evasion:]")
+        self.niktoSE = QLabel("[ + Nikto with SSL and Evasion: ]")
         self.niktoSE.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1178,7 +1178,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'nikto'):
             self.tab2_container_layout.removeWidget(self.nikto)
             self.nikto.deleteLater()
-        self.nikto = QLabel("[+ Nikto Standard:]")
+        self.nikto = QLabel("[ + Nikto Standard: ]")
         self.nikto.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1261,7 +1261,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'gobusterDir'):
             self.tab2_container_layout.removeWidget(self.gobusterDir)
             self.gobusterDir.deleteLater()
-        self.gobusterDir = QLabel("[+ Gobuster Directory]")
+        self.gobusterDir = QLabel("[ + Gobuster Directory ]")
         self.gobusterDir.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1314,7 +1314,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'gobusterFiles'):
             self.tab2_container_layout.removeWidget(self.gobusterFiles)
             self.gobusterFiles.deleteLater()
-        self.gobusterFiles = QLabel("[+ Gobuster Files]")
+        self.gobusterFiles = QLabel("[ + Gobuster Files ]")
         self.gobusterFiles.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1367,7 +1367,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'gobusterSub'):
             self.tab2_container_layout.removeWidget(self.gobusterSub)
             self.gobusterSub.deleteLater()
-        self.gobusterSub = QLabel("[+ Gobuster for SubDomain Brute Forcing]")
+        self.gobusterSub = QLabel("[ + Gobuster for SubDomain Brute Forcing ]")
         self.gobusterSub.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1450,7 +1450,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzXSS'):
             self.tab2_container_layout.removeWidget(self.wfuzzXSS)
             self.wfuzzXSS.deleteLater()
-        self.wfuzzXSS = QLabel("[+ Wfuzz XSS Fuzzing]")
+        self.wfuzzXSS = QLabel("[ + Wfuzz XSS Fuzzing ]")
         self.wfuzzXSS.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1533,7 +1533,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzCIPD'):
             self.tab2_container_layout.removeWidget(self.wfuzzCIPD)
             self.wfuzzCIPD.deleteLater()
-        self.wfuzzCIPD = QLabel("[+ Wfuzz Command Injection with Post Data]")
+        self.wfuzzCIPD = QLabel("[ + Wfuzz Command Injection with Post Data ]")
         self.wfuzzCIPD.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1586,7 +1586,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzPE'):
             self.tab2_container_layout.removeWidget(self.wfuzzPE)
             self.wfuzzPE.deleteLater()
-        self.wfuzzPE = QLabel("[+ Wfuzz Testing for Parameter Existence]")
+        self.wfuzzPE = QLabel("[ + Wfuzz Testing for Parameter Existence ]")
         self.wfuzzPE.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1639,7 +1639,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzAFD'):
             self.tab2_container_layout.removeWidget(self.wfuzzAFD)
             self.wfuzzAFD.deleteLater()
-        self.wfuzzAFD = QLabel("[+ Wfuzz Authenticated Fuzzing Directories]")
+        self.wfuzzAFD = QLabel("[ + Wfuzz Authenticated Fuzzing Directories ]")
         self.wfuzzAFD.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1692,7 +1692,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzAFF'):
             self.tab2_container_layout.removeWidget(self.wfuzzAFF)
             self.wfuzzAFF.deleteLater()
-        self.wfuzzAFF = QLabel("[+ Authenticated File Fuzzing]")
+        self.wfuzzAFF = QLabel("[ + Authenticated File Fuzzing ]")
         self.wfuzzAFF.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1745,7 +1745,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzD'):
             self.tab2_container_layout.removeWidget(self.wfuzzD)
             self.wfuzzD.deleteLater()
-        self.wfuzzD = QLabel("[+ Wfuzz Fuzz Directories]")
+        self.wfuzzD = QLabel("[ + Wfuzz Fuzz Directories ]")
         self.wfuzzD.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -1888,8 +1888,8 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzF'):
             self.tab2_container_layout.removeWidget(self.wfuzzF)
             self.wfuzzF.deleteLater()
-        self.wfuzzF = QLabel("[+ Wfuzz Fuzz Files]")
-        self.wfuzzF = QLabel("[+ WFuzz Fuzz Files:]")
+        self.wfuzzF = QLabel("[ + Wfuzz Fuzz Files ]")
+        self.wfuzzF = QLabel("[ + WFuzz Fuzz Files: ]")
         self.wfuzzF.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -2032,7 +2032,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'wfuzzUsers'):
             self.tab2_container_layout.removeWidget(self.wfuzzUsers)
             self.wfuzzUsers.deleteLater()
-        self.wfuzzUsers = QLabel("[+ Wfuzz Users]")
+        self.wfuzzUsers = QLabel("[ + Wfuzz Users ]")
         self.wfuzzUsers.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -2115,7 +2115,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'SQLMap'):
             self.tab2_container_layout.removeWidget(self.SQLMap)
             self.SQLMap.deleteLater()
-        self.SQLMap = QLabel("[+ SQLMap]")
+        self.SQLMap = QLabel("[ + SQLMap ]")
         self.SQLMap.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -2228,7 +2228,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'shellshockTest'):
             self.tab2_container_layout.removeWidget(self.shellshockTest)
             self.shellshockTest.deleteLater()
-        self.shellshockTest = QLabel("[+ Test for Shell Shock]")
+        self.shellshockTest = QLabel("[ + Test for Shell Shock ]")
         self.shellshockTest.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -2280,7 +2280,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'shellshockExploit'):
             self.tab2_container_layout.removeWidget(self.shellshockExploit)
             self.shellshockExploit.deleteLater()
-        self.shellshockExploit = QLabel("[+ Exploit Shell Shock]")
+        self.shellshockExploit = QLabel("[ + Exploit Shell Shock ]")
         self.shellshockExploit.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -11205,7 +11205,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'tty_python'):
             self.tab5_container_layout.removeWidget(self.tty_python)
             self.tty_python.deleteLater()
-        self.tty_python = QLabel("[+ Python ]")
+        self.tty_python = QLabel("[ + Python ]")
         self.tty_python.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -11485,7 +11485,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'tty_perl'):
             self.tab5_container_layout.removeWidget(self.tty_perl)
             self.tty_perl.deleteLater()
-        self.tty_perl = QLabel("[+ Perl]")
+        self.tty_perl = QLabel("[ + Perl ]")
         self.tty_perl.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -11598,7 +11598,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'tty_awk'):
             self.tab5_container_layout.removeWidget(self.tty_awk)
             self.tty_awk.deleteLater()
-        self.tty_awk = QLabel("[+ Awk]")
+        self.tty_awk = QLabel("[ + Awk ]")
         self.tty_awk.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -11711,7 +11711,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'tty_ed'):
             self.tab5_container_layout.removeWidget(self.tty_ed)
             self.tty_ed.deleteLater()
-        self.tty_ed = QLabel("[+ ed ]")
+        self.tty_ed = QLabel("[ + ed ]")
         self.tty_ed.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -11824,7 +11824,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'tty_IRB'):
             self.tab5_container_layout.removeWidget(self.tty_IRB)
             self.tty_IRB.deleteLater()
-        self.tty_IRB = QLabel("[+ IRB ]")
+        self.tty_IRB = QLabel("[ + IRB ]")
         self.tty_IRB.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -11907,7 +11907,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'tty_nmap'):
             self.tab5_container_layout.removeWidget(self.tty_nmap)
             self.tty_nmap.deleteLater()
-        self.tty_nmap = QLabel("[+ Nmap ]")
+        self.tty_nmap = QLabel("[ + Nmap ]")
         self.tty_nmap.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12048,7 +12048,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'bash'):
             self.tab6_container_layout.removeWidget(self.bash)
             self.bash.deleteLater()
-        self.bash = QLabel("[+ BASH]")
+        self.bash = QLabel("[ + BASH ]")
         self.bash.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12161,7 +12161,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'php'):
             self.tab6_container_layout.removeWidget(self.php)
             self.php.deleteLater()
-        self.php = QLabel("[+ PHP]")
+        self.php = QLabel("[ + PHP ]")
         self.php.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12244,7 +12244,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'python'):
             self.tab6_container_layout.removeWidget(self.python)
             self.python.deleteLater()
-        self.python = QLabel("[+ Python]")
+        self.python = QLabel("[ + Python ]")
         self.python.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12327,7 +12327,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'netcat'):
             self.tab6_container_layout.removeWidget(self.netcat)
             self.netcat.deleteLater()
-        self.netcat = QLabel("[+ Netcat]")
+        self.netcat = QLabel("[ + Netcat ]")
         self.netcat.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12411,7 +12411,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'perl'):
             self.tab6_container_layout.removeWidget(self.perl)
             self.perl.deleteLater()
-        self.perl = QLabel("[+ Perl]")
+        self.perl = QLabel("[ + Perl ]")
         self.perl.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12494,7 +12494,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'ps'):
             self.tab6_container_layout.removeWidget(self.ps)
             self.ps.deleteLater()
-        self.ps = QLabel("[+ Powershell]")
+        self.ps = QLabel("[ + Powershell ]")
         self.ps.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12605,7 +12605,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_list'):
             self.tab7_container_layout.removeWidget(self.msfv_list)
             self.msfv_list.deleteLater()
-        self.msfv_list = QLabel("[+ List Payloads ]")
+        self.msfv_list = QLabel("[ + List Payloads ]")
         self.msfv_list.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12689,7 +12689,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_options'):
             self.tab7_container_layout.removeWidget(self.msfv_options)
             self.msfv_options.deleteLater()
-        self.msfv_options = QLabel("[+ View Payload Options ]")
+        self.msfv_options = QLabel("[ + View Payload Options ]")
         self.msfv_options.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12773,7 +12773,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_basic'):
             self.tab7_container_layout.removeWidget(self.msfv_basic)
             self.msfv_basic.deleteLater()
-        self.msfv_basic = QLabel("[+ Creating a Payload ]")
+        self.msfv_basic = QLabel("[ + Creating a Payload ]")
         self.msfv_basic.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12857,7 +12857,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_encode'):
             self.tab7_container_layout.removeWidget(self.msfv_encode)
             self.msfv_encode.deleteLater()
-        self.msfv_encode = QLabel("[+ Creating a payload with encoding ]")
+        self.msfv_encode = QLabel("[ + Creating a payload with encoding ]")
         self.msfv_encode.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -12941,7 +12941,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_template'):
             self.tab7_container_layout.removeWidget(self.msfv_template)
             self.msfv_template.deleteLater()
-        self.msfv_template = QLabel("[+ Creating a payload using a template ]")
+        self.msfv_template = QLabel("[ + Creating a payload using a template ]")
         self.msfv_template.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -13025,7 +13025,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_listener'):
             self.tab7_container_layout.removeWidget(self.msfv_listener)
             self.msfv_listener.deleteLater()
-        self.msfv_listener = QLabel("[+ Listening for MSfvenom Payloads (from msframework) ]")
+        self.msfv_listener = QLabel("[ + Listening for MSfvenom Payloads (from msframework) ]")
         self.msfv_listener.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -13264,7 +13264,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_windows'):
             self.tab7_container_layout.removeWidget(self.msfv_windows)
             self.msfv_windows.deleteLater()
-        self.msfv_windows = QLabel("[+ Windows Payloads ]")
+        self.msfv_windows = QLabel("[ + Windows Payloads ]")
         self.msfv_windows.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -13503,7 +13503,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_add_users'):
             self.tab7_container_layout.removeWidget(self.msfv_add_users)
             self.msfv_add_users.deleteLater()
-        self.msfv_add_users = QLabel("[+ Add a user in windows with msfvenom ]")
+        self.msfv_add_users = QLabel("[ + Add a user in windows with msfvenom ]")
         self.msfv_add_users.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -13587,7 +13587,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_linux'):
             self.tab7_container_layout.removeWidget(self.msfv_linux)
             self.msfv_linux.deleteLater()
-        self.msfv_linux = QLabel("[+ Linux Payloads ]")
+        self.msfv_linux = QLabel("[ + Linux Payloads ]")
         self.msfv_linux.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -13764,7 +13764,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_web_php'):
             self.tab7_container_layout.removeWidget(self.msfv_web_php)
             self.msfv_web_php.deleteLater()
-        self.msfv_web_php = QLabel("[+ Web Payloads: PHP ]")
+        self.msfv_web_php = QLabel("[ + Web Payloads: PHP ]")
         self.msfv_web_php.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -13879,7 +13879,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_web_asp'):
             self.tab7_container_layout.removeWidget(self.msfv_web_asp)
             self.msfv_web_asp.deleteLater()
-        self.msfv_web_asp = QLabel("[+ Web Payloads: ASP ]")
+        self.msfv_web_asp = QLabel("[ + Web Payloads: ASP ]")
         self.msfv_web_asp.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -13963,7 +13963,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_web_jsp'):
             self.tab7_container_layout.removeWidget(self.msfv_web_jsp)
             self.msfv_web_jsp.deleteLater()
-        self.msfv_web_jsp = QLabel("[+ Web Payloads: JSP ]")
+        self.msfv_web_jsp = QLabel("[ + Web Payloads: JSP ]")
         self.msfv_web_jsp.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -14047,7 +14047,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_web_war'):
             self.tab7_container_layout.removeWidget(self.msfv_web_war)
             self.msfv_web_war.deleteLater()
-        self.msfv_web_war = QLabel("[+ Web Payloads: WAR ]")
+        self.msfv_web_war = QLabel("[ + Web Payloads: WAR ]")
         self.msfv_web_war.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -14131,7 +14131,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_web_python'):
             self.tab7_container_layout.removeWidget(self.msfv_web_python)
             self.msfv_web_python.deleteLater()
-        self.msfv_web_python = QLabel("[+ Scripting Payloads: Python ]")
+        self.msfv_web_python = QLabel("[ + Scripting Payloads: Python ]")
         self.msfv_web_python.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -14215,7 +14215,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_web_bash'):
             self.tab7_container_layout.removeWidget(self.msfv_web_bash)
             self.msfv_web_bash.deleteLater()
-        self.msfv_web_bash = QLabel("[+ Scripting Payloads: Bash ]")
+        self.msfv_web_bash = QLabel("[ + Scripting Payloads: Bash ]")
         self.msfv_web_bash.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -14299,7 +14299,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_web_perl'):
             self.tab7_container_layout.removeWidget(self.msfv_web_perl)
             self.msfv_web_perl.deleteLater()
-        self.msfv_web_perl = QLabel("[+ Scripting Payloads: Perl ]")
+        self.msfv_web_perl = QLabel("[ + Scripting Payloads: Perl ]")
         self.msfv_web_perl.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
@@ -14383,7 +14383,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'msfv_web_badchar'):
             self.tab7_container_layout.removeWidget(self.msfv_web_badchar)
             self.msfv_web_badchar.deleteLater()
-        self.msfv_web_badchar = QLabel("[+ Creating an Msfvenom Payload with an encoder while removing bad characters ]")
+        self.msfv_web_badchar = QLabel("[ + Creating an Msfvenom Payload with an encoder while removing bad characters ]")
         self.msfv_web_badchar.setStyleSheet(
             "color: #20C20E;" +
             "font-size: 20px;" +
