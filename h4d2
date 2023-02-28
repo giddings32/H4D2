@@ -15237,7 +15237,18 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab9_container_layout.insertWidget(1,self.winExploit_0)
+        self.tab9_container_layout.insertWidget(1, self.winExploit_0)
+
+    # winExploit_0_Scan1_spacer1
+        if hasattr(self, 'winExploit_0_Scan1_spacer1'):
+            self.tab9_container_layout.removeWidget(self.winExploit_0_Scan1_spacer1)
+            self.winExploit_0_Scan1_spacer1.deleteLater()
+        self.winExploit_0_Scan1_spacer1 = QLabel()
+        self.winExploit_0_Scan1_spacer1.setFixedWidth(40)
+        self.winExploit_0_Scan1_spacer1.setFixedHeight(0)
+
+        # winExploit_0_Scan1 spacer & divider layout
+        self.tab9_container_layout.insertWidget(2, self.winExploit_0_Scan1_spacer1)
 
         # winExploit_0_Scan1
         if hasattr(self, 'winExploit_0_Scan1'):
@@ -15249,7 +15260,7 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab9_container_layout.insertWidget(2,self.winExploit_0_Scan1)
+        self.tab9_container_layout.insertWidget(3,self.winExploit_0_Scan1)
      
         # winExploit_0_Scan2
         if hasattr(self, 'winExploit_0_Scan2'):
@@ -15261,7 +15272,7 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab9_container_layout.insertWidget(3,self.winExploit_0_Scan2)
+        self.tab9_container_layout.insertWidget(4,self.winExploit_0_Scan2)
      
         # winExploit_0_Scan2_Copy
         if hasattr(self, 'winExploit_0_Scan2_Copy'):
@@ -15279,7 +15290,7 @@ class MainWindow(QMainWindow):
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.winExploit_0_Scan2_Copy)
         label_layout.addWidget(self.winExploit_0_Scan2)
-        self.tab9_container_layout.insertLayout(4, label_layout)
+        self.tab9_container_layout.insertLayout(5, label_layout)
         self.tab9_container_layout.addStretch()
      
         # winExploit_0_Scan3
@@ -15292,7 +15303,7 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab9_container_layout.insertWidget(5,self.winExploit_0_Scan3)
+        self.tab9_container_layout.insertWidget(6,self.winExploit_0_Scan3)
      
         # winExploit_0_Scan3_Copy
         if hasattr(self, 'winExploit_0_Scan3_Copy'):
@@ -15310,7 +15321,7 @@ class MainWindow(QMainWindow):
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.winExploit_0_Scan3_Copy)
         label_layout.addWidget(self.winExploit_0_Scan3)
-        self.tab9_container_layout.insertLayout(6, label_layout)
+        self.tab9_container_layout.insertLayout(7, label_layout)
         self.tab9_container_layout.addStretch()
      
         # winExploit_0_Scan4
@@ -15323,7 +15334,7 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab9_container_layout.insertWidget(7,self.winExploit_0_Scan4)
+        self.tab9_container_layout.insertWidget(8,self.winExploit_0_Scan4)
      
         # winExploit_0_Scan4_Copy
         if hasattr(self, 'winExploit_0_Scan4_Copy'):
@@ -15341,7 +15352,7 @@ class MainWindow(QMainWindow):
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.winExploit_0_Scan4_Copy)
         label_layout.addWidget(self.winExploit_0_Scan4)
-        self.tab9_container_layout.insertLayout(8, label_layout)
+        self.tab9_container_layout.insertLayout(9, label_layout)
         self.tab9_container_layout.addStretch()
 
     # winExploit_0_Scan4_spacer1
@@ -15353,7 +15364,7 @@ class MainWindow(QMainWindow):
         self.winExploit_0_Scan4_spacer1.setFixedHeight(25)
 
         # winExploit_0_Scan4 spacer & divider layout
-        self.tab9_container_layout.insertWidget(9, self.winExploit_0_Scan4_spacer1)
+        self.tab9_container_layout.insertWidget(10, self.winExploit_0_Scan4_spacer1)
      
         # winExploit_0_Scan5
         if hasattr(self, 'winExploit_0_Scan5'):
@@ -15365,7 +15376,7 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab9_container_layout.insertWidget(10,self.winExploit_0_Scan5)
+        self.tab9_container_layout.insertWidget(11,self.winExploit_0_Scan5)
      
         # winExploit_0_Scan6
         if hasattr(self, 'winExploit_0_Scan6'):
@@ -15377,7 +15388,7 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab9_container_layout.insertWidget(11,self.winExploit_0_Scan6)
+        self.tab9_container_layout.insertWidget(12,self.winExploit_0_Scan6)
      
         # winExploit_0_Scan6_Copy
         if hasattr(self, 'winExploit_0_Scan6_Copy'):
@@ -15395,7 +15406,7 @@ class MainWindow(QMainWindow):
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.winExploit_0_Scan6_Copy)
         label_layout.addWidget(self.winExploit_0_Scan6)
-        self.tab9_container_layout.insertLayout(12, label_layout)
+        self.tab9_container_layout.insertLayout(13, label_layout)
         self.tab9_container_layout.addStretch()
      
         # winExploit_0_Scan7
@@ -15408,7 +15419,7 @@ class MainWindow(QMainWindow):
             "font-size: 20px;" +
             "font-style: 'bold';"
         )
-        self.tab9_container_layout.insertWidget(13,self.winExploit_0_Scan7)
+        self.tab9_container_layout.insertWidget(14,self.winExploit_0_Scan7)
      
         # winExploit_0_Scan7_Copy
         if hasattr(self, 'winExploit_0_Scan7_Copy'):
@@ -15426,7 +15437,7 @@ class MainWindow(QMainWindow):
         label_layout = QHBoxLayout()
         label_layout.addWidget(self.winExploit_0_Scan7_Copy)
         label_layout.addWidget(self.winExploit_0_Scan7)
-        self.tab9_container_layout.insertLayout(14, label_layout)
+        self.tab9_container_layout.insertLayout(15, label_layout)
         self.tab9_container_layout.addStretch()
      
         # winExploit_0_divider1
@@ -15464,10 +15475,10 @@ class MainWindow(QMainWindow):
         self.winExploit_0_spacer2.setFixedHeight(50)
      
         # winExploit_0 spacer & divider layout
-        self.tab9_container_layout.insertWidget(15, self.winExploit_0_spacer1)
-        self.tab9_container_layout.insertWidget(16, self.winExploit_0_divider1)
-        self.tab9_container_layout.insertWidget(17, self.winExploit_0_divider2)
-        self.tab9_container_layout.insertWidget(18, self.winExploit_0_spacer2)
+        self.tab9_container_layout.insertWidget(16, self.winExploit_0_spacer1)
+        self.tab9_container_layout.insertWidget(17, self.winExploit_0_divider1)
+        self.tab9_container_layout.insertWidget(18, self.winExploit_0_divider2)
+        self.tab9_container_layout.insertWidget(19, self.winExploit_0_spacer2)
         self.tab9_container_layout.addStretch()
 
 if __name__ == '__main__':
